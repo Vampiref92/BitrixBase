@@ -26,5 +26,5 @@
     "webarchitect609/bitrix-neverinclude": "^0.4.2"
 //    "bitrix": ">=16.5.0"
   },
-  "minimum-stability": "stable",
+  "minimum-stability": "stable"
 }
