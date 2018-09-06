@@ -1,6 +1,6 @@
 <?php
 
-namespace Vf92\Exception;
+namespace Vf92\User\Exception;
 
 use Exception;
 

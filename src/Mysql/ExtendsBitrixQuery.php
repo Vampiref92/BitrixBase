@@ -8,7 +8,6 @@
 
 namespace Vf92\Mysql;
 
-
 use Bitrix\Main\Entity\Query;
 
 class ExtendsBitrixQuery extends Query

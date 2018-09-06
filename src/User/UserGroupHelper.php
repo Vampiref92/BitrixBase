@@ -2,11 +2,11 @@
 
 namespace Vf92\Main;
 
-use Vf92\Exception\GroupNotFoundException;
+use Vf92\User\Exception\GroupNotFoundException;
 use Bitrix\Main\GroupTable;
 
 /** @deprecated  */
-class UserGroupUtils
+class UserGroupHelper
 {
     /**
      * @var array

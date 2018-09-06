@@ -1,10 +1,10 @@
 <?php
 
-namespace Vf92\Helpers;
+namespace Vf92\Form;
 
-use Vf92\Helpers\Exception\Form\FileSaveException;
-use Vf92\Helpers\Exception\Form\FileSizeException;
-use Vf92\Helpers\Exception\Form\FileTypeException;
+use Vf92\Form\Exception\FileSaveException;
+use Vf92\Form\Exception\FileSizeException;
+use Vf92\Form\Exception\FileTypeException;
 
 /**
  * Class FormHelper

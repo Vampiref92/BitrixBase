@@ -2,14 +2,14 @@
 
 namespace Vf92\Iblock;
 
-use Vf92\Exception\IblockNotFoundException;
-use Vf92\Exception\IblockPropertyNotFoundException;
+use Vf92\Iblock\Exception\IblockNotFoundException;
+use Vf92\Iblock\Exception\IblockPropertyNotFoundException;
 use Bitrix\Iblock\IblockTable;
 use Bitrix\Iblock\PropertyTable;
 use Bitrix\Iblock\TypeTable;
 use InvalidArgumentException;
 
-class IblockUtils
+class IblockHelper
 {
 
     /**

@@ -1,5 +1,5 @@
 <?php
-namespace Vf92\Helpers;
+namespace Vf92\HLBlock;
 
 use Bitrix\Highloadblock\HighloadBlockTable;
 use Bitrix\Main\ArgumentException;
@@ -10,7 +10,7 @@ use Bitrix\Main\LoaderException;
 /**
  * Class HighloadHelper
  *
- * @package Vf92\Helpers
+ * @package Vf92\HLBlock
  */
 class HighloadHelper
 {

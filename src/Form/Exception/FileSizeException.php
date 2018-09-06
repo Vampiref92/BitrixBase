@@ -1,6 +1,6 @@
 <?php
 
-namespace Vf92\Helpers\Exception\Form;
+namespace Vf92\Form\Exception;
 
 /**
  * Class FileSizeException

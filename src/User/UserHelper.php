@@ -2,14 +2,13 @@
 
 namespace Vf92\Main;
 
-use Bitrix\Main\Application;
 use Bitrix\Main\Entity\ReferenceField;
 use Bitrix\Main\UserTable;
 use CUser;
 use Vf92\Constructor\EntityConstructor;
 
 /** @deprecated  */
-class UserUtils
+class UserHelper
 {
     /**
      * Проверяет вхождение пользователя в группу
@@ -30,7 +29,7 @@ class UserUtils
         }
 
         return in_array(
-            UserGroupUtils::getGroupIdByCode($groupStringId),
+            UserGroupHelper::getGroupIdByCode($groupStringId),
             CUser::GetUserGroup($userId),
             false
         );

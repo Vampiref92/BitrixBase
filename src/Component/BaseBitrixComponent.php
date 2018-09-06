@@ -1,6 +1,6 @@
 <?php
 
-namespace Vf92;
+namespace Vf92\Component;
 
 
 use Vf92\Log\LazyLoggerAwareTrait;
@@ -14,7 +14,7 @@ use RuntimeException;
  *
  * @package Vf92
  */
-abstract class Vf92BitrixComponent extends \CBitrixComponent implements LoggerAwareInterface
+abstract class BaseBitrixComponent extends \CBitrixComponent implements LoggerAwareInterface
 {
     use LazyLoggerAwareTrait;
 
