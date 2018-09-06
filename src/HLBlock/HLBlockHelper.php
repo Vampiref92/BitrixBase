@@ -15,6 +15,7 @@ use Bitrix\Main\LoaderException;
 class HLBlockHelper
 {
     /**
+     * Получение ID Хайлоад блока по имени
      * @param string $name
      *
      * @throws ArgumentException
@@ -47,6 +48,7 @@ class HLBlockHelper
     }
     
     /**
+     * Получение ID Хайлоад блока по таблице
      * @param string $name
      *
      * @throws ArgumentException

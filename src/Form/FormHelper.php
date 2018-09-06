@@ -14,6 +14,7 @@ use Vf92\Form\Exception\FileTypeException;
 class FormHelper
 {
     /**
+     * Получение ID формы по коду
      * @param string $code
      *
      * @return int
@@ -25,6 +26,7 @@ class FormHelper
     }
 
     /**
+     * Проверка обязательных полей формы
      * @param array $fields
      * @param array $requireFields
      *
@@ -43,6 +45,7 @@ class FormHelper
     }
 
     /**
+     * Валидация email
      * @param $email
      *
      * @return bool
@@ -53,6 +56,7 @@ class FormHelper
     }
 
     /**
+     * Добавление результат(заполенние формы)
      * @param $data
      *
      * @return bool
@@ -86,6 +90,7 @@ class FormHelper
     }
 
     /**
+     * Сохранение файла
      * @param $fileCode
      * @param $fileSizeMb
      * @param $valid_types
@@ -130,6 +135,7 @@ class FormHelper
     }
 
     /**
+     * Добавление формы
      * @param $form
      */
     public static function addForm(array $form)
@@ -165,6 +171,7 @@ class FormHelper
     }
 
     /**
+     * Добавление статусов
      * @param int   $formId
      * @param array $statuses
      */
@@ -180,6 +187,7 @@ class FormHelper
     }
 
     /**
+     * Добавление вопросов
      * @param int   $formId
      * @param array $questions
      */
@@ -203,6 +211,7 @@ class FormHelper
     }
 
     /**
+     * Добавление ответов
      * @param array $answers
      * @param int   $questionId
      */
@@ -218,6 +227,7 @@ class FormHelper
     }
 
     /**
+     * Генерация почтового шаблона
      * @param int    $formId
      * @param string $createEmail
      */
@@ -230,6 +240,7 @@ class FormHelper
     }
 
     /**
+     * Удаление формы
      * @param $sid
      */
     public static function deleteForm($sid)
@@ -244,6 +255,7 @@ class FormHelper
     }
 
     /**
+     * Получить реальные названия полей формы
      * @param int   $formId
      * @param array $fields
      *
@@ -297,6 +309,7 @@ class FormHelper
     }
 
     /**
+     * Получение вопросов
      * @param array $params
      *
      * @return array

@@ -124,6 +124,7 @@ class DateHelper
     ];
     
     /**
+     * Подстановка русских месяцев по шаблону
      * @param string $date
      *
      * @param string $case
@@ -149,20 +150,8 @@ class DateHelper
         return $res;
     }
     
-    private static function replaceStringByArray(array $params)
-    {
-        preg_match($params['pattern'], $params['date'], $matches);
-        if (!empty($matches[0]) && !empty($params['case'])) {
-            $items = static::${$params['type'] . $params['case']};
-            if (!empty($items)) {
-                return str_replace($matches[0], $items[$matches[0]], $params['date']);
-            }
-        }
-        
-        return $params['date'];
-    }
-    
     /**
+     * Подстановка дней недели по шаблону
      * @param string $date
      *
      * @param string $case
@@ -182,6 +171,7 @@ class DateHelper
     }
 
     /**
+     * Преобразование битриксового объекта даты в Php
      * @param DateTime $bxDatetime
      *
      * @return NormalDateTime
@@ -253,5 +243,18 @@ class DateHelper
         }
 
         return FormatDate($dateFormat, $timestamp);
+    }
+
+    private static function replaceStringByArray(array $params)
+    {
+        preg_match($params['pattern'], $params['date'], $matches);
+        if (!empty($matches[0]) && !empty($params['case'])) {
+            $items = static::${$params['type'] . $params['case']};
+            if (!empty($items)) {
+                return str_replace($matches[0], $items[$matches[0]], $params['date']);
+            }
+        }
+
+        return $params['date'];
     }
 }

@@ -21,6 +21,7 @@ class WordHelper
     }
 
     /**
+     * Возвращает отформатированный вес
      * @param float $weight
      * @param bool  $short
      *
@@ -50,6 +51,7 @@ class WordHelper
     }
 
     /**
+     * Возвращает отформатированную длину в см - задается в мм
      * @param float $lengthMm - длинна в миллиметрах
      *
      * @return string
@@ -60,6 +62,7 @@ class WordHelper
     }
 
     /**
+     * Форматированный вывод чиел, с возможностью удаления незначащих нулей и с округлением до нужной точности
      * @param      $number
      * @param int  $decimals
      *
@@ -78,6 +81,7 @@ class WordHelper
     }
 
     /**
+     * Очистка текста от примесей(тегов, лишних спец. символов)
      * @param $string
      *
      * @return mixed

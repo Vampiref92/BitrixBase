@@ -9,6 +9,7 @@ namespace Vf92\Helpers;
 class ClassFinderHelper
 {
     /**
+     * Поиск классов с совпадением имени в определенной папке
      * @param string $findNamespace
      * @param string $findDir
      *

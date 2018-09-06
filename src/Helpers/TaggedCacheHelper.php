@@ -22,6 +22,7 @@ class TaggedCacheHelper
     }
 
     /**
+     * Получение объекта тегированного кеша
      * @return TaggedCache|null
      */
     public static function getTagCacheInstance()
@@ -40,6 +41,7 @@ class TaggedCacheHelper
     }
 
     /**
+     * Добавление тегов массивом
      * @param array            $tags
      * @param TaggedCache|null $tagCache
      */
@@ -59,6 +61,7 @@ class TaggedCacheHelper
     }
 
     /**
+     * Очистка кеша по тегам
      * @param array $tags
      */
     public static function clearManagedCache(array $tags)
@@ -82,6 +85,7 @@ class TaggedCacheHelper
     }
 
     /**
+     * Добавление одного тега
      * @param string           $tag
      * @param TaggedCache|null $tagCache
      */
@@ -99,6 +103,7 @@ class TaggedCacheHelper
     }
 
     /**
+     * Начинаем тегирвоанный кеш
      * @param string $cachePath
      *
      * @return TaggedCacheHelper
@@ -112,6 +117,7 @@ class TaggedCacheHelper
         return $this;
     }
 
+    /** Завершаем тегирвоанный кеш */
     public function end()
     {
         if ($this->tagCacheInstance !== null) {
@@ -120,6 +126,7 @@ class TaggedCacheHelper
     }
 
     /**
+     * Добавляем теги
      * @param array $tags
      *
      * @return TaggedCacheHelper
@@ -134,6 +141,7 @@ class TaggedCacheHelper
     }
 
     /**
+     * Добавляем тег
      * @param string $tag
      *
      * @return TaggedCacheHelper
@@ -147,6 +155,7 @@ class TaggedCacheHelper
         return $this;
     }
 
+    /** прерываем тегированный кеш(abort) */
     public function abortTagCache()
     {
         $this->tagCacheInstance->abortTagCache();
