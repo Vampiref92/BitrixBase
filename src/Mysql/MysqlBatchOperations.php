@@ -20,6 +20,7 @@ class MysqlBatchOperations
     private $step = 0;
 
     /**
+     * Устанавливаем сформирвоанный объект с запросом
      * MysqlBatchOperations constructor.
      *
      * @param Query  $query
@@ -38,6 +39,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Делаем массовое обновление данных по условию
      * @param array $fields
      *
      * @throws SqlQueryException
@@ -60,6 +62,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Делаем массовое удаление по условию
      * @throws SqlQueryException
      */
     public function batchDelete()
@@ -75,6 +78,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Делаем массовую вставку
      * @param array $fields
      *
      * @throws SqlQueryException
@@ -105,6 +109,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Получение части массива по лимтам
      * @param $items
      *
      * @return array
@@ -128,6 +133,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Получаем ограничение в limit
      * @return int
      */
     public function getLimit()
@@ -136,6 +142,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Устанавливаем ограничение в limit
      * @param int $limit
      */
     public function setLimit($limit)
@@ -144,6 +151,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Проверяем LOW_PRIORITY
      * @return bool
      */
     public function isLowPriority()
@@ -152,6 +160,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Устанавливаем LOW_PRIORITY
      * @param bool $lowPriority
      */
     public function setLowPriority($lowPriority)
@@ -160,6 +169,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Првоеряем QUICK
      * @return bool
      */
     public function isQuick()
@@ -168,6 +178,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Устанавливаем QUICK
      * @param bool $quick
      */
     public function setQuick($quick)
@@ -176,6 +187,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Получаем имя таблицы
      * @return string
      */
     public function getTable()
@@ -184,6 +196,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Устанавливаем имя таблицы
      * @param string $table
      */
     public function setTable($table)
@@ -192,6 +205,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Проверка установки DELAYED
      * @return bool
      */
     public function isDelayed()
@@ -200,6 +214,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Установка DELAYED
      * @param bool $delayed
      */
     public function setDelayed($delayed)
@@ -208,6 +223,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Проверка установки IGNORE
      * @return bool
      */
     public function isIgnore()
@@ -215,12 +231,17 @@ class MysqlBatchOperations
         return $this->ignore;
     }
 
+    /**
+     * Получение строки IGNORE
+     * @return string
+     */
     public function getIgnore()
     {
         return $this->isIgnore() ? ' IGNORE' : '';
     }
 
     /**
+     * Установка IGNORE
      * @param bool $ignore
      */
     public function setIgnore($ignore)
@@ -229,6 +250,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Получение установленного объекта Query
      * @return ExtendsBitrixQuery
      */
     public function getQuery()
@@ -237,6 +259,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Установка объекта Query
      * @param Query $query
      *
      * @throws \Bitrix\Main\ArgumentException
@@ -248,6 +271,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Получение строки LOW_PRIORITY
      * @return string
      */
     private function getLowPriority()
@@ -256,6 +280,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * получение строки QUICK
      * @return string
      */
     private function getQuick()
@@ -264,6 +289,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Првоерка существования таблицы
      * @return bool
      */
     private function hasTable()
@@ -272,6 +298,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Получение строки DELAYED
      * @return string
      */
     private function getDelayed()
@@ -280,6 +307,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Получение шага
      * @return int
      */
     private function getStep()
@@ -288,6 +316,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Установка шага
      * @param int $step
      */
     private function setStep($step)
@@ -295,17 +324,20 @@ class MysqlBatchOperations
         $this->step = $step;
     }
 
+    /** Наращивание шага */
     private function increaseStep()
     {
         $this->setStep($this->getStep() + 1);
     }
 
+    /** Очистка шага */
     private function clearStep()
     {
         $this->setStep(0);
     }
 
     /**
+     * Получение строки LIMIT
      * @return string
      */
     private function getLimitString()
@@ -318,6 +350,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Получение строки WHERE
      * @return string
      */
     private function getWhere()
@@ -326,6 +359,7 @@ class MysqlBatchOperations
     }
 
     /**
+     * Получение стркои ORDER
      * @return string
      */
     private function getOrder()

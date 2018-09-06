@@ -12,9 +12,11 @@ use Bitrix\Main\Entity\Query;
 
 class ExtendsBitrixQuery extends Query
 {
-    /** @noinspection MagicMethodsValidityInspection */
-    /** @noinspection PhpMissingParentConstructorInspection */
-    /** @inheritdoc */
+    /**
+     * заполняем объект
+     * @noinspection MagicMethodsValidityInspection
+     * @noinspection PhpMissingParentConstructorInspection
+     * @inheritdoc */
     public function __construct($source)
     {
         /** reInit Query*/
@@ -40,6 +42,7 @@ class ExtendsBitrixQuery extends Query
     }
 
     /**
+     * Получаем сформированное условие по запросу(where)
      * @return string
      */
     public function getBuildWhere()
@@ -50,6 +53,7 @@ class ExtendsBitrixQuery extends Query
     }
 
     /**
+     * Получаем сформированную сортировку(order)
      * @return string
      */
     public function getBuildOrder()
