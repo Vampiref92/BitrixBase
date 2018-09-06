@@ -1,9 +1,29 @@
 {
-  "name": "project",
-  "description": "desc",
-  "require-dev": {
-    "codeception/codeception": "^2.3",
-    "friendsofphp/php-cs-fixer": "@stable",
-    "phpunit/phpunit": "^6.5"
+  "name": "developer_name/project_name",
+  "description": "project_name - project_description powered by developer_full_name",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Name LastName",
+      "email": "email"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "project_name_upper\\": "src/"
+    }
+  },
+  "extra": {
+    "installer-paths": {
+      "modules/{$name}/": ["type:bitrix-module"]
+    }
+  },
+  "require": {
+    "vf92/bitrixBase": "dev-master",
+    "andreyryabin/sprint.migration": "dev-master",
+    //    "twig/twig": "^1.0",
+    //    "php-amqplib/rabbitmq-bundle": "~1.13.0",
+    //    "bitrix": ">=16.5.0"
   }
 }
