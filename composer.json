@@ -1,6 +1,6 @@
 {
   "name": "bitrixBase",
-  "description": "base bitrix classes",
+  "description": "base bitrix classes. Bitrix minimal version 16.5.0",
   "type": "library",
   "license": "proprietary",
   "keywords": [
@@ -24,7 +24,6 @@
     "doctrine/collections": "^1.4",
     "webarchitect609/bitrix-cache": "^1.0",
     "webarchitect609/bitrix-neverinclude": "^0.4.2"
-//    "bitrix": ">=16.5.0"
   },
   "minimum-stability": "stable"
 }
