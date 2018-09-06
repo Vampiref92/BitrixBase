@@ -20,7 +20,7 @@
     }
   },
   "require": {
-    "vf92/bitrixBase": "dev-master",
+    "vf92/bitrix-base": "dev-master",
     "andreyryabin/sprint.migration": "dev-master",
     "webarchitect609/bitrix-user-type": "^0.1",
     "webarchitect609/bitrix-iblock-property-type": "^1.0.3"
