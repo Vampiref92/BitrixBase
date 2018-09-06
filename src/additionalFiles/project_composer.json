@@ -1,0 +1,9 @@
+{
+  "name": "project",
+  "description": "desc",
+  "require-dev": {
+    "codeception/codeception": "^2.3",
+    "friendsofphp/php-cs-fixer": "@stable",
+    "phpunit/phpunit": "^6.5"
+  }
+}
