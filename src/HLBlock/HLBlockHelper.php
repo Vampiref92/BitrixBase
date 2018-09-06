@@ -8,11 +8,11 @@ use Bitrix\Main\Loader;
 use Bitrix\Main\LoaderException;
 
 /**
- * Class HighloadHelper
+ * Class HLBlockHelper
  *
  * @package Vf92\HLBlock
  */
-class HighloadHelper
+class HLBlockHelper
 {
     /**
      * @param string $name
