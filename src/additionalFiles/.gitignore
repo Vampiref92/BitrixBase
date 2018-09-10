@@ -7,6 +7,8 @@
 /local/composer.phar
 /composer.phar
 
+*node_modules/*
+
 /.idea/
 /.bash_history
 /.viminfo
