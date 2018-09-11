@@ -1,15 +1,16 @@
-/bitrix/
-/upload/
-/vendor/
-/local/vendor/
-/local/cache/
+/bitrix
+/upload
+/vendor
+/local/vendor
+/local/cache
 
 /local/composer.phar
 /composer.phar
 
-*node_modules/*
+/node_modules
+/local/node_modules
 
-/.idea/
+/.idea
 /.bash_history
 /.viminfo
 .DS_Store
