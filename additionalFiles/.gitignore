@@ -4,7 +4,6 @@
 /local/vendor
 /local/cache
 
-/local/composer.phar
 /composer.phar
 
 /node_modules
