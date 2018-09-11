@@ -1,18 +1,8 @@
 <?php
-
-$finder = \PhpCsFixer\Finder::create();
-$finder
-    ->in([
-        __DIR__ . '/src',
-        __DIR__ . '/local',
-    ])
-    ->exclude([
-        __DIR__ . '/local/modules',
-        __DIR__ . '/local/docs',
-    ])
-    ->files()
-    ->name('*.php');
-return \PhpCsFixer\Config::create()
+/** либо выбираем текущий конфиг, либо настраиваем свой */
+//$config = new DotsUnited\PhpCsFixer\Php56Config();
+//$config = new DotsUnited\PhpCsFixer\Php71Config();
+$config = \PhpCsFixer\Config::create()
     ->setUsingCache(true)
     ->setRiskyAllowed(true)
     ->setRules([
@@ -38,5 +28,21 @@ return \PhpCsFixer\Config::create()
         'array_syntax'                              => [
             'syntax' => 'short',
         ],
+    ]);
+
+$cacheDir = getenv('TRAVIS') ? getenv('HOME') . '/.php-cs-fixer' : __DIR__;
+$config->setCacheFile($cacheDir . '/.php_cs.cache');
+
+// устанавливаем где искать
+$config->getFinder()
+    ->in([__DIR__])
+    ->exclude([
+        __DIR__ . '/bitrix',
+        __DIR__ . '/upload',
+        __DIR__ . '/local/modules',
+        __DIR__ . '/local/docs',
     ])
-    ->setFinder($finder);
+    ->files()
+    ->name('*.php');
+
+return $config;
