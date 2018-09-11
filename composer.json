@@ -24,8 +24,10 @@
     "monolog/monolog": "^1.22",
     "doctrine/collections": "^1.4",
     "webarchitect609/bitrix-cache": "^1.0",
-    "webarchitect609/bitrix-neverinclude": "^0.4.2",
-    "otsunited/php-cs-fixer-config" : "^1.5"
+    "webarchitect609/bitrix-neverinclude": "^0.4.2"
+  },
+  "require-dev": {
+    "dotsunited/php-cs-fixer-config" : "^1.5"
   },
   "minimum-stability": "stable"
 }
