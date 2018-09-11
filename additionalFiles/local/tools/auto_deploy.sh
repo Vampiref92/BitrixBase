@@ -4,9 +4,9 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_PATH="${DIR}/../.."
 
-if [ -f "${DIR}/deploy_include/deploy_settings.ini" ]; then
+if [[ -f "${DIR}/deploy_include/deploy_settings.ini" ]]; then
     . ${DIR}/deploy_include/deploy_settings.ini
-    if [ -f "${DIR}/deploy_include/deploy_settings.${ENV_TYPE}" ]; then
+    if [[ -f "${DIR}/deploy_include/deploy_settings.${ENV_TYPE}" ]]; then
         . ${DIR}/deploy_include/deploy_settings.${ENV_TYPE}
     else
         echo "Файл настроек для зоны не найден"
@@ -28,7 +28,7 @@ git pull origin ${GIT_BRANCH}
 echo "Изменения из git получены"
 echo "======"
 cd ${COMPOSER_DIRECTORY}
-if [ ! -f "composer.phar" ]; then
+if [[ ! -f "composer.phar" ]]; then
     echo "начало установки composer"
     ${INSTALLER} update
     ${INSTALLER} install curl php-cli php-mbstring git unzip
@@ -39,9 +39,9 @@ if [ ! -f "composer.phar" ]; then
     echo "composer установлен"
     echo "======"
 fi
-if [ -f "composer.phar" ] && [-f "composer.json" ]; then
+if [[ -f "composer.phar" && -f "composer.json" ]]; then
     echo "начало установки пакетов из composer"
-        if [[ "${ENV_TYPE}" = "dev" ]]; then
+    if [[ "${ENV_TYPE}" = "dev" ]]; then
         ${PHP_PATH} composer.phar install
     else
         ${PHP_PATH} composer.phar install --no-dev
@@ -51,7 +51,7 @@ if [ -f "composer.phar" ] && [-f "composer.json" ]; then
     echo "======"
 fi
 cd ${PROJECT_PATH}
-if [ -f "${MIGRATE_PATH}" ] && ([ -d "local/modules/${MIGRATE_MODULE_NAME}" ] || [ -d "bitrix/modules/${MIGRATE_MODULE_NAME}" ]); then
+if [[ -f "${MIGRATE_PATH}" ]] && ( [[ -d "local/modules/${MIGRATE_MODULE_NAME}" ]] || [[ -d "bitrix/modules/${MIGRATE_MODULE_NAME}" ]] ); then
     echo "начало миграций"
     ${PHP_PATH} ${MIGRATE_PATH} up
     # добавить проверку на ошибки
