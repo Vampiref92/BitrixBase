@@ -11,7 +11,7 @@
   "minimum-stability": "stable",
   "autoload": {
     "psr-4": {
-      "project_name_upper\\": "src/"
+      "ProjectName\\": "src/"
     }
   },
   "extra": {
@@ -26,6 +26,6 @@
     "webarchitect609/bitrix-iblock-property-type": "^1.0.3"
     //    "twig/twig": "^1.0",
     //    "php-amqplib/rabbitmq-bundle": "~1.13.0",
-    //    "bitrix": ">=16.5.0"
+    //    "bitrix": ">=16.5.0" // желателен битрикс выше 17.5.2, чтобы работало where в orm
   }
 }

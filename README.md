@@ -52,7 +52,7 @@ $dataManager = \Vf92\Constructor\IblockPropMultipleEntityConstructor::getDataCla
 $id = (int)$dataManager::query()->setSelect(['ID'])->setFilter(['CODE' => $code])->exec()->fetch()['ID'];
 ```
 
-## Пользователь и группы пользователя
+## Пользователь и группа пользователя
 ### UserGroupHelper
 хелпер для получения данных из групп пользователя
 - getGroupIdByCode - Возвращает id группы пользователей по её коду
@@ -147,7 +147,7 @@ $fullPath = (new \Vf92\Decorators\FullHrefDecorator($path))->getFullPublicPath()
 - numberFormat - Форматированный вывод чиел, с возможностью удаления незначащих нулей и с округлением до нужной точности
 - clear - Очистка текста от примесей(тегов, лишних спец. символов)
 
-## дополнительный возможности для запросов к Mysql через объект dataQuery
+## Дополнительные возможности для запросов к Mysql через объект dataQuery
 ### MysqlBatchOperations
 Массовые операции над таблицами с поддержкой условий
 - batchUpdate - Делаем массовое обновление данных по условию
@@ -177,5 +177,5 @@ $fullPath = (new \Vf92\Decorators\FullHrefDecorator($path))->getFullPublicPath()
 Нераспределенные функции:
 - getClassName - получение имени класса без namespace
 
-## папка additionalFiles
+## Папка additionalFiles
 В папке содержатся доп. файлы которые могут понадобиться на проекте - это базовый композер, gitignore для битрикса и cs_fixer
