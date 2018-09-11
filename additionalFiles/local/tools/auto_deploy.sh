@@ -41,7 +41,11 @@ if [ ! -f "composer.phar" ]; then
 fi
 if [ -f "composer.phar" ] && [-f "composer.json" ]; then
     echo "начало установки пакетов из composer"
-    ${PHP_PATH} composer.phar install
+        if [[ "${ENV_TYPE}" = "dev" ]]; then
+        ${PHP_PATH} composer.phar install
+    else
+        ${PHP_PATH} composer.phar install --no-dev
+    fi
     # добавить проверку на ошибки
     echo "Установка пакетов из composer завершена"
     echo "======"
