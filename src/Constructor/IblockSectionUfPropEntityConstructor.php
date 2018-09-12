@@ -7,7 +7,11 @@ use Bitrix\Main\Entity\DataManager;
 use Bitrix\Main\Entity\ReferenceField;
 use Bitrix\Main\SystemException;
 
-class IblockPropEntityConstructor extends EntityConstructor
+/**
+ * Class IblockSectionUfPropEntityConstructor
+ * @package Vf92\Constructor
+ */
+class IblockSectionUfPropEntityConstructor extends EntityConstructor
 {
     const SINGLE_TYPE='s';
     const MULTIPLE_TYPE='m';
