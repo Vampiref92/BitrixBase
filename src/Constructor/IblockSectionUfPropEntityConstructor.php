@@ -2,15 +2,11 @@
 
 namespace Vf92\Constructor;
 
-use Bitrix\Iblock\ElementTable;
+use Bitrix\Iblock\SectionTable;
 use Bitrix\Main\Entity\DataManager;
 use Bitrix\Main\Entity\ReferenceField;
 use Bitrix\Main\SystemException;
 
-/**
- * Class IblockPropEntityConstructor
- * @package Vf92\Constructor
- */
 class IblockPropEntityConstructor extends EntityConstructor
 {
     const SINGLE_TYPE='s';
@@ -37,16 +33,24 @@ class IblockPropEntityConstructor extends EntityConstructor
         return static::getBaseDataClass($iblockId, static::MULTIPLE_TYPE);
     }
 
+    /**
+     * @param        $iblockId
+     * @param string $type
+     *
+     * @return DataManager|string
+     * @throws SystemException
+     * @throws \Bitrix\Main\ArgumentException
+     */
     protected static function getBaseDataClass($iblockId, $type = 's')
     {
-        $className = 'ElementProp'.ToUpper($type) . $iblockId;
-        $tableName = 'b_iblock_element_prop_'.ToLower($type) . $iblockId;
+        $className = 'Ut'.ToLower($type).'Iblock' . $iblockId.'Section';
+        $tableName = 'b_ut'.ToLower($type).'_iblock_' . $iblockId.'_section';
         $additionalFields = [
-            'ELEMENT' => new ReferenceField(
-                'ELEMENT',
-                ElementTable::class,
-                ['=this.IBLOCK_ELEMENT_ID' => 'ref.ID']
-            ),
+            'PROPERTY' => new ReferenceField(
+                'PROPERTY',
+                SectionTable::class,
+                ['=this.VALUE_ID' => 'ref.ID']
+            )
         ];
         return parent::compileEntityDataClass($className, $tableName, $additionalFields);
     }

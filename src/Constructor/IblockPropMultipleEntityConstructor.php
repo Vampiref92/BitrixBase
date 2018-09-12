@@ -2,7 +2,9 @@
 
 namespace Vf92\Constructor;
 
+use Bitrix\Iblock\ElementTable;
 use Bitrix\Main\Entity\DataManager;
+use Bitrix\Main\Entity\ReferenceField;
 use Bitrix\Main\SystemException;
 
 class IblockPropMultipleEntityConstructor extends EntityConstructor
@@ -12,10 +14,10 @@ class IblockPropMultipleEntityConstructor extends EntityConstructor
      *
      * @return DataManager|string
      * @throws SystemException
+     * @deprecated
      */
-    public static function getDataClass($iblockId){
-        $className = 'ElementPropM'.$iblockId;
-        $tableName = 'b_iblock_element_prop_m'.$iblockId;
-        return parent::compileEntityDataClass($className, $tableName);
+    public static function getDataClass($iblockId)
+    {
+        return IblockPropEntityConstructor::getMultipleDataClass($iblockId);
     }
 }
