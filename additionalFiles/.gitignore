@@ -21,3 +21,5 @@
 *.lock
 *.log
 sitemap*.xml
+
+/local/php_interface/.settings.local.php
