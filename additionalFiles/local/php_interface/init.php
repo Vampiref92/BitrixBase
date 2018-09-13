@@ -2,7 +2,8 @@
 use WebArch\BitrixNeverInclude\BitrixNeverInclude;
 
 /** настрйоки */
-require_once __DIR__ . '/settings.php';
+require_once __DIR__ . '/.settings.php';
+require_once __DIR__ . '/.settings.local.php';
 
 /** автоподгрузка из композера для вендора */
 require_once $_SERVER['DOCUMENT_ROOT'] . PATH_TO_VENDOR_AUTOLOAD;
