@@ -50,8 +50,8 @@ class IblockSectionUfPropEntityConstructor extends EntityConstructor
         $className = 'Ut'.ToLower($type).'Iblock' . $iblockId.'Section';
         $tableName = 'b_ut'.ToLower($type).'_iblock_' . $iblockId.'_section';
         $additionalFields = [
-            'PROPERTY' => new ReferenceField(
-                'PROPERTY',
+            'SECTION' => new ReferenceField(
+                'SECTION',
                 SectionTable::class,
                 ['=this.VALUE_ID' => 'ref.ID']
             )

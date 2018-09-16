@@ -34,17 +34,24 @@ class IblockPropEntityConstructor extends EntityConstructor
      */
     public static function getMultipleDataClass($iblockId)
     {
-        return static::getBaseDataClass($iblockId, static::MULTIPLE_TYPE);
+        $additionalFields[] = [
+            'PROPERTY' => new ReferenceField(
+                'PROPERTY',
+                PropertyTable::getEntity(),
+                ['=this.IBLOCK_ELEMENT_ID' => 'ref.ID']
+            ),
+        ];
+        return static::getBaseDataClass($iblockId, static::MULTIPLE_TYPE, $additionalFields);
     }
 
-    protected static function getBaseDataClass($iblockId, $type = 's')
+    protected static function getBaseDataClass($iblockId, $type = 's', $additionalFields = [])
     {
         $className = 'ElementProp'.ToUpper($type) . $iblockId;
         $tableName = 'b_iblock_element_prop_'.ToLower($type) . $iblockId;
-        $additionalFields = [
+        $additionalFields[] = [
             'ELEMENT' => new ReferenceField(
                 'ELEMENT',
-                ElementTable::class,
+                ElementTable::getEntity(),
                 ['=this.IBLOCK_ELEMENT_ID' => 'ref.ID']
             ),
         ];

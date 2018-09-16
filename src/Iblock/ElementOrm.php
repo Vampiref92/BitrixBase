@@ -12,16 +12,19 @@ namespace Vf92\Iblock;
 use Bitrix\Iblock\ElementTable;
 use Bitrix\Main\Entity\ReferenceField;
 use Bitrix\Main\FileTable;
-use Vf92\Constructor\IblockPropEntityConstructor;
 
 class ElementOrm extends ElementTable
-
 {
+    const PROPERTY_MULTIPLE = 'PROPERTY_MULTIPLE';
+    const PROPERTY_SINGLE = 'PROPERTY_SINGLE';
+    const PROPERTY_BASE = 'PROPERTY_BASE';
+
+    /** @var int */
     public static $iblockId;
 
     public static function getIblockId()
     {
-        return static::$iblockId;
+        return (int)static::$iblockId;
     }
 
     public static function setIblockId($iblockId)
@@ -43,16 +46,7 @@ class ElementOrm extends ElementTable
             ['=this.PREVIEW_PICTURE' => 'ref.ID']
         );
 
-        $map['PROPERTY_SINGLE'] = new ReferenceField(
-            'PROPERTY_SINGLE',
-            IblockPropEntityConstructor::getDataClass(static::getIblockId()),
-            ['=this.ID' => 'ref.IBLOCK_ELEMENT_ID']
-        );
-        $map['PROPERTY_MULTIPLE'] = new ReferenceField(
-            'PROPERTY_MULTIPLE',
-            IblockPropEntityConstructor::getMultipleDataClass(static::getIblockId()),
-            ['=this.ID' => 'ref.IBLOCK_ELEMENT_ID']
-        );
+        return $map;
     }
 
 
@@ -60,6 +54,7 @@ class ElementOrm extends ElementTable
     public static function query()
     {
         $query = new ExtendsElementBitrixQuery(static::getEntity());
+        $query->setIblockId(static::getIblockId());
         $query->where('IBLOCK_ID', static::getIblockId());
         return $query;
     }
