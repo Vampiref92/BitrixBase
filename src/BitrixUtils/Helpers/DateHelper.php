@@ -3,7 +3,7 @@ namespace Vf92\BitrixUtils\Helpers;
 
 use Bitrix\Main\Type\DateTime;
 use DateTime as NormalDateTime;
-use Vf92\BitrixUtils\MiscUtils\Helpers\DateHelper as MiscDateHelper;
+use Vf92\MiscUtils\Helpers\DateHelper as MiscDateHelper;
 
 /**
  * Class DateHelper
