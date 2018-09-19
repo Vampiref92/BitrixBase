@@ -8,16 +8,13 @@
 
 namespace Vf92\Connections;
 
-use Bitrix\Main\Localization\Loc;
 use Psr\Log\LoggerInterface;
 use Vf92\Log\LoggerFactory;
-
-Loc::loadMessages(__FILE__);
 
 /**
  * Class Ftp
  * @package Vf92\Tender
- * @todo переписать с exception
+ * @todo    переписать с exception
  */
 class Ftp
 {
@@ -89,16 +86,14 @@ class Ftp
         if ($this->ftp !== false) {
             $res = \ftp_login($this->ftp, $this->ftpParams['user'], $this->ftpParams['password']);
             if (!$res) {
-                $this->log->error(Loc::getMessage("AUTH_ERROR_TEXT"));
+                $this->log->error('ошибка авторизации');
                 exit;
             } else {
-                // ��������� ���������� ������
                 \ftp_pasv($this->ftp, true);
-                //����������� �������
                 \ftp_set_option($this->ftp, FTP_TIMEOUT_SEC, 300);
             }
         } else {
-            $this->log->error(Loc::getMessage("CONNECTION_ERROR_TEXT"));
+            $this->log->error('ошибка подключения');
             exit;
         }
     }
@@ -120,7 +115,7 @@ class Ftp
             $transfer_mode = FTP_BINARY;
             $res = \ftp_get($this->ftp, $localPath, $ftpPath, $transfer_mode);
             if (!$res) {
-                $this->log->error(Loc::getMessage("ERROR_GET_BY_FTP_TEXT") . $ftpPath . Loc::getMessage("IN_TEXT") . $localPath);
+                $this->log->error('Ошибка получения файлов из ' . $ftpPath . ' в ' . $localPath);
             }
         } else {
             $res = true;
@@ -149,7 +144,7 @@ class Ftp
                 $transfer_mode = FTP_BINARY;
                 $res = \ftp_put($this->ftp, $ftpPath, $localPath, $transfer_mode);
                 if (!$res) {
-                    $this->log->error(Loc::getMessage("ERROR_LOAD_TEXT") . $localPath . Loc::getMessage("TO_FTP_IN_TEXT") . $ftpPath);
+                    $this->log->error('Ошибка загрузки файлов из ' . $localPath . ' в ' . $ftpPath);
                 }
             }
         } else {
