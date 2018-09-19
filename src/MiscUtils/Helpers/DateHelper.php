@@ -25,7 +25,7 @@ class DateHelper
     const DATIVE_PLURAL = 'DativePlural';
 
     /**Месяца в родительном падеже*/
-    private static $monthGenitive = [
+    protected static $monthGenitive = [
         '#1#'  => 'Января',
         '#2#'  => 'Февраля',
         '#3#'  => 'Марта',
@@ -41,7 +41,7 @@ class DateHelper
     ];
 
     /** Месяца в именительном падеже  */
-    private static $monthNominative = [
+    protected static $monthNominative = [
         '#1#'  => 'Январь',
         '#2#'  => 'Февраль',
         '#3#'  => 'Март',
@@ -57,7 +57,7 @@ class DateHelper
     ];
 
     /** кратские месяца в именительном падеже  */
-    private static $monthShortNominative = [
+    protected static $monthShortNominative = [
         '#1#'  => 'янв',
         '#2#'  => 'фев',
         '#3#'  => 'мар',
@@ -73,7 +73,7 @@ class DateHelper
     ];
 
     /**кратские месяца в родительном падеже*/
-    private static $monthShortGenitive = [
+    protected static $monthShortGenitive = [
         '#1#'  => 'янв',
         '#2#'  => 'фев',
         '#3#'  => 'мар',
@@ -89,7 +89,7 @@ class DateHelper
     ];
 
     /**дни недели в именительном падеже*/
-    private static $dayOfWeekNominative = [
+    protected static $dayOfWeekNominative = [
         '#1#' => 'Понедельник',
         '#2#' => 'Вторник',
         '#3#' => 'Среда',
@@ -100,7 +100,7 @@ class DateHelper
     ];
 
     /** дни недели в множ. числе дат. падеже */
-    private static $dayOfWeekDativePlural = [
+    protected static $dayOfWeekDativePlural = [
         '#1#' => 'Понедельникам',
         '#2#' => 'Вторникам',
         '#3#' => 'Средам',
@@ -111,7 +111,7 @@ class DateHelper
     ];
 
     /**краткие дни недели*/
-    private static $dayOfWeekShortNominative = [
+    protected static $dayOfWeekShortNominative = [
         '#1#' => 'пн',
         '#2#' => 'вт',
         '#3#' => 'ср',
@@ -170,7 +170,7 @@ class DateHelper
         );
     }
 
-    private static function replaceStringByArray(array $params)
+    protected static function replaceStringByArray(array $params)
     {
         preg_match($params['pattern'], $params['date'], $matches);
         if (!empty($matches[0]) && !empty($params['case'])) {
