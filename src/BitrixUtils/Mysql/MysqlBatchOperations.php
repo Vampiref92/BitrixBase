@@ -39,7 +39,20 @@ class MysqlBatchOperations
     }
 
     /**
+     * @param Query|null $query
+     * @param string     $table
+     *
+     * @return static
+     * @throws ArgumentException
+     */
+    public static function getInstance(Query $query = null, $table = '')
+    {
+        return new static($query, $table);
+    }
+
+    /**
      * Делаем массовое обновление данных по условию
+     *
      * @param array $fields
      *
      * @throws SqlQueryException
@@ -48,13 +61,16 @@ class MysqlBatchOperations
     {
         /** @todo обновление из нескольких таблиц */
         /** @todo транзакции */
+        $sqlHelper = Application::getConnection()->getSqlHelper();
         if (!empty($fields) && $this->hasTable()) {
             $updates = [];
             foreach ($fields as $column => $val) {
-                $updates[] = $column . '=' . $val;
+                if (!empty($column) && !empty($val)) {
+                    $updates[] = $sqlHelper->quote($column) . '=' . $val;
+                }
             }
             $connection = Application::getConnection();
-            $queryString = 'UPDATE' . $this->getLowPriority() . $this->getIgnore() . ' ' . $this->getTable()
+            $queryString = 'UPDATE' . $this->getLowPriority() . $this->getIgnore() . ' ' . $sqlHelper->quote($this->getTable())
                 . ' SET ' . implode(', ', $updates)
                 . $this->getWhere() . $this->getOrder() . $this->getLimitString();
             $connection->queryExecute($queryString);
@@ -67,11 +83,12 @@ class MysqlBatchOperations
      */
     public function batchDelete()
     {
+        $sqlHelper = Application::getConnection()->getSqlHelper();
         /** @todo удаление из нескольких таблиц */
         /** @todo использование USING */
         if ($this->hasTable()) {
             $connection = Application::getConnection();
-            $queryString = 'DELETE' . $this->getLowPriority() . $this->getQuick() . ' FROM ' . $this->getTable()
+            $queryString = 'DELETE' . $this->getLowPriority() . $this->getQuick() . ' FROM ' . $sqlHelper->quote($this->getTable())
                 . $this->getWhere() . $this->getOrder() . $this->getLimitString();
             $connection->queryExecute($queryString);
         }
@@ -79,12 +96,14 @@ class MysqlBatchOperations
 
     /**
      * Делаем массовую вставку
+     *
      * @param array $fields
      *
      * @throws SqlQueryException
      */
     public function batchInsert(array $fields)
     {
+        $sqlHelper = Application::getConnection()->getSqlHelper();
         /** @todo транзакции */
         /** @todo вставка по подзапросу в том числе с лимитом */
         /** @todo использование ON DUPLICATE KEY UPDATE */
@@ -99,9 +118,13 @@ class MysqlBatchOperations
                     $columns = array_merge($columns, array_keys($item));
                 }
                 array_unique($columns);
+                foreach ($columns as &$column) {
+                    $column = $sqlHelper->quote($column);
+                }
+                unset($column);
                 $connection = Application::getConnection();
                 $queryString = 'INSERT' . $this->getDelayed() . ($this->isDelayed() ? '' : $this->getLowPriority()) . $this->getIgnore()
-                    . ' INTO ' . $this->getTable() . '(' . implode(', ', $columns) . ')'
+                    . ' INTO ' . $sqlHelper->quote($this->getTable()) . '(' . implode(', ', $columns) . ')'
                     . ' VALUES ' . implode(', ', $values);
                 $connection->queryExecute($queryString);
             }
@@ -110,6 +133,7 @@ class MysqlBatchOperations
 
     /**
      * Получение части массива по лимтам
+     *
      * @param $items
      *
      * @return array
@@ -143,6 +167,7 @@ class MysqlBatchOperations
 
     /**
      * Устанавливаем ограничение в limit
+     *
      * @param int $limit
      */
     public function setLimit($limit)
@@ -161,6 +186,7 @@ class MysqlBatchOperations
 
     /**
      * Устанавливаем LOW_PRIORITY
+     *
      * @param bool $lowPriority
      */
     public function setLowPriority($lowPriority)
@@ -179,6 +205,7 @@ class MysqlBatchOperations
 
     /**
      * Устанавливаем QUICK
+     *
      * @param bool $quick
      */
     public function setQuick($quick)
@@ -197,6 +224,7 @@ class MysqlBatchOperations
 
     /**
      * Устанавливаем имя таблицы
+     *
      * @param string $table
      */
     public function setTable($table)
@@ -215,6 +243,7 @@ class MysqlBatchOperations
 
     /**
      * Установка DELAYED
+     *
      * @param bool $delayed
      */
     public function setDelayed($delayed)
@@ -242,6 +271,7 @@ class MysqlBatchOperations
 
     /**
      * Установка IGNORE
+     *
      * @param bool $ignore
      */
     public function setIgnore($ignore)
@@ -260,6 +290,7 @@ class MysqlBatchOperations
 
     /**
      * Установка объекта Query
+     *
      * @param Query $query
      *
      * @throws \Bitrix\Main\ArgumentException
@@ -317,6 +348,7 @@ class MysqlBatchOperations
 
     /**
      * Установка шага
+     *
      * @param int $step
      */
     private function setStep($step)
