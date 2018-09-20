@@ -61,15 +61,15 @@ class MysqlBatchOperations
     {
         /** @todo обновление из нескольких таблиц */
         /** @todo транзакции */
-        $sqlHelper = Application::getConnection()->getSqlHelper();
         if (!empty($fields) && $this->hasTable()) {
             $updates = [];
+            $connection = Application::getConnection();
+            $sqlHelper = $connection->getSqlHelper();
             foreach ($fields as $column => $val) {
                 if (!empty($column) && !empty($val)) {
                     $updates[] = $sqlHelper->quote($column) . '=' . $val;
                 }
             }
-            $connection = Application::getConnection();
             $queryString = 'UPDATE' . $this->getLowPriority() . $this->getIgnore() . ' ' . $sqlHelper->quote($this->getTable())
                 . ' SET ' . implode(', ', $updates)
                 . $this->getWhere() . $this->getOrder() . $this->getLimitString();
@@ -88,6 +88,7 @@ class MysqlBatchOperations
         /** @todo использование USING */
         if ($this->hasTable()) {
             $connection = Application::getConnection();
+            $sqlHelper = $connection->getSqlHelper();
             $queryString = 'DELETE' . $this->getLowPriority() . $this->getQuick() . ' FROM ' . $sqlHelper->quote($this->getTable())
                 . $this->getWhere() . $this->getOrder() . $this->getLimitString();
             $connection->queryExecute($queryString);
@@ -118,11 +119,12 @@ class MysqlBatchOperations
                     $columns = array_merge($columns, array_keys($item));
                 }
                 array_unique($columns);
+                $connection = Application::getConnection();
+                $sqlHelper = $connection->getSqlHelper();
                 foreach ($columns as &$column) {
                     $column = $sqlHelper->quote($column);
                 }
                 unset($column);
-                $connection = Application::getConnection();
                 $queryString = 'INSERT' . $this->getDelayed() . ($this->isDelayed() ? '' : $this->getLowPriority()) . $this->getIgnore()
                     . ' INTO ' . $sqlHelper->quote($this->getTable()) . '(' . implode(', ', $columns) . ')'
                     . ' VALUES ' . implode(', ', $values);
