@@ -2,7 +2,7 @@
 
 namespace Vf92\Log;
 
-use Vf92\MiscUtils;
+use Vf92\MiscUtils\MiscUtils;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use RuntimeException;

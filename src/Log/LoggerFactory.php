@@ -2,7 +2,7 @@
 
 namespace Vf92\Log;
 
-use Vf92\EnvType;
+use Vf92\MiscUtils\EnvType;
 use InvalidArgumentException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
