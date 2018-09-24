@@ -31,7 +31,8 @@
     "webarchitect609/bitrix-neverinclude": "^0.4.2"
   },
   "require-dev": {
-    "dotsunited/php-cs-fixer-config" : "^1.5"
+    "dotsunited/php-cs-fixer-config": "^1.5",
+    "friendsofphp/php-cs-fixer": "^2.13"
   },
   "suggest": {
     "ext-ftp": "to connect to ftp:// server"
