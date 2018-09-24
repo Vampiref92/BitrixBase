@@ -1,7 +1,8 @@
 <?php
 /** либо выбираем текущий конфиг, либо настраиваем свой */
-//$config = new DotsUnited\PhpCsFixer\Php56Config();
+$config = new DotsUnited\PhpCsFixer\Php56Config();
 //$config = new DotsUnited\PhpCsFixer\Php71Config();
+$projectPath = realpath(__DIR__.'/../');
 $config = \PhpCsFixer\Config::create()
     ->setUsingCache(true)
     ->setRiskyAllowed(true)
@@ -25,24 +26,30 @@ $config = \PhpCsFixer\Config::create()
         'trailing_comma_in_multiline_array'         => true,
         'no_unused_imports'                         => true,
         'include'                                   => true,
-        'array_syntax'                              => [
-            'syntax' => 'short',
-        ],
+//        'array_syntax'                              => [
+//            'syntax' => 'short',
+//        ],
     ]);
 
-$cacheDir = getenv('TRAVIS') ? getenv('HOME') . '/.php-cs-fixer' : __DIR__;
+$cacheDir = getenv('TRAVIS') ? getenv('HOME') . '/.php-cs-fixer' : $projectPath;
 $config->setCacheFile($cacheDir . '/.php_cs.cache');
 
 // устанавливаем где искать
+// исключения действуют для корня
 $config->getFinder()
-    ->in([__DIR__])
+    ->in(['./'])
     ->exclude([
-        __DIR__ . '/bitrix',
-        __DIR__ . '/upload',
-        __DIR__ . '/local/modules',
-        __DIR__ . '/local/docs',
+        'bitrix',
+        'upload',
+        'html',
+        'local/modules/sprint.migration',
+        'local/docs',
+        'vendor',
+        'local/vendor'
     ])
     ->files()
     ->name('*.php');
+
+$config->setUsingCache(false);
 
 return $config;
