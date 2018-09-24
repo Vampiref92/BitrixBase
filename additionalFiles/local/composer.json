@@ -22,16 +22,20 @@
     }
   },
   "require": {
+    //    "bitrix": ">=16.5.0" // желателен битрикс выше 17.5.2, чтобы работало where в orm
     "vf92/bitrix-base": "^1.1",
     "andreyryabin/sprint.migration": "dev-master",
     "webarchitect609/bitrix-user-type": "^0.1",
     "webarchitect609/bitrix-iblock-property-type": "^1.0.3"
-    //    "guzzlehttp/guzzle": "^6.3"
-    //    "twig/twig": "^1.0",
-    //    "php-amqplib/rabbitmq-bundle": "~1.13.0",
-    //    "bitrix": ">=16.5.0" // желателен битрикс выше 17.5.2, чтобы работало where в orm
-    //    "phpmailer/phpmailer": "^6.0",
-    //    "rakit/validation": "^0.14.0",
     //    "vf92/recaptcha-bitrix": "^1.1",
+    //    "guzzlehttp/guzzle": "^6.3"
+    //    "rakit/validation": "^0.14.0",
+    //    "jms/serializer ": "^1.13",
+    //    "respect/validation ": "^1.1.25",
+    //    "phpmailer/phpmailer": "^6.0",
+    //    "php-amqplib/rabbitmq-bundle": "~1.13.0",
+  },
+  "require-dev": {
+    "dotsunited/php-cs-fixer-config" : "^1.5"
   }
 }
