@@ -3,8 +3,11 @@
 /vendor
 /local/vendor
 /local/cache
+/local/modules/sprint.migration
 
 /composer.phar
+/composer-setup.php
+/local/composer-setup.php
 
 /node_modules
 /local/node_modules
@@ -23,3 +26,4 @@
 sitemap*.xml
 
 /local/php_interface/.settings.local.php
+/local/tools/deploy_include/deploy_settings.ini
