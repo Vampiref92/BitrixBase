@@ -23,7 +23,7 @@
   },
   "require": {
     //    "bitrix": ">=16.5.0" // желателен битрикс выше 17.5.2, чтобы работало where в orm
-    "vf92/bitrix-base": "^1.1",
+    "vf92/bitrix-base": "^2.0.8",
     "andreyryabin/sprint.migration": "dev-master",
     "webarchitect609/bitrix-user-type": "^0.1",
     "webarchitect609/bitrix-iblock-property-type": "^1.0.3"

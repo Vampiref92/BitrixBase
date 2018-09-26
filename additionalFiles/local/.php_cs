@@ -1,6 +1,6 @@
 <?php
 /** либо выбираем текущий конфиг, либо настраиваем свой */
-$config = new DotsUnited\PhpCsFixer\Php56Config();
+//$config = new DotsUnited\PhpCsFixer\Php56Config();
 //$config = new DotsUnited\PhpCsFixer\Php71Config();
 $projectPath = realpath(__DIR__.'/../');
 $config = \PhpCsFixer\Config::create()
