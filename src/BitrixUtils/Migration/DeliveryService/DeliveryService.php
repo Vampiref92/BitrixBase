@@ -15,7 +15,7 @@ class DeliveryService
 
     private $service;
 
-    public function __construct(int $id = 0)
+    public function __construct($id = 0)
     {
         Loader::includeModule('sale');
 
