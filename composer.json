@@ -5,7 +5,13 @@
   "type": "library",
   "license": "proprietary",
   "keywords": [
-    "bitrix"
+    "bitrix",
+    "sergey",
+    "frolov",
+    "log",
+    "cache",
+    "utils",
+    "test"
   ],
   "authors": [
     {
@@ -16,14 +22,12 @@
   "autoload": {
     "psr-4": {
       "Vf92\\BitrixUtils\\": "src/BitrixUtils/",
-      "Vf92\\Connections\\": "src/Connections/",
       "Vf92\\Log\\": "src/Log/",
       "Vf92\\MiscUtils\\": "src/MiscUtils/"
     }
   },
   "require": {
     "php": ">=5.6",
-    "ext-ftp": "*",
     "psr/log": "^1.0",
     "monolog/monolog": "^1.22",
     "doctrine/collections": "^1.4",
@@ -34,9 +38,6 @@
     "dotsunited/php-cs-fixer-config": "^1.5",
     "friendsofphp/php-cs-fixer": "^2.13",
     "codeception/codeception":"^2.5"
-  },
-  "suggest": {
-    "ext-ftp": "to connect to ftp:// server"
   },
   "minimum-stability": "stable"
 }
