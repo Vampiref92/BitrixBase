@@ -1,6 +1,6 @@
 {
   "name": "vf92/bitrix-base",
-  "description": "base bitrix classes. Bitrix minimal version 16.5.0",
+  "description": "Расширение возможностей платформы 1С-Битрикс. Минимальная версия 16.5.0, рекомендуется использовать с версии 17.5.2",
   "homepage": "https://github.com/Vampiref92/BitrixBase",
   "type": "library",
   "license": "proprietary",
@@ -9,7 +9,7 @@
   ],
   "authors": [
     {
-      "name": "Frolov Sergey",
+      "name": "Sergey Frolov",
       "email": "vampiref92@yandex.ru"
     }
   ],

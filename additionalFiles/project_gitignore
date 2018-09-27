@@ -18,12 +18,13 @@
 .DS_Store
 .php_cs.cache
 
-.gitmodules
+.gitmodulesaaa
 
 /robots.txt
 *.lock
 *.log
 sitemap*.xml
 
-/local/php_interface/.settings.local.php
-/local/tools/deploy_include/deploy_settings.ini
+/local/php_interface/.project_settings.local.php
+/local/tools/auto_deploy
+/local/tools/deploy_settings/base.ini
