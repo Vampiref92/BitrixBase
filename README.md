@@ -1,17 +1,7 @@
 # BitrixBase
 Расширенный набор функций для Битиркса
 
-## Компонент
-### BaseBitrixComponent
-Базовый класс для упрощения создания компонентов и их унификации
-Особенности:
-- Включен логер
-- Можно задать ключи кеширования
-- Можно переопределить вызываемый шаблон через метод
-- Изначально включен кеш
-- Все необходимые действия делать в этом классе prepareResult, если логика сложнее, то переопределяем execute
-
-## Логгер
+## Log - Логгер
 ### LoggerFactory
 получение логгера
 ```php
@@ -35,16 +25,27 @@ $logger = LoggerFactory::create('fullHrefDecorator');
 $logger->critical('Системная ошибка при получении пукбличного пути ' . $e->getTraceAsString());
 ```
 
-## Конструктор
+## BitrixUtils
+### Component - Компонент
+#### BaseBitrixComponent
+Базовый класс для упрощения создания компонентов и их унификации
+Особенности:
+- Включен логер
+- Можно задать ключи кеширования
+- Можно переопределить вызываемый шаблон через метод
+- Изначально включен кеш
+- Все необходимые действия делать в этом классе prepareResult, если логика сложнее, то переопределяем execute
+
+### Конструктор
 Делает возможным работы с dataManager если сущность не описана
-### Базовый конструктор(EntityConstructor)
+#### Базовый конструктор(EntityConstructor)
 ```php
 $dataManager = \Vf92\Constructor\EntityConstructor::compileEntityDataClass('Form', 'b_form');
 //дальше работаем как обычно с объектом
 $id = (int)$dataManager::query()->setSelect(['ID'])->setFilter(['SID' => $code])->exec()->fetch()['ID'];
 ```
 
-### Упрощенный конструктор для свойств инфоблок в отдельной таблице(IblockPropEntityConstructor и IblockPropMultipleEntityConstructor)
+#### Упрощенный конструктор для свойств инфоблок в отдельной таблице(IblockPropEntityConstructor и IblockPropMultipleEntityConstructor)
 ```php
 $dataManager = \Vf92\Constructor\IblockPropEntityConstructor::getDataClass($iblockId);
 $dataManager = \Vf92\Constructor\IblockPropMultipleEntityConstructor::getDataClass($iblockId);
@@ -52,37 +53,37 @@ $dataManager = \Vf92\Constructor\IblockPropMultipleEntityConstructor::getDataCla
 $id = (int)$dataManager::query()->setSelect(['ID'])->setFilter(['CODE' => $code])->exec()->fetch()['ID'];
 ```
 
-## Пользователь и группа пользователя
-### UserGroupHelper
+### Пользователь и группа пользователя
+#### UserGroupHelper
 хелпер для получения данных из групп пользователя
 - getGroupIdByCode - Возвращает id группы пользователей по её коду
 
-### UserHelper
+#### UserHelper
 Хелпер для получения данных пользователя
 - isInGroup - Проверяет вхождение пользователя в группу
 - getLoginByHash - Возвращает логин пользователя по хешу его запомненной авторизации
 
-## Инфоблоки
-### IblockHelper
+### Инфоблоки
+#### IblockHelper
 Хелпер для инфоблока
 - getIblockId - Возвращает id инфоблока по его типу и символьному коду
 - getIblockXmlId - Возвращает xml id инфоблока по его типу и символьному коду
 - getPropertyId - Возвращает id свойства инфоблока по символьному коду
 - isIblockTypeExists - Проверка существования типа инфоблоков
 
-## Хайлоад блоки
-### HLBlockHelper
+### Хайлоад блоки
+#### HLBlockHelper
 получение информации о highload блкое - например id по названию таблицы
 - getIdByName - Получение ID Хайлоад блока по имени
 - getIdByTableName - Получение ID Хайлоад блока по таблице
 
-### HLBlockFactory
+#### HLBlockFactory
 создание объекта dataManager
 - createTableObject - Возвращает скомпилированную сущность HL-блока по имени его сущности.
 - createTableObjectByTable - Возвращает скомпилированную сущность HL-блока по имени его таблицы в базе данных.
 
-## Форма
-### FormHelper
+### Форма
+#### FormHelper
 - getIdByCode - Получение ID формы по коду
 - checkRequiredFields - Проверка обязательных полей формы
 - validEmail - Валидация email
@@ -97,19 +98,19 @@ $id = (int)$dataManager::query()->setSelect(['ID'])->setFilter(['CODE' => $code]
 - getRealNamesFields - Получить реальные названия полей формы
 - getQuestions - Получение вопросов
 
-## Декораторы
-### FullHrefDecorator 
+### Декораторы
+#### FullHrefDecorator 
 позволяет получить абсолютный путь сайта по относительному
 ```php
 $fullPath = (new \Vf92\Decorators\FullHrefDecorator($path))->getFullPublicPath();
 ```
 
-## Хелперы
-### ClassFinderHelper
+### Хелперы
+#### ClassFinderHelper
 Получение списка классов
 - getClasses - Поиск классов с совпадением имени в определенной папке
 
-### DateHelper
+#### DateHelper
 Хелпер для работы с датами
 - replaceRuMonth - Подстановка русских месяцев по шаблону
 - replaceRuDayOfWeek - Подстановка дней недели по шаблону
@@ -118,7 +119,7 @@ $fullPath = (new \Vf92\Decorators\FullHrefDecorator($path))->getFullPublicPath()
     - ll - отображение для недели в винительном падеже (в пятницу, в субботу)
     - XX - 'Сегодня', 'Завтра'
 
-### PhoneHelper
+#### PhoneHelper
 Обработка и нормализация телефонов
 - isPhone - Проверяет телефон по правилам нормализации. Допускаются только десятизначные номера с ведущими 7 или 8
 - normalizePhone - Нормализует телефонный номер.
@@ -126,7 +127,7 @@ $fullPath = (new \Vf92\Decorators\FullHrefDecorator($path))->getFullPublicPath()
     - Кидает исключение, если $phone - не номер
 - formatPhone - Форматирует телефон по шаблону
 
-### TaggedCacheHelper
+#### TaggedCacheHelper
 Класс для упрощенной работы с тегирвоанным кешем
 есть 2 режима работы как static так и dinamic(через объект)
 - addManagedCacheTags - Добавление тегов массивом
@@ -139,7 +140,7 @@ $fullPath = (new \Vf92\Decorators\FullHrefDecorator($path))->getFullPublicPath()
 - addTag - Добавляем тег
 - abortTagCache - прерываем тегированный кеш(abort)
 
-### WordHelper
+#### WordHelper
 Класс для работы со словами - например окончания
 - declension - Возвращает нужную форму существительного, стоящего после числительного
 - showWeight - Возвращает отформатированный вес
@@ -147,8 +148,8 @@ $fullPath = (new \Vf92\Decorators\FullHrefDecorator($path))->getFullPublicPath()
 - numberFormat - Форматированный вывод чиел, с возможностью удаления незначащих нулей и с округлением до нужной точности
 - clear - Очистка текста от примесей(тегов, лишних спец. символов)
 
-## Дополнительные возможности для запросов к Mysql через объект dataQuery
-### MysqlBatchOperations
+### Дополнительные возможности для запросов к Mysql через объект dataQuery
+#### MysqlBatchOperations
 Массовые операции над таблицами с поддержкой условий
 - batchUpdate - Делаем массовое обновление данных по условию
 - batchDelete - Делаем массовое удаление по условию
@@ -161,21 +162,19 @@ $fullPath = (new \Vf92\Decorators\FullHrefDecorator($path))->getFullPublicPath()
 - getQuery - Получение установленного объекта Query
 - setQuery - Установка объекта Query
 
-### ExtendsBitrixQuery
+#### ExtendsBitrixQuery
 Получение сформированных запросов(селекта,фильтра)
 - getBuildWhere - Получаем сформированное условие по запросу(where)
 - getBuildOrder - Получаем сформированную сортировку(order)
 
-## Другие возможности
-### BitrixUtils
+### Другие возможности
+#### BitrixUtils
 Нераспределенные функции:
 - isAjax - битровая проверка на аякс
 - bool2BitrixBool - преобразование из буля в битровый буль
 - bitrixBool2bool - преобразование из битрового буля в буль
 
+## MiscUtils
 ### MiscUtils
 Нераспределенные функции:
 - getClassName - получение имени класса без namespace
-
-## Папка additionalFiles
-В папке содержатся доп. файлы которые могут понадобиться на проекте - это базовый композер, gitignore для битрикса и cs_fixer
