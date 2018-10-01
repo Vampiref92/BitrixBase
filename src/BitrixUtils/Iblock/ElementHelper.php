@@ -21,7 +21,7 @@ class ElementHelper
      *
      * @return int|null
      */
-    public function getIdByCode($code)
+    public function getIdByCode($iblockId, $code)
     {
         //SetFilter т.к. минимальная версия 16.5
         $id = 0;
@@ -29,9 +29,10 @@ class ElementHelper
             if (BitrixUtils::isVersionMoreEqualThan('16.5')) {
                 $query = ElementTable::query();
                 if (BitrixUtils::isVersionMoreEqualThan('17.5.2')) {
-                    $query->where('CODE', $code);
+                    $query->where('CODE', $code)
+                        ->where('IBLOCK_ID', $iblockId);
                 } else {
-                    $query->setFilter(['CODE' => $code]);
+                    $query->setFilter(['CODE' => $code, 'IBLOCK_ID' => $iblockId]);
                 }
                 $id = (int)$query->exec()->fetch()['ID'];
             }
