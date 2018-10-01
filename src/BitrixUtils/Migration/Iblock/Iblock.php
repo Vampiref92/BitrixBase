@@ -288,7 +288,7 @@ class Iblock
      * @return bool
      * @throws MigrationFailureException
      */
-    public function deleteIblock(string $code, string $type) : bool
+    public function deleteIblock($code, $type)
     {
         $IblockRes = \CIBlock::GetList([], ['TYPE' => $type, 'CODE' => $code]);
         if ($arIblock = $IblockRes->Fetch()) {
