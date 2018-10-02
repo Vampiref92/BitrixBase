@@ -105,6 +105,11 @@ $id = (int)$dataManager::query()->setSelect(['ID'])->setFilter(['CODE' => $code]
 $fullPath = (new \Vf92\Decorators\FullHrefDecorator($path))->getFullPublicPath();
 ```
 
+### Config - работа с конфигурационными файлами
+#### Dbconn - работа с dbconn
+- get - получение данных в виде массива
+- save - сохранение данных из массива в файл
+
 ### Helpers - Хелперы
 #### DateHelper - наследуеся от misc datehelper
 - convertToDateTime - Преобразование битриксового объекта даты в Php
