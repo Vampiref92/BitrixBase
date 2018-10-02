@@ -176,4 +176,46 @@ class MiscUtils
 
         return $arResult;
     }
+
+    /**
+     * @param bool $val
+     *
+     * @return string
+     */
+    public static function getStringBoolByBool($val)
+    {
+        if (\is_bool($val)) {
+            if ($val === true) {
+                $val = 'true';
+            } else {
+                $val = 'false';
+            }
+        }
+        return $val;
+    }
+
+    /**
+     * @param string $val
+     *
+     * @return bool
+     */
+    public static function getBoolByStringBool($val)
+    {
+        if (\is_string($val)) {
+            if (\is_numeric($val)) {
+                if ((int)$val === 1) {
+                    $val = true;
+                } elseif ((int)$val === 0) {
+                    $val = false;
+                }
+            } else {
+                if ($val === 'true') {
+                    $val = true;
+                } elseif ($val === 'false') {
+                    $val = false;
+                }
+            }
+        }
+        return $val;
+    }
 }

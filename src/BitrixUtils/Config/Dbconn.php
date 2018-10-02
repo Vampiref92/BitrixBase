@@ -4,6 +4,8 @@
 namespace Vf92\BitrixUtils\Config;
 
 
+use Vf92\MiscUtils\MiscUtils;
+
 /**
  * Class Dbconn
  * @package Vf92\BitrixUtils\Config
@@ -114,7 +116,7 @@ class Dbconn
         }
 
         $res = preg_match_all('/\$DB([^\s=]*)\s?=?\s?[\'"]([^\'"]*)[\'"]\;/im', $file, $dbMatches);
-        if ($res !== false && !empty($dbList[1]) && !empty($dbList[2])) {
+        if ($res !== false && !empty($dbMatches[1]) && !empty($dbMatches[2])) {
             $dbList = static::clearValues(array_combine(array_values($dbMatches[1]), array_values($dbMatches[2])));
         }
 
@@ -175,7 +177,7 @@ class Dbconn
         $result = [];
         $list = self::clearValues($list);
         foreach ($list as $key => $val) {
-            if (preg_match('/(^DB)|(^MYSQL)|(.*_DB)|(.*_MYSQL)|(.*_CONNECT)/i', $key) !== false) {
+            if (preg_match('/(^DB)|(^MYSQL)|(_DB)|(_MYSQL)|(_CONNECT$)/i', $key) !== false) {
                 $result['db'][$key] = $val;
             } elseif (preg_match('/^CACHED_/i', $key) !== false) {
                 $result['cached'][$key] = $val;
@@ -209,7 +211,10 @@ class Dbconn
             if (\is_string($value)) {
                 $content .= '\'';
             }
-            $content .= $value;
+            if(\is_bool($value)){
+                $value = MiscUtils::getStringBoolByBool($value);
+            }
+            $content .= (string)$value;
             if (\is_string($value)) {
                 $content .= '\'';
             }
@@ -234,7 +239,10 @@ class Dbconn
             if (\is_string($value)) {
                 $content .= '\'';
             }
-            $content .= $value;
+            if(\is_bool($value)){
+                $value = MiscUtils::getStringBoolByBool($value);
+            }
+            $content .= (string)$value;
             if (\is_string($value)) {
                 $content .= '\'';
             }
