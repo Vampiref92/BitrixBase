@@ -15,8 +15,11 @@ class ClassFinderHelper
      *
      * @return array
      */
-    public static function getClasses($findNamespace, $findDir)
+    public static function getClasses($findNamespace = '', $findDir = '/')
     {
+        if($findDir === '/'){
+            $findDir = $_SERVER['DOCUMENT_ROOT'].'/';
+        }
         $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($findDir));
         $regex = new \RegexIterator($iterator, '/^.+\.php$/i', \RecursiveRegexIterator::GET_MATCH);
         $classes = [];
@@ -24,8 +27,16 @@ class ClassFinderHelper
             $current = static::parseTokens(token_get_all(file_get_contents(str_replace('\\', '/', $file))));
             if ($current !== false) {
                 list($namespace, $class) = $current;
-                if ($namespace === $findNamespace) {
-                    $classes[] = $namespace . $class;
+                if(!empty($findNamespace)) {
+                    if ($namespace === $findNamespace) {
+                        $classes[] = $namespace . $class;
+                    }
+                } else {
+                    if(!empty($namespace)) {
+                        $classes[] = $namespace . $class;
+                    } else {
+                        $classes[] = $class;
+                    }
                 }
             }
         }
