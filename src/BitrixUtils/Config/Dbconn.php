@@ -15,7 +15,8 @@ class Dbconn
     /**
      * @param $list
      */
-    public static function save($list) {
+    public static function save($list)
+    {
         $content = '';
         if (!empty($list['db'])) {
             $content .= '//Db' . PHP_EOL;
@@ -92,7 +93,7 @@ class Dbconn
     protected static function parse()
     {
         $file = static::getFileContent();
-        if(empty($file)){
+        if (empty($file)) {
             return [];
         }
 
@@ -201,17 +202,15 @@ class Dbconn
      *
      * @return string
      */
-    protected
-    static function getStringDbContent(
-        $list
-    ) {
+    protected static function getStringDbContent($list)
+    {
         $content = '';
-        foreach ($list['db'] as $code => $value) {
+        foreach ($list as $code => $value) {
             $content .= '$DB' . $code . ' = ';
             if (\is_string($value)) {
                 $content .= '\'';
             }
-            if(\is_bool($value)){
+            if (\is_bool($value)) {
                 $value = MiscUtils::getStringBoolByBool($value);
             }
             $content .= (string)$value;
@@ -229,17 +228,15 @@ class Dbconn
      *
      * @return string
      */
-    protected
-    static function getStringDefineContent(
-        $list
-    ) {
+    protected static function getStringDefineContent($list)
+    {
         $content = '';
         foreach ($list as $code => $value) {
             $content .= 'define(\'' . $code . '\' , ';
             if (\is_string($value)) {
                 $content .= '\'';
             }
-            if(\is_bool($value)){
+            if (\is_bool($value)) {
                 $value = MiscUtils::getStringBoolByBool($value);
             }
             $content .= (string)$value;
