@@ -43,6 +43,18 @@ class ClassFinderHelper
         return $classes;
     }
 
+    public static function getClassByFile($pathToFile)
+    {
+        return shell_exec("php -r \"include('$pathToFile'); echo end(get_declared_classes());\"");
+    }
+
+    public static function getClassByFileInclude($pathToFile)
+    {
+        include_once($pathToFile);
+        return end(get_declared_classes());
+    }
+
+
     private static function parseTokens(array $tokens)
     {
         $nsStart = false;
