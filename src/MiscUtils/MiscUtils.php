@@ -201,21 +201,25 @@ class MiscUtils
      */
     public static function getBoolByStringBool($val)
     {
+        $res = null;
         if (\is_string($val)) {
             if (\is_numeric($val)) {
                 if ((int)$val === 1) {
-                    $val = true;
+                    $res = true;
                 } elseif ((int)$val === 0) {
-                    $val = false;
+                    $res = false;
                 }
             } else {
                 if ($val === 'true') {
-                    $val = true;
+                    $res = true;
                 } elseif ($val === 'false') {
-                    $val = false;
+                    $res = false;
                 }
             }
         }
-        return $val;
+        if ($res === null) {
+            $res = $val;
+        }
+        return $res;
     }
 }

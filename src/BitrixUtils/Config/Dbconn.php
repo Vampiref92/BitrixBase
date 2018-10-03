@@ -156,11 +156,8 @@ class Dbconn
     protected static function clearValue($val)
     {
         $val = trim($val);
-        if ($val === 'true') {
-            return (bool)true;
-        }
-        if ($val === 'false') {
-            return (bool)false;
+        if ($val === 'true' || $val === 'false') {
+            return MiscUtils::getBoolByStringBool($val);
         }
         if (\is_numeric($val)) {
             return (float)$val;
