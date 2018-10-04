@@ -13,17 +13,19 @@ class AfterConnectD7
     public static function save($afterConnectList)
     {
         $content = '';
-        $db = '$connection->queryExecute("%s")';
 
         if (!empty($afterConnectList['charset'])) {
+            $db = '$connection->queryExecute("SET NAMES \'%s\'")';
             $content .= sprintf($db, $afterConnectList['charset']) . PHP_EOL;
         }
         if (!empty($afterConnectList['collation'])) {
+            $db = '$connection->queryExecute("SET collation_connection = \'%s\'")';
             $content .= sprintf($db, $afterConnectList['collation']) . PHP_EOL;
         }
         if (!empty($afterConnectList['custom'])) {
+            $db = '$connection->queryExecute("%s")';
             foreach ($afterConnectList['custom'] as $item) {
-                $content .= $item . PHP_EOL;
+                $content .= sprintf($db, $item) . PHP_EOL;
             }
         }
 
