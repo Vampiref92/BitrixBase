@@ -2,9 +2,7 @@
 
 namespace Vf92\BitrixUtils\Constructor;
 
-use Bitrix\Iblock\ElementTable;
 use Bitrix\Main\Entity\DataManager;
-use Bitrix\Main\Entity\ReferenceField;
 use Bitrix\Main\SystemException;
 
 class IblockPropMultipleEntityConstructor extends EntityConstructor

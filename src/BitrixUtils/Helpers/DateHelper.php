@@ -2,6 +2,7 @@
 
 namespace Vf92\BitrixUtils\Helpers;
 
+use Bitrix\Main\ObjectException;
 use Bitrix\Main\Type\Date;
 use Bitrix\Main\Type\DateTime;
 use DateTime as NormalDateTime;
@@ -97,7 +98,7 @@ class DateHelper extends MiscDateHelper
      * @param array  $setting
      *
      * @return string
-     * @throws \Bitrix\Main\ObjectException
+     * @throws ObjectException
      */
     public static function getFormattedActiveDate($dateFrom = '', $dateTo = '', array $setting = [])
     {

@@ -13,6 +13,7 @@ use Bitrix\Iblock\ElementTable;
 use Bitrix\Main\Entity\ReferenceField;
 use Bitrix\Main\FileTable;
 
+/** @todo доделать orm, чтобы можно было работать со свойствами */
 class ElementOrm extends ElementTable
 {
     const PROPERTY_MULTIPLE = 'PROPERTY_MULTIPLE';

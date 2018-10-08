@@ -17,6 +17,7 @@ use Vf92\BitrixUtils\BitrixUtils;
 class ElementHelper
 {
     /**
+     * @param        $iblockId
      * @param string $code
      *
      * @return int|null

@@ -58,12 +58,12 @@ Class MenuHelper
         $arSubMenu = [];
 
         while ($this->countSubArrayItems > $k) {
-            if (!empty($arSubMenu) && count($arSubMenu) != 0 && $arSubMenu[0][$this->depthLvlName] < $this->arSubArrayItems[$k][$this->depthLvlName]) {
+            if (!empty($arSubMenu) && \count($arSubMenu) !== 0 && $arSubMenu[0][$this->depthLvlName] < $this->arSubArrayItems[$k][$this->depthLvlName]) {
                 $this->lastKey = $k;
-                $arSubMenu[count($arSubMenu) - 1][$this->childrenSectionsName] = $this->returnSubArray();
-                $k += $this->countMultiArray($arSubMenu[count($arSubMenu) - 1][$this->childrenSectionsName]);
+                $arSubMenu[\count($arSubMenu) - 1][$this->childrenSectionsName] = $this->returnSubArray();
+                $k += $this->countMultiArray($arSubMenu[\count($arSubMenu) - 1][$this->childrenSectionsName]);
                 continue;
-            } elseif (!empty($arSubMenu) && count($arSubMenu) != 0 && $arSubMenu[0][$this->depthLvlName] > $this->arSubArrayItems[$k][$this->depthLvlName]) {
+            } elseif (!empty($arSubMenu) && \count($arSubMenu) !== 0 && $arSubMenu[0][$this->depthLvlName] > $this->arSubArrayItems[$k][$this->depthLvlName]) {
                 return $arSubMenu;
             } else {
                 $arSubMenu[] = $this->arSubArrayItems[$k];

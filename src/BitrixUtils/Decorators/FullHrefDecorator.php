@@ -2,9 +2,11 @@
 
 namespace Vf92\BitrixUtils\Decorators;
 
-use Vf92\Log\LoggerFactory;
 use Bitrix\Main\Application;
+use Bitrix\Main\SiteTable;
 use Bitrix\Main\SystemException;
+use Vf92\BitrixUtils\BitrixUtils;
+use Vf92\Log\LoggerFactory;
 
 /**
  * Project specific SvgDecorator
@@ -129,14 +131,13 @@ class FullHrefDecorator
             }
             // ... или через сайт
             if (static::$host === '') {
-                $site = \CSite::GetList(
-                    $by = 'SORT',
-                    $order = 'ASC',
-                    [
-                        'ACTIVE' => 'Y',
-                        //'DEFAULT' => 'Y',
-                    ]
-                )->Fetch();
+                $query = SiteTable::query()->setOrder(['SORT'=>'ASC']);
+                if (BitrixUtils::isVersionMoreEqualThan('17.5.2')) {
+                    $query->where('ACTIVE', 'Y');
+                } else {
+                    $query->setFilter(['ACTIVE' => 'Y']);
+                }
+                $site = $query->exec()->fetch();
                 if ($site) {
                     static::$host = $site['SERVER_NAME'];
                 }

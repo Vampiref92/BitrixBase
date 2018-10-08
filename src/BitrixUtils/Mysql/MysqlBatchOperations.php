@@ -6,6 +6,7 @@ use Bitrix\Main\Application;
 use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Db\SqlQueryException;
 use Bitrix\Main\Entity\Query;
+use Bitrix\Main\SystemException;
 
 class MysqlBatchOperations
 {
@@ -27,6 +28,7 @@ class MysqlBatchOperations
      * @param string $table
      *
      * @throws ArgumentException
+     * @throws SystemException
      */
     public function __construct(Query $query = null, $table = '')
     {
@@ -44,6 +46,7 @@ class MysqlBatchOperations
      *
      * @return static
      * @throws ArgumentException
+     * @throws SystemException
      */
     public static function getInstance(Query $query = null, $table = '')
     {
@@ -83,7 +86,6 @@ class MysqlBatchOperations
      */
     public function batchDelete()
     {
-        $sqlHelper = Application::getConnection()->getSqlHelper();
         /** @todo удаление из нескольких таблиц */
         /** @todo использование USING */
         if ($this->hasTable()) {
@@ -104,7 +106,6 @@ class MysqlBatchOperations
      */
     public function batchInsert(array $fields)
     {
-        $sqlHelper = Application::getConnection()->getSqlHelper();
         /** @todo транзакции */
         /** @todo вставка по подзапросу в том числе с лимитом */
         /** @todo использование ON DUPLICATE KEY UPDATE */
@@ -295,7 +296,8 @@ class MysqlBatchOperations
      *
      * @param Query $query
      *
-     * @throws \Bitrix\Main\ArgumentException
+     * @throws ArgumentException
+     * @throws SystemException
      */
     public function setQuery(Query $query)
     {

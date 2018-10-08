@@ -2,6 +2,12 @@
 
 namespace Vf92\BitrixUtils\Form;
 
+use Bitrix\Main\ArgumentException;
+use Bitrix\Main\Engine\CurrentUser;
+use Bitrix\Main\ObjectPropertyException;
+use Bitrix\Main\SystemException;
+use Vf92\BitrixUtils\BitrixUtils;
+use Vf92\BitrixUtils\Constructor\EntityConstructor;
 use Vf92\BitrixUtils\Form\Exception\FileSaveException;
 use Vf92\BitrixUtils\Form\Exception\FileSizeException;
 use Vf92\BitrixUtils\Form\Exception\FileTypeException;
@@ -15,18 +21,30 @@ class FormHelper
 {
     /**
      * Получение ID формы по коду
+     *
      * @param string $code
      *
      * @return int
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
      */
     public static function getIdByCode($code)
     {
-        $dataManager = \Vf92\BitrixUtils\Constructor\EntityConstructor::compileEntityDataClass('Form', 'b_form');
-        return !empty($code) ? (int)$dataManager::query()->setSelect(['ID'])->setFilter(['SID' => $code])->exec()->fetch()['ID'] : 0;
+        $dataManager = EntityConstructor::compileEntityDataClass('Form', 'b_form');
+        $query = $dataManager::query();
+        $query->setSelect(['ID']);
+        if (BitrixUtils::isVersionMoreEqualThan('17.5.2')) {
+            $query->where('SID', $code);
+        } else {
+            $query->setFilter(['SID' => $code]);
+        }
+        return !empty($code) ? (int)$query->exec()->fetch()['ID'] : 0;
     }
 
     /**
      * Проверка обязательных полей формы
+     *
      * @param array $fields
      * @param array $requireFields
      *
@@ -34,6 +52,7 @@ class FormHelper
      */
     public static function checkRequiredFields(array $fields, array $requireFields = [])
     {
+        /** @todo использовать в классе нормальные валидаторы */
         foreach ($requireFields as $requiredField) {
             if (empty($fields[$requiredField])) {
                 return false;
@@ -46,17 +65,19 @@ class FormHelper
 
     /**
      * Валидация email
+     *
      * @param $email
      *
      * @return bool
      */
     public static function validEmail($email)
     {
-        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+        return \filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
 
     /**
      * Добавление результат(заполенние формы)
+     *
      * @param $data
      *
      * @return bool
@@ -75,7 +96,7 @@ class FormHelper
         global $USER;
         $userID = 0;
         if ($USER->IsAuthorized()) {
-            $userID = (int)$USER->GetID();
+            $userID = (int)CurrentUser::get()->getId();
         }
         unset($data['web_form_submit'], $data['WEB_FORM_ID']);
 
@@ -91,6 +112,7 @@ class FormHelper
 
     /**
      * Сохранение файла
+     *
      * @param $fileCode
      * @param $fileSizeMb
      * @param $valid_types
@@ -136,6 +158,7 @@ class FormHelper
 
     /**
      * Добавление формы
+     *
      * @param $form
      */
     public static function addForm(array $form)
@@ -172,6 +195,7 @@ class FormHelper
 
     /**
      * Добавление статусов
+     *
      * @param int   $formId
      * @param array $statuses
      */
@@ -188,6 +212,7 @@ class FormHelper
 
     /**
      * Добавление вопросов
+     *
      * @param int   $formId
      * @param array $questions
      */
@@ -212,6 +237,7 @@ class FormHelper
 
     /**
      * Добавление ответов
+     *
      * @param array $answers
      * @param int   $questionId
      */
@@ -228,6 +254,7 @@ class FormHelper
 
     /**
      * Генерация почтового шаблона
+     *
      * @param int    $formId
      * @param string $createEmail
      */
@@ -241,6 +268,7 @@ class FormHelper
 
     /**
      * Удаление формы
+     *
      * @param $sid
      */
     public static function deleteForm($sid)
@@ -256,6 +284,7 @@ class FormHelper
 
     /**
      * Получить реальные названия полей формы
+     *
      * @param int   $formId
      * @param array $fields
      *
@@ -310,6 +339,7 @@ class FormHelper
 
     /**
      * Получение вопросов
+     *
      * @param array $params
      *
      * @return array
