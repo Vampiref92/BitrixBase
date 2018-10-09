@@ -23,7 +23,7 @@ class BitrixUtils
     {
         //TODO Правильно делать не так, а смотреть на хеадеры `X-Requested-With` === `XMLHttpRequest`
 
-        return ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' || $_SERVER['HTTP_BX_AJAX'] == 'true');
+        return ($_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' || $_SERVER['HTTP_BX_AJAX'] === 'true');
     }
 
     /**
@@ -66,14 +66,14 @@ class BitrixUtils
     public static function getProductRedaction()
     {
         if (!defined('HELP_FILE')) {
-            define("HELP_FILE", "marketplace/sysupdate.php");
+            define('HELP_FILE', 'marketplace/sysupdate.php');
         }
-        require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/classes/general/update_client.php");
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/classes/general/update_client.php';
         $errorMessage = '';
         $arUpdateList = \CUpdateClient::GetUpdatesList($errorMessage);
         if (empty($errorMessage)) {
-            if (\is_array($arUpdateList) && \array_key_exists("CLIENT", $arUpdateList)) {
-                echo (string)$arUpdateList["CLIENT"][0]["@"]["LICENSE"];
+            if (\is_array($arUpdateList) && \array_key_exists('CLIENT', $arUpdateList)) {
+                echo (string)$arUpdateList['CLIENT'][0]['@']['LICENSE'];
             }
         }
         return 'undefined';
@@ -87,7 +87,7 @@ class BitrixUtils
      */
     public static function isVersionMoreThan($version, $curVersion = null)
     {
-        if($curVersion == null){
+        if($curVersion === null){
             $curVersion = static::getProductVersion();
         }
         return static::matchVersions($curVersion, $version, '>');
@@ -101,7 +101,7 @@ class BitrixUtils
      */
     public static function isVersionMoreEqualThan($version, $curVersion = null)
     {
-        if($curVersion == null){
+        if($curVersion === null){
             $curVersion = static::getProductVersion();
         }
         return static::matchVersions($curVersion, $version, '>=');
@@ -115,7 +115,7 @@ class BitrixUtils
      */
     public static function isVersionLessThan($version, $curVersion = null)
     {
-        if($curVersion == null){
+        if($curVersion === null){
             $curVersion = static::getProductVersion();
         }
         return static::matchVersions($curVersion, $version, '<');
@@ -129,7 +129,7 @@ class BitrixUtils
      */
     public static function isVersionLessEqualThan($version, $curVersion = null)
     {
-        if($curVersion == null){
+        if($curVersion === null){
             $curVersion = static::getProductVersion();
         }
         return static::matchVersions($curVersion, $version, '<=');

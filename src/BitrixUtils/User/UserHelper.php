@@ -2,12 +2,16 @@
 
 namespace Vf92\BitrixUtils\Main;
 
+use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Entity\ReferenceField;
+use Bitrix\Main\ObjectPropertyException;
+use Bitrix\Main\SystemException;
 use Bitrix\Main\UserTable;
 use CUser;
 use Vf92\BitrixUtils\Constructor\EntityConstructor;
+use Vf92\BitrixUtils\User\Exception\GroupNotFoundException;
 
-/** @deprecated  */
+/** @deprecated */
 class UserHelper
 {
     /**
@@ -17,7 +21,10 @@ class UserHelper
      * @param int    $userId
      *
      * @return bool
-     * @throws \Vf92\BitrixUtils\Exception\GroupNotFoundException
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     * @throws GroupNotFoundException
      */
     public static function isInGroup($groupStringId, $userId)
     {
@@ -41,6 +48,9 @@ class UserHelper
      * @param string $hash
      *
      * @return string
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
      */
     public static function getLoginByHash($hash)
     {
@@ -53,16 +63,8 @@ class UserHelper
         $result = $dataManager::query()
             ->setSelect(['LOGIN'])
             ->setFilter(['=STORED_HASH' => $hash])
-            ->registerRuntimeField(new ReferenceField('USER', UserTable::class, array('=this.USER_ID' => 'ref.ID')))
+            ->registerRuntimeField(new ReferenceField('USER', UserTable::class, ['=this.USER_ID' => 'ref.ID']))
             ->exec()->fetch();
-//        $query =
-//            'SELECT LOGIN ' .
-//            'FROM b_user_stored_auth as USA ' .
-//            'INNER JOIN b_user as U ' .
-//            'ON USA.USER_ID = U.ID ' .
-//            'WHERE USA.STORED_HASH = \'' . $hash . '\'';
-//
-//        $result = Application::getConnection()->query($query)->fetch();
 
         if (false === $result || !isset($result['LOGIN'])) {
             return '';

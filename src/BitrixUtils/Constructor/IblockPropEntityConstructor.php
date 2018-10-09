@@ -3,6 +3,8 @@
 namespace Vf92\BitrixUtils\Constructor;
 
 use Bitrix\Iblock\ElementTable;
+use Bitrix\Iblock\PropertyTable;
+use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Entity\DataManager;
 use Bitrix\Main\Entity\ReferenceField;
 use Bitrix\Main\SystemException;
@@ -13,8 +15,8 @@ use Bitrix\Main\SystemException;
  */
 class IblockPropEntityConstructor extends EntityConstructor
 {
-    const SINGLE_TYPE='s';
-    const MULTIPLE_TYPE='m';
+    const SINGLE_TYPE = 's';
+    const MULTIPLE_TYPE = 'm';
 
     /**
      * @param int $iblockId
@@ -31,6 +33,8 @@ class IblockPropEntityConstructor extends EntityConstructor
      * @param $iblockId
      *
      * @return DataManager|string
+     * @throws SystemException
+     * @throws ArgumentException
      */
     public static function getMultipleDataClass($iblockId)
     {
@@ -44,10 +48,19 @@ class IblockPropEntityConstructor extends EntityConstructor
         return static::getBaseDataClass($iblockId, static::MULTIPLE_TYPE, $additionalFields);
     }
 
-    protected static function getBaseDataClass($iblockId, $type = 's', $additionalFields = [])
+    /**
+     * @param        $iblockId
+     * @param string $type
+     * @param array  $additionalFields
+     *
+     * @return DataManager|string
+     * @throws SystemException
+     * @throws ArgumentException
+     */
+    protected static function getBaseDataClass($iblockId, $type = 's', array $additionalFields = [])
     {
-        $className = 'ElementProp'.ToUpper($type) . $iblockId;
-        $tableName = 'b_iblock_element_prop_'.ToLower($type) . $iblockId;
+        $className = 'ElementProp' . ToUpper($type) . $iblockId;
+        $tableName = 'b_iblock_element_prop_' . ToLower($type) . $iblockId;
         $additionalFields[] = [
             'ELEMENT' => new ReferenceField(
                 'ELEMENT',

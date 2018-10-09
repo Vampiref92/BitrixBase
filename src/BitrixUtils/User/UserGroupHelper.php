@@ -2,6 +2,9 @@
 
 namespace Vf92\BitrixUtils\Main;
 
+use Bitrix\Main\ArgumentException;
+use Bitrix\Main\ObjectPropertyException;
+use Bitrix\Main\SystemException;
 use Vf92\BitrixUtils\User\Exception\GroupNotFoundException;
 use Bitrix\Main\GroupTable;
 
@@ -11,7 +14,7 @@ class UserGroupHelper
     /**
      * @var array
      */
-    static $groupIdByCodeIndex;
+    public static $groupIdByCodeIndex;
 
     /**
      * Возвращает id группы пользователей по её коду
@@ -20,6 +23,9 @@ class UserGroupHelper
      *
      * @return int
      * @throws GroupNotFoundException
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
      */
     public static function getGroupIdByCode($stringId)
     {

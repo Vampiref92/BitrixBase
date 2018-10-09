@@ -17,6 +17,7 @@ use Vf92\BitrixUtils\BitrixUtils;
 class SectionHelper
 {
     /**
+     * @param int    $iblockId
      * @param string $code
      *
      * @return int|null

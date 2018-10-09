@@ -19,7 +19,7 @@ class EntityConstructor
      * @return DataManager|string
      * @throws Main\SystemException
      */
-    public static function compileEntityDataClass($className, $tableName, $additionalFields = [])
+    public static function compileEntityDataClass($className, $tableName, array $additionalFields = [])
     {
         $entity_data_class = $className;
 
@@ -65,6 +65,7 @@ class EntityConstructor
      */
     public static function getFieldsMap($tableName)
     {
+        /** @todo переделать с массива на классы */
         $fieldsMap = [];
         $obTable = new \CPerfomanceTable;
         $obTable->Init($tableName);
