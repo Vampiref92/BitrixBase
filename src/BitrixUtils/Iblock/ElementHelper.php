@@ -22,7 +22,7 @@ class ElementHelper
      *
      * @return int|null
      */
-    public function getIdByCode($iblockId, $code)
+    public static function getIdByCode($iblockId, $code)
     {
         //SetFilter т.к. минимальная версия 16.5
         $id = 0;
