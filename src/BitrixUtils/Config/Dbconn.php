@@ -1,8 +1,4 @@
-<?php
-
-
-namespace Vf92\BitrixUtils\Config;
-
+<?php namespace Vf92\BitrixUtils\Config;
 
 use Vf92\MiscUtils\MiscUtils;
 
@@ -175,16 +171,16 @@ class Dbconn
         $result = [];
         $list = self::clearValues($list);
         foreach ($list as $key => $val) {
-            if (preg_match('/(^DB)|(^MYSQL)|(_DB)|(_MYSQL)|(_CONNECT$)/i', $key) !== false) {
+            if (preg_match('/((^DB)|(^MYSQL)|(_DB)|(_MYSQL)|(_CONNECT$)){1}/i', $key) !== false) {
                 $result['db'][$key] = $val;
             } elseif (preg_match('/^CACHED_/i', $key) !== false) {
                 $result['cached'][$key] = $val;
-            } elseif (preg_match('/(^BX_CACHE_TYPE$)|(^BX_CACHE_SID$)|(^BX_MEMCACHE_HOST$)|(^BX_MEMCACHE_PORT$)/i',
+            } elseif (preg_match('/((^BX_CACHE_TYPE$)|(^BX_CACHE_SID$)|(^BX_MEMCACHE_HOST$)|(^BX_MEMCACHE_PORT$)){1}/i',
                     $key) !== false) {
                 $result['cache'][$key] = $val;
             } elseif (preg_match('/_PERMISSIONS$/i', $key) !== false) {
                 $result['permissions'][$key] = $val;
-            } elseif (preg_match('/(^SHORT_INSTALL$)|(^VM_INSTALL$)|(^BX_UTF$)|(^BX_COMPRESSION_DISABLED$)/i',
+            } elseif (preg_match('/((^SHORT_INSTALL$)|(^VM_INSTALL$)|(^BX_UTF$)|(^BX_COMPRESSION_DISABLED$)){1}/i',
                     $key) !== false) {
                 $result['project'][$key] = $val;
             } else {
