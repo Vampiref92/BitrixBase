@@ -68,12 +68,24 @@ class MiscUtils
      */
     public static function eraseArray(&$list)
     {
+        $tmpList = [];
+        foreach ($list as $key => $val) {
+            $tmpList[$key] = $val;
+        }
+        $list = static::eraseArrayReturn($tmpList);
+    }
+
+    /**
+     * @param array $list
+     */
+    public static function eraseArrayReturn($list)
+    {
         foreach ($list as $key => $val) {
             if (\is_object($val)) {
                 continue;
             }
             if (\is_array($val)) {
-                self::eraseArray($val);
+                $val = self::eraseArrayReturn($val);
                 if ($val === null || empty($val)) {
                     unset($list[$key]);
                 }
@@ -83,6 +95,7 @@ class MiscUtils
                 }
             }
         }
+        return $list;
     }
 
     /**
