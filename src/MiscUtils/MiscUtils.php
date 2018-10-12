@@ -85,8 +85,14 @@ class MiscUtils
                 continue;
             }
             if (\is_array($val)) {
-                $val = self::eraseArrayReturn($val);
-                if ($val === null || empty($val)) {
+                if (!empty($val)) {
+                    $newVal = self::eraseArrayReturn($val);
+                    if ($newVal === null || empty($newVal)) {
+                        unset($list[$key]);
+                    } else {
+                        $list[$key] = $val = $newVal;
+                    }
+                } else {
                     unset($list[$key]);
                 }
             } else {
