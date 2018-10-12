@@ -2,6 +2,8 @@
 
 namespace Vf92\MiscUtils;
 
+use Bitrix\Main\Type\DateTime;
+
 /**
  * Class MiscTools
  * @package Vf92\MiscUtils
@@ -30,24 +32,24 @@ class MiscUtils
     }
 
     /**
-     * @param $arItems
+     * @param array $arItems
      */
     public static function trimArrayStrings(&$arItems)
     {
-        if (is_array($arItems)) {
+        if (\is_array($arItems) && !empty($arItems)) {
             foreach ($arItems as $key => $val) {
-                if (is_array($val)) {
+                if (\is_array($val)) {
                     self::trimArrayStrings($val);
                 } else {
-                    $arItems[$key] = trim(str_replace(' ', '', $val));
+                    $arItems[$key] = trim($val);
                 }
             }
         }
     }
 
     /**
-     * @param     $size
-     * @param int $round
+     * @param  float|int $size
+     * @param int        $round
      *
      * @return string
      */
@@ -58,23 +60,27 @@ class MiscUtils
             $size /= 1024;
         }
 
-        return round($size, $round) . " " . $sizes[$i];
+        return round($size, $round) . ' ' . $sizes[$i];
     }
 
     /**
-     * @param $arr
+     * @param array $list
      */
-    public static function eraseArray(&$arr)
+    public static function eraseArray(&$list)
     {
-        foreach ($arr as $key => $val) {
-            if (is_array($val)) {
-                self::eraseArray($val);
-                if (empty($val)) {
-                    unset($arr[$key]);
-                }
+        foreach ($list as $key => $val) {
+            if (\is_object($val)) {
+                continue;
             }
-            if (empty($val)) {
-                unset($arr[$key]);
+            if (\is_array($val)) {
+                self::eraseArray($val);
+                if ($val === null || empty($val)) {
+                    unset($list[$key]);
+                }
+            } else {
+                if ($val === null || empty($val)) {
+                    unset($list[$key]);
+                }
             }
         }
     }
@@ -84,7 +90,7 @@ class MiscUtils
      *
      * @return array|bool|mixed
      */
-    public static function getUniqueArray($params = [])
+    public static function getUniqueArray(array $params = [])
     {
         if (!isset($params['arr1'])) {
             return false;
@@ -101,25 +107,25 @@ class MiscUtils
         if (!isset($params['skipKeys'])) {
             $params['skipKeys'] = [];
         }
-        $arResult = [];
+        $result = [];
         if ($params['bReturnFullDiffArray'] && $params['isChild']) {
             $arTmp = [];
-            $arDiff = [];
+            $diff = [];
         }
         foreach ($params['arr1'] as $key => $val) {
             if ($params['bReturnFullDiffArray'] && $params['isChild']) {
                 $arTmp[$key] = $val;
             }
             if (is_array($val)) {
-                if (!in_array($key, $params['skipKeys'])) {
+                if (!in_array($key, $params['skipKeys'], true)) {
                     if (!isset($params['arr2'][$key]) || (!empty($val) && empty($params['arr2'][$key]))) {
                         if ($params['bReturnFullDiffArray'] && $params['isChild']) {
-                            $arDiff[$key] = $val;
+                            $diff[$key] = $val;
                         } else {
-                            $arResult[$key] = $val;
+                            $result[$key] = $val;
                         }
                     } else {
-                        $arReturn = self::getUniqueArray(
+                        $return = self::getUniqueArray(
                             [
                                 'arr1'                 => $val,
                                 'arr2'                 => $params['arr2'][$key],
@@ -128,22 +134,22 @@ class MiscUtils
                                 'isChild'              => true,
                             ]
                         );
-                        if (!empty($arReturn)) {
+                        if (!empty($return)) {
                             if ($params['bReturnFullDiffArray'] && $params['isChild']) {
-                                $arDiff[$key] = $arReturn;
+                                $diff[$key] = $return;
                             } else {
-                                $arResult[$key] = $arReturn;
+                                $result[$key] = $return;
                             }
                         }
                     }
                 }
             } else {
-                if (!in_array($key, $params['skipKeys'])) {
+                if (!in_array($key, $params['skipKeys'], true)) {
                     if (!isset($params['arr2'][$key])) {
                         if ($params['bReturnFullDiffArray'] && $params['isChild']) {
-                            $arDiff[$key] = $val;
+                            $diff[$key] = $val;
                         } else {
-                            $arResult[$key] = $val;
+                            $result[$key] = $val;
                         }
                     } else {
                         $tmpVal = '0';
@@ -158,23 +164,23 @@ class MiscUtils
                                 unset($val2);
                             }
                         }
-                        if ((!is_object($val) && $val !== $params['arr2'][$key])
-                            || (is_object($val) && $tmpVal !== $tmpArr2Val)) {
+                        if ((is_object($val) && $tmpVal !== $tmpArr2Val)
+                            || (!is_object($val) && $val !== $params['arr2'][$key])) {
                             if ($params['bReturnFullDiffArray'] && $params['isChild']) {
-                                $arDiff[$key] = $val;
+                                $diff[$key] = $val;
                             } else {
-                                $arResult[$key] = $val;
+                                $result[$key] = $val;
                             }
                         }
                     }
                 }
             }
         }
-        if (isset($arDiff) && count($arDiff) > 0 && isset($arTmp) && !empty($arTmp)) {
-            $arResult = $arTmp;
+        if ($diff !== null && count($diff) > 0 && $arTmp !== null && !empty($arTmp)) {
+            $result = $arTmp;
         }
 
-        return $arResult;
+        return $result;
     }
 
     /**
