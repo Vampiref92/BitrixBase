@@ -4,6 +4,8 @@ namespace Vf92\BitrixUtils\Constructor;
 
 use Bitrix\Main;
 use Bitrix\Main\Entity\DataManager;
+use Vf92\BitrixUtils\BitrixUtils;
+use Vf92\MiscUtils\MiscUtils;
 
 /**
  * Class EntityConstructor
@@ -36,6 +38,15 @@ class EntityConstructor
 
         if (class_exists($entity_data_class)) {
             return $entity_data_class;
+        }
+
+        $currentFieldsMap = [];
+        $mapOld = static::getFieldsMap($tableName);
+        $mapNew = static ::getNewFieldsMap($mapOld);
+        if(\count($mapOld) === \count($mapNew)){
+            $currentFieldsMap = $mapNew;
+        } else {
+            $currentFieldsMap = $mapOld;
         }
 
         $eval = '
@@ -137,5 +148,46 @@ class EntityConstructor
         }
 
         return $fieldsMap;
+    }
+
+    public static function getNewFieldsMap($fieldsMap)
+    {
+        $newFieldsMap = [
+        ];
+        foreach ($fieldsMap as $columnName => $columnInfo) {
+            $params = [
+                'autocomplete' => $columnInfo['autocomplete'],
+                'required' => $columnInfo['required'],
+                'values' => $columnInfo['values'],
+                'primary' => $columnInfo['primary'],
+            ];
+            MiscUtils::eraseArray($params);
+            switch ($columnInfo['data_type']){
+                case 'integer':
+                    $newFieldsMap[] = new Main\Entity\IntegerField($columnName, $params);
+                    break;
+                case 'float':
+                    $newFieldsMap[] = new Main\Entity\FloatField($columnName, $params);
+                    break;
+                case 'boolean':
+                    $newFieldsMap[] = new Main\Entity\BooleanField($columnName, $params);
+                    break;
+                case 'date':
+                    $newFieldsMap[] = new Main\Entity\DateField($columnName, $params);
+                    break;
+                case 'datetime':
+                    $newFieldsMap[] = new Main\Entity\DateTimeField($columnName, $params);
+                    break;
+                case 'string':
+                    if($columnInfo['length'] > 255) {
+                        $newFieldsMap[] = new Main\Entity\TextField($columnName, $params);
+                    } else {
+                        $newFieldsMap[] = new Main\Entity\StringField($columnName, $params);
+                    }
+                    break;
+
+            }
+        }
+        return $newFieldsMap;
     }
 }

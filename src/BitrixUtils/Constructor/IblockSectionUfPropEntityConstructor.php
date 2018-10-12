@@ -6,7 +6,10 @@ use Bitrix\Iblock\SectionTable;
 use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Entity\DataManager;
 use Bitrix\Main\Entity\ReferenceField;
+use Bitrix\Main\ORM\Fields\Relations\Reference;
+use Bitrix\Main\ORM\Query\Join;
 use Bitrix\Main\SystemException;
+use Vf92\BitrixUtils\BitrixUtils;
 
 /**
  * Class IblockSectionUfPropEntityConstructor
@@ -52,13 +55,21 @@ class IblockSectionUfPropEntityConstructor extends EntityConstructor
     {
         $className = 'Ut' . ToLower($type) . 'Iblock' . $iblockId . 'Section';
         $tableName = 'b_ut' . ToLower($type) . '_iblock_' . $iblockId . '_section';
-        $additionalFields = [
-            'SECTION' => new ReferenceField(
+
+        $additionalFields= [];
+        if (BitrixUtils::isVersionMoreEqualThan('18.0.0')) {
+            $additionalFields[] = (new Reference(
                 'SECTION',
-                SectionTable::class,
+                SectionTable::getEntity(),
+                Join::on('this.VALUE_ID', 'ref.ID')
+            ))->configureJoinType('inner');
+        } else {
+            $additionalFields[] = new ReferenceField(
+                'SECTION',
+                SectionTable::getEntity(),
                 ['=this.VALUE_ID' => 'ref.ID']
-            ),
-        ];
+            );
+        }
         return parent::compileEntityDataClass($className, $tableName, $additionalFields);
     }
 }

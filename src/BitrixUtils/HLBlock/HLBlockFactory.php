@@ -39,6 +39,19 @@ class HLBlockFactory
     }
 
     /**
+     * Возвращает скомпилированную сущность HL-блока по имени его таблицы в базе данных.
+     *
+     * @param int $id
+     *
+     * @return DataManager
+     * @throws Exception
+     */
+    public static function createTableObjectById($id)
+    {
+        return self::doCreateTableObject(['=ID' => $id]);
+    }
+
+    /**
      * Возвращает скомпилированную сущность HL-блока по заданному фильтру, но фильтр должен в итоге находить один
      * HL-блок.
      *

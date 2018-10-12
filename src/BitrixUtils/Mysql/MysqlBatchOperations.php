@@ -70,7 +70,7 @@ class MysqlBatchOperations
             $sqlHelper = $connection->getSqlHelper();
             foreach ($fields as $column => $val) {
                 if (!empty($column) && !empty($val)) {
-                    $updates[] = $sqlHelper->quote($column) . '=' . $val;
+                    $updates[] = $sqlHelper->quote($column) . ' = ' . $val;
                 }
             }
             $queryString = 'UPDATE' . $this->getLowPriority() . $this->getIgnore() . ' ' . $sqlHelper->quote($this->getTable())
