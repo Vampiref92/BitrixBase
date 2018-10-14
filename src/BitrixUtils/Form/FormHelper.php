@@ -6,7 +6,7 @@ use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Engine\CurrentUser;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
-use Vf92\BitrixUtils\BitrixUtils;
+use Vf92\BitrixUtils\Config\Version;
 use Vf92\BitrixUtils\Constructor\EntityConstructor;
 use Vf92\BitrixUtils\Form\Exception\FileSaveException;
 use Vf92\BitrixUtils\Form\Exception\FileSizeException;
@@ -34,10 +34,10 @@ class FormHelper
         $dataManager = EntityConstructor::compileEntityDataClass('Form', 'b_form');
         $query = $dataManager::query();
         $query->setSelect(['ID']);
-        if (BitrixUtils::isVersionMoreEqualThan('17.5.2')) {
+        if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
             $query->where('SID', $code);
         } else {
-            $query->setFilter(['SID' => $code]);
+            $query->setFilter(['=SID' => $code]);
         }
         return !empty($code) ? (int)$query->exec()->fetch()['ID'] : 0;
     }

@@ -34,9 +34,8 @@ class Logger
      */
     public static function getInstance($name = 'main')
     {
-        if (!isset(self::$instance[$name])) {
-            $c = __CLASS__;
-            self::$instance[$name] = new $c($name);
+        if (!isset(self::$instance[$name]) || self::$instance[$name] === null) {;
+            self::$instance[$name] = new self($name);
         }
 
         return self::$instance[$name];

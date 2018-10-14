@@ -29,9 +29,8 @@ class HLBlockEvents
      */
     public static function getInstance()
     {
-        if (!isset(self::$instance)) {
-            $c = __CLASS__;
-            self::$instance = new $c;
+        if (self::$instance === null) {
+            self::$instance = new self();
         }
 
         return self::$instance;

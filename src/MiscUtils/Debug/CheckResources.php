@@ -21,7 +21,7 @@ class CheckResources
      */
     public static function getInstance()
     {
-        if (!isset(static::$instance)) {
+        if (static::$instance === null) {
             static::$instance = new static();
         }
 

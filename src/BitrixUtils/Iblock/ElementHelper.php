@@ -8,7 +8,7 @@ use Bitrix\Iblock\ElementTable;
 use Bitrix\Main\ArgumentException;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
-use Vf92\BitrixUtils\BitrixUtils;
+use Vf92\BitrixUtils\Config\Version;
 
 /**
  * Class ElementHelper
@@ -27,16 +27,14 @@ class ElementHelper
         //SetFilter т.к. минимальная версия 16.5
         $id = 0;
         try {
-            if (BitrixUtils::isVersionMoreEqualThan('16.5')) {
-                $query = ElementTable::query();
-                if (BitrixUtils::isVersionMoreEqualThan('17.5.2')) {
-                    $query->where('CODE', $code)
-                        ->where('IBLOCK_ID', $iblockId);
-                } else {
-                    $query->setFilter(['CODE' => $code, 'IBLOCK_ID' => $iblockId]);
-                }
-                $id = (int)$query->exec()->fetch()['ID'];
+            $query = ElementTable::query();
+            if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
+                $query->where('CODE', $code)
+                    ->where('IBLOCK_ID', $iblockId);
+            } else {
+                $query->setFilter(['=CODE' => $code, '=IBLOCK_ID' => $iblockId]);
             }
+            $id = (int)$query->exec()->fetch()['ID'];
         } catch (ObjectPropertyException $e) {
             return null;
         } catch (ArgumentException $e) {

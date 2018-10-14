@@ -2,14 +2,14 @@
 
 namespace Vf92\BitrixUtils\Iblock;
 
-use Bitrix\Main\ArgumentException;
-use Vf92\BitrixUtils\BitrixUtils;
-use Vf92\BitrixUtils\Iblock\Exception\IblockNotFoundException;
-use Vf92\BitrixUtils\Iblock\Exception\IblockPropertyNotFoundException;
 use Bitrix\Iblock\IblockTable;
 use Bitrix\Iblock\PropertyTable;
 use Bitrix\Iblock\TypeTable;
+use Bitrix\Main\ArgumentException;
 use InvalidArgumentException;
+use Vf92\BitrixUtils\Config\Version;
+use Vf92\BitrixUtils\Iblock\Exception\IblockNotFoundException;
+use Vf92\BitrixUtils\Iblock\Exception\IblockPropertyNotFoundException;
 
 class IblockHelper
 {
@@ -87,7 +87,7 @@ class IblockHelper
         }
 
         $query = PropertyTable::query()->setSelect(['ID'])->setLimit(1);
-        if (BitrixUtils::isVersionMoreEqualThan('17.5.2')) {
+        if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
             $query->where('CODE', $code)->where('IBLOCK_ID', $iblockId);
         } else {
             $query->setFilter(['=CODE' => $code, '=IBLOCK_ID' => $iblockId]);

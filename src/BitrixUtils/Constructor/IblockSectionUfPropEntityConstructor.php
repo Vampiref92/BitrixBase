@@ -9,7 +9,7 @@ use Bitrix\Main\Entity\ReferenceField;
 use Bitrix\Main\ORM\Fields\Relations\Reference;
 use Bitrix\Main\ORM\Query\Join;
 use Bitrix\Main\SystemException;
-use Vf92\BitrixUtils\BitrixUtils;
+use Vf92\BitrixUtils\Config\Version;
 
 /**
  * Class IblockSectionUfPropEntityConstructor
@@ -56,18 +56,22 @@ class IblockSectionUfPropEntityConstructor extends EntityConstructor
         $className = 'Ut' . ToLower($type) . 'Iblock' . $iblockId . 'Section';
         $tableName = 'b_ut' . ToLower($type) . '_iblock_' . $iblockId . '_section';
 
-        $additionalFields= [];
-        if (BitrixUtils::isVersionMoreEqualThan('18.0.0')) {
+        $additionalFields = [];
+        if (Version::getInstance()->isVersionMoreEqualThan('18')) {
             $additionalFields[] = (new Reference(
                 'SECTION',
                 SectionTable::getEntity(),
                 Join::on('this.VALUE_ID', 'ref.ID')
             ))->configureJoinType('inner');
         } else {
+            $referenceFilter = ['=this.VALUE_ID' => 'ref.ID'];
+            if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
+                $referenceFilter =Join::on('this.VALUE_ID', 'ref.ID');
+            }
             $additionalFields[] = new ReferenceField(
                 'SECTION',
                 SectionTable::getEntity(),
-                ['=this.VALUE_ID' => 'ref.ID']
+                $referenceFilter
             );
         }
         return parent::compileEntityDataClass($className, $tableName, $additionalFields);

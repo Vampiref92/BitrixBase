@@ -5,7 +5,7 @@ namespace Vf92\BitrixUtils\Decorators;
 use Bitrix\Main\Application;
 use Bitrix\Main\SiteTable;
 use Bitrix\Main\SystemException;
-use Vf92\BitrixUtils\BitrixUtils;
+use Vf92\BitrixUtils\Config\Version;
 use Vf92\Log\LoggerFactory;
 
 /**
@@ -131,11 +131,11 @@ class FullHrefDecorator
             }
             // ... или через сайт
             if (static::$host === '') {
-                $query = SiteTable::query()->setOrder(['SORT'=>'ASC']);
-                if (BitrixUtils::isVersionMoreEqualThan('17.5.2')) {
+                $query = SiteTable::query()->setOrder(['SORT' => 'ASC']);
+                if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
                     $query->where('ACTIVE', 'Y');
                 } else {
-                    $query->setFilter(['ACTIVE' => 'Y']);
+                    $query->setFilter(['=ACTIVE' => 'Y']);
                 }
                 $site = $query->exec()->fetch();
                 if ($site) {
