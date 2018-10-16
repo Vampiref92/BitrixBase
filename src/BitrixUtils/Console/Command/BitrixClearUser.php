@@ -1,6 +1,6 @@
 <?php
 
-namespace Vf92\BitrixUtils\Command;
+namespace Vf92\BitrixUtils\Console\Command;
 
 use Bitrix\Main\Application;
 use Bitrix\Main\Entity\Query;

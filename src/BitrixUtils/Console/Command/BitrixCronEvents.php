@@ -1,4 +1,4 @@
-<?php namespace Vf92\BitrixUtils\Command;
+<?php namespace Vf92\BitrixUtils\Console\Command;
 
 use Vf92\Log\LazyLoggerAwareTrait;
 use Bitrix\Main\Loader;
