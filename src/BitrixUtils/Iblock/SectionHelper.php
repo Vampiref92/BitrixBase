@@ -27,7 +27,7 @@ class SectionHelper
         //SetFilter т.к. минимальная версия 16.5
         $id = 0;
         try {
-            $query = SectionTable::query();
+            $query = SectionTable::query()->setSelect(['ID']);
             if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
                 $query->where('CODE', $code)
                     ->where('IBLOCK_ID', $iblockId);
