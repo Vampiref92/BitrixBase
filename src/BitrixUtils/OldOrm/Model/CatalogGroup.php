@@ -2,7 +2,7 @@
 
 namespace Vf92\BitrixUtils\OldOrm\Model;
 
-use Adv\Bitrixtools\Tools\BitrixUtils;
+use Vf92\BitrixUtils\BitrixUtils;
 
 class CatalogGroup extends BitrixArrayItemBase
 {

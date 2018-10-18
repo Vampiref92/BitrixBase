@@ -1,8 +1,5 @@
 <?php
 
-/*
- * @copyright Copyright (c) ADV/web-engineering co
- */
 
 namespace Vf92\BitrixUtils\OldOrm\Model;
 

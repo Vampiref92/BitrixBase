@@ -37,7 +37,8 @@
     "symfony/routing": ">=3.4",
     "symfony/yaml": ">=3.1",
     "symfony/config": ">=3.1",
-    "symfony/console": ">=3.1"
+    "symfony/console": ">=3.1",
+    "jms/serializer": "^1.13"
   },
   "require-dev": {
     "dotsunited/php-cs-fixer-config": "^1.5",

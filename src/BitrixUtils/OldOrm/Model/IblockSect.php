@@ -2,7 +2,7 @@
 
 namespace Vf92\BitrixUtils\OldOrm\Model;
 
-use Adv\Bitrixtools\Tools\BitrixUtils;
+use Vf92\BitrixUtils\BitrixUtils;
 use CIBlockElement;
 use DateTimeImmutable;
 use Vf92\BitrixUtils\OldOrm\Model\Traits\IblockModelTrait;

@@ -2,7 +2,7 @@
 
 namespace Vf92\BitrixUtils\OldOrm\Collection;
 
-use Adv\Bitrixtools\Collection\ObjectArrayCollection;
+use Vf92\MiscUtils\Collection\ObjectArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Vf92\BitrixUtils\OldOrm\Model\Image;
 use Vf92\BitrixUtils\OldOrm\Model\ResizeImageDecorator;

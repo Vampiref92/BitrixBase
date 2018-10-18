@@ -2,7 +2,7 @@
 
 namespace Vf92\BitrixUtils\OldOrm\Model;
 
-use Adv\Bitrixtools\Tools\BitrixUtils;
+use Vf92\BitrixUtils\BitrixUtils;
 use Vf92\BitrixUtils\OldOrm\Model\Interfaces\ActiveReadModelInterface;
 use Vf92\BitrixUtils\OldOrm\Model\Interfaces\ItemInterface;
 use Vf92\BitrixUtils\OldOrm\Model\Interfaces\ToArrayInterface;
