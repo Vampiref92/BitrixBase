@@ -72,28 +72,15 @@ class ConsoleApp
 
     private function init()
     {
-        /**
-         * TODO Вынести подключение Битрикса в пакет adv/bitrix-tools ?
-         */
-        if (php_sapi_name() != 'cli') {
+        if (php_sapi_name() !== 'cli') {
             die('Can not run in this mode. Bye!');
         }
-
-        defined('NO_KEEP_STATISTIC') || define('NO_KEEP_STATISTIC', 'Y');
-        defined('NOT_CHECK_PERMISSIONS') || define('NOT_CHECK_PERMISSIONS', true);
-        defined('NO_AGENT_CHECK') || define('NO_AGENT_CHECK', true);
-        defined('PUBLIC_AJAX_MODE') || define('PUBLIC_AJAX_MODE', true);
 
         if (empty($_SERVER['DOCUMENT_ROOT'])) {
             $_SERVER['DOCUMENT_ROOT'] = $this->documentRoot;
         }
+        require_once __DIR__.'../../../tools/bxAjaxProlog.php';
 
-        $GLOBALS['DOCUMENT_ROOT'] = $_SERVER['DOCUMENT_ROOT'];
-
-        /** @noinspection PhpIncludeInspection */
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_before.php';
-
-        set_time_limit(0);
         // ini_set('memory_limit', '2G');
         error_reporting(E_ERROR);
     }

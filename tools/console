@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+use Vf92\BitrixUtils\Console\ConsoleApp;
+
+$_SERVER['DOCUMENT_ROOT'] = $argv[1];
+unset($argv[1]);
+sort($argv);
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/local/php_interface/.settings.php';
+if(!defined('PATH_TO_VENDOR_AUTOLOAD')){
+    exit('not load vendor');
+}
+
+require_once $_SERVER['DOCUMENT_ROOT'] . PATH_TO_VENDOR_AUTOLOAD;
+
+(new ConsoleApp($_SERVER['DOCUMENT_ROOT']))->run();
