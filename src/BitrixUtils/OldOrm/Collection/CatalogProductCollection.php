@@ -20,7 +20,7 @@ class CatalogProductCollection extends CdbResultCollectionBase
     /**
      * Извлечение модели
      */
-    protected function fetchElement(): \Generator
+    protected function fetchElement()
     {
         while ($fields = $this->getCdbResult()->Fetch()) {
             yield $this->serializer->fromArray(

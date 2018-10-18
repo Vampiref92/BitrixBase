@@ -9,9 +9,9 @@ namespace Vf92\BitrixUtils\OldOrm\Type;
  */
 class TextContent
 {
-    public const TYPE_HTML = 'html';
+    const TYPE_HTML = 'html';
 
-    public const TYPE_TEXT = 'text';
+    const TYPE_TEXT = 'text';
 
     /**
      * @var string Тип содержимого
@@ -29,7 +29,7 @@ class TextContent
      *
      * @param array|null $fields
      */
-    public function __construct(?array $fields = null)
+    public function __construct($fields = null)
     {
         if (null !== $fields && isset($fields['TYPE'], $fields['TEXT'])) {
             $this->withType($fields['TYPE'])
@@ -42,7 +42,7 @@ class TextContent
      *
      * @return TextContent
      */
-    public function withText(string $text): TextContent
+    public function withText($text)
     {
         $this->text = $text;
 
@@ -54,7 +54,7 @@ class TextContent
      *
      * @return TextContent
      */
-    public function withType(string $type): TextContent
+    public function withType($type)
     {
         $this->type = $type;
 
@@ -64,7 +64,7 @@ class TextContent
     /**
      * @return string
      */
-    public function getText(): string
+    public function getText()
     {
         return
             $this->matchType(self::TYPE_HTML)
@@ -77,7 +77,7 @@ class TextContent
      *
      * @return string
      */
-    public function __toString(): string
+    public function __toString()
     {
         return $this->getText();
     }
@@ -88,7 +88,7 @@ class TextContent
      *
      * @return bool
      */
-    private function matchType($type): bool
+    private function matchType($type)
     {
         return \strtolower($this->getType()) === $type;
     }
@@ -96,7 +96,7 @@ class TextContent
     /**
      * @return string
      */
-    public function getType(): string
+    public function getType()
     {
         return $this->type;
     }

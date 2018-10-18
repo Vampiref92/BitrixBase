@@ -19,7 +19,7 @@ interface ImageInterface extends FileInterface
     /**
      * @return int
      */
-    public function getHeight(): int;
+    public function getHeight();
 
     /**
      * @param int $width
@@ -31,5 +31,5 @@ interface ImageInterface extends FileInterface
     /**
      * @return int
      */
-    public function getWidth(): int;
+    public function getWidth();
 }

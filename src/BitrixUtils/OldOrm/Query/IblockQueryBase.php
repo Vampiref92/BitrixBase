@@ -21,7 +21,7 @@ abstract class IblockQueryBase extends QueryBase
      *
      * @return array
      */
-    public static function getActiveAccessableElementsFilter(): array
+    public static function getActiveAccessableElementsFilter()
     {
         return [
             'CHECK_PERMISSIONS' => 'Y',

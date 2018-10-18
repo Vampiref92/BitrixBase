@@ -30,7 +30,7 @@ class RotateImageDecorator extends Image implements RotateImageInterface
      * @return $this
      *
      */
-    public function setAngle(int $angle)
+    public function setAngle($angle)
     {
         if (!\in_array($angle, self::ALLOWABLE_ANGLE, true)) {
             throw new WrongRotateAngleException(sprintf(
@@ -47,7 +47,7 @@ class RotateImageDecorator extends Image implements RotateImageInterface
     /**
      * @inheritDoc
      */
-    public function getAngle() : int
+    public function getAngle()
     {
         return $this->angle;
     }
@@ -55,7 +55,7 @@ class RotateImageDecorator extends Image implements RotateImageInterface
     /**
      * @return string
      */
-    public function getSrc() : string
+    public function getSrc()
     {
         $angle = $this->getAngle();
         

@@ -29,7 +29,7 @@ class CatalogGroup extends BitrixArrayItemBase
     /**
      * @return bool
      */
-    public function isBase(): bool
+    public function isBase()
     {
         return $this->base;
     }
@@ -39,7 +39,7 @@ class CatalogGroup extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withBase(bool $base)
+    public function withBase($base)
     {
         $this->base = $base;
 
@@ -51,7 +51,7 @@ class CatalogGroup extends BitrixArrayItemBase
      *
      * @return string
      */
-    public function getLangName(): string
+    public function getLangName()
     {
         return $this->NAME_LANG;
     }
@@ -63,7 +63,7 @@ class CatalogGroup extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withLangName(string $name)
+    public function withLangName($name)
     {
         $this->NAME_LANG = $name;
 
@@ -75,7 +75,7 @@ class CatalogGroup extends BitrixArrayItemBase
      *
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return parent::getName();
     }
@@ -87,7 +87,7 @@ class CatalogGroup extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withName(string $name): Interfaces\ItemInterface
+    public function withName($name)
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return parent::withName($name);

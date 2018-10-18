@@ -44,7 +44,7 @@ class ResultContent
     /**
      * @return string
      */
-    public function getType() : string
+    public function getType()
     {
         return $this->type;
     }
@@ -54,7 +54,7 @@ class ResultContent
      *
      * @return ResultContent
      */
-    public function withType(string $type) : ResultContent
+    public function withType($type)
     {
         $this->type = $type;
         
@@ -64,7 +64,7 @@ class ResultContent
     /**
      * @return string
      */
-    public function getMessage() : string
+    public function getMessage()
     {
         return $this->message;
     }
@@ -74,7 +74,7 @@ class ResultContent
      *
      * @return ResultContent
      */
-    public function withMessage(string $message) : ResultContent
+    public function withMessage($message)
     {
         $this->message = $message;
         
@@ -84,7 +84,7 @@ class ResultContent
     /**
      * @return bool
      */
-    public function isError() : bool
+    public function isError()
     {
         return $this->type === self::TYPE_ERROR;
     }
@@ -92,7 +92,7 @@ class ResultContent
     /**
      * @return bool
      */
-    public function isSuccess() : bool
+    public function isSuccess()
     {
         return $this->type === self::TYPE_SUCCESS;
     }

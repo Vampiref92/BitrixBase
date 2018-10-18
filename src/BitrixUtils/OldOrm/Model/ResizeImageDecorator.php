@@ -24,7 +24,7 @@ class ResizeImageDecorator extends Image implements ResizeImageInterface
     /**
      * @inheritDoc
      */
-    public function setResizeWidth(int $resizeWidth) : self
+    public function setResizeWidth($resizeWidth)
     {
         $this->resizeWidth = $resizeWidth > 0 ? $resizeWidth : '-';
         
@@ -34,7 +34,7 @@ class ResizeImageDecorator extends Image implements ResizeImageInterface
     /**
      * @inheritDoc
      */
-    public function setResizeHeight(int $resizeHeight) : self
+    public function setResizeHeight($resizeHeight)
     {
         $this->resizeHeight = $resizeHeight > 0 ? $resizeHeight : '-';
         
@@ -44,7 +44,7 @@ class ResizeImageDecorator extends Image implements ResizeImageInterface
     /**
      * @inheritDoc
      */
-    public function getResizeWidth() : int
+    public function getResizeWidth()
     {
         return (int)$this->resizeWidth;
     }
@@ -52,7 +52,7 @@ class ResizeImageDecorator extends Image implements ResizeImageInterface
     /**
      * @inheritDoc
      */
-    public function getResizeHeight() : int
+    public function getResizeHeight()
     {
         return (int)$this->resizeHeight;
     }
@@ -60,7 +60,7 @@ class ResizeImageDecorator extends Image implements ResizeImageInterface
     /**
      * @return string
      */
-    public function getSrc() : string
+    public function getSrc()
     {
         return sprintf('/resize/%sx%s%s',
                        $this->getResizeWidth() ?: '-',

@@ -26,7 +26,7 @@ abstract class CdbResultCollectionBase extends CollectionBase
     /**
      * @return int
      */
-    public function getTotalCount(): int
+    public function getTotalCount()
     {
         $this->initialize();
         return $this->totalCount;
@@ -35,7 +35,7 @@ abstract class CdbResultCollectionBase extends CollectionBase
     /**
      * @return \CDBResult
      */
-    public function getCdbResult(): \CDBResult
+    public function getCdbResult()
     {
         return $this->cdbResult;
     }

@@ -10,7 +10,7 @@ class CatalogGroupCollection extends CdbResultCollectionBase
     /**
      * @return Generator CatalogGroup[]
      */
-    protected function fetchElement(): Generator
+    protected function fetchElement()
     {
         while ($fields = $this->getCdbResult()->GetNext()) {
             yield new CatalogGroup($fields);

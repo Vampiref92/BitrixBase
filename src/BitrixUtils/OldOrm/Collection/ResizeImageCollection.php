@@ -20,14 +20,14 @@ class ResizeImageCollection extends ObjectArrayCollection
      */
     private $height;
 
-    public function __construct(array $objects = [], int $width = 0, int $height = 0)
+    public function __construct(array $objects = [], $width = 0, $height = 0)
     {
         parent::__construct($objects);
         $this->width = $width;
         $this->height = $height;
     }
 
-    public static function createFromImageCollection(Collection $imageCollection, int $width = 0, int $height = 0)
+    public static function createFromImageCollection(Collection $imageCollection, $width = 0, $height = 0)
     {
         $collection = new ResizeImageCollection([], $width, $height);
         foreach ($imageCollection as $image) {
@@ -39,7 +39,7 @@ class ResizeImageCollection extends ObjectArrayCollection
     /**
      * @return int
      */
-    public function getWidth(): int
+    public function getWidth()
     {
         return $this->width;
     }
@@ -49,7 +49,7 @@ class ResizeImageCollection extends ObjectArrayCollection
      *
      * @return ResizeImageCollection
      */
-    public function setWidth(int $width): ResizeImageCollection
+    public function setWidth(int $width)
     {
         $this->width = $width;
         $this->forAll(function ($key, ResizeImageDecorator $image) use ($width) {
@@ -61,7 +61,7 @@ class ResizeImageCollection extends ObjectArrayCollection
     /**
      * @return int
      */
-    public function getHeight(): int
+    public function getHeight()
     {
         return $this->height;
     }
@@ -71,7 +71,7 @@ class ResizeImageCollection extends ObjectArrayCollection
      *
      * @return ResizeImageCollection
      */
-    public function setHeight(int $height): ResizeImageCollection
+    public function setHeight($height)
     {
         $this->height = $height;
         $this->forAll(function ($key, ResizeImageDecorator $image) use ($height) {

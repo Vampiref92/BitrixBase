@@ -12,7 +12,7 @@ use CIBlockSection;
  */
 abstract class IblockMixedQuery extends IblockSectionQuery
 {
-    public function doExec(): CDBResult
+    public function doExec()
     {
         /** @noinspection PhpDynamicAsStaticMethodCallInspection */
         return CIBlockSection::GetMixedList(

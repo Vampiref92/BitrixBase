@@ -12,20 +12,20 @@ interface CropImageInterface extends FileInterface
     /**
      * @param int $cropWidth
      */
-    public function setCropWidth(int $cropWidth);
+    public function setCropWidth($cropWidth);
     
     /**
      * @param int $cropHeight
      */
-    public function setCropHeight(int $cropHeight);
+    public function setCropHeight($cropHeight);
     
     /**
      * @return int
      */
-    public function getCropWidth() : int;
+    public function getCropWidth();
     
     /**
      * @return int
      */
-    public function getCropHeight() : int;
+    public function getCropHeight();
 }

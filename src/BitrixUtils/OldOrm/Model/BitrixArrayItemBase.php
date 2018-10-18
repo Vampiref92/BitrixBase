@@ -86,7 +86,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
     /**
      * @inheritDoc
      */
-    public static function createFromPrimary(string $primary)
+    public static function createFromPrimary($primary)
     {
         /**
          * @todo Заглушка. Удалить после реализации создания в более конкретных классах.
@@ -96,7 +96,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
     /**
      * @return array
      */
-    public function toArray(): array
+    public function toArray()
     {
         $result = [];
         //TODO Дописать лучше часть про поля
@@ -119,7 +119,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return (int)$this->ID;
     }
@@ -129,7 +129,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
      *
      * @return $this
      */
-    public function withId(int $id): ItemInterface
+    public function withId($id)
     {
         $this->ID = $id;
 
@@ -139,7 +139,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
     /**
      * @return string
      */
-    public function getXmlId(): string
+    public function getXmlId()
     {
         return $this->XML_ID;
     }
@@ -149,7 +149,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
      *
      * @return $this
      */
-    public function withXmlId(string $xmlId): ItemInterface
+    public function withXmlId($xmlId)
     {
         $this->XML_ID = $xmlId;
 
@@ -159,7 +159,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
     /**
      * @return bool
      */
-    public function isActive(): bool
+    public function isActive()
     {
         return $this->active;
     }
@@ -169,7 +169,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
      *
      * @return $this
      */
-    public function withActive(bool $active): ItemInterface
+    public function withActive($active)
     {
         $this->active = $active;
 
@@ -179,7 +179,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName()
     {
         return $this->NAME;
     }
@@ -189,7 +189,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
      *
      * @return $this
      */
-    public function withName(string $name): ItemInterface
+    public function withName($name)
     {
         $this->NAME = $name;
 
@@ -199,7 +199,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
     /**
      * @return int
      */
-    public function getSort(): int
+    public function getSort()
     {
         return (int)$this->SORT;
     }
@@ -209,7 +209,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
      *
      * @return $this
      */
-    public function withSort(int $sort): ItemInterface
+    public function withSort($sort)
     {
         $this->SORT = $sort;
 
@@ -221,7 +221,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
      *
      * @return string
      */
-    protected function getPropertyName(string $fieldName): string
+    protected function getPropertyName($fieldName)
     {
         return preg_replace(self::PATTERN_PROPERTY_VALUE, '$1', $fieldName);
     }
@@ -231,7 +231,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
      *
      * @return bool
      */
-    protected function isProperty(string $fieldName): bool
+    protected function isProperty($fieldName)
     {
         return preg_match(self::PATTERN_PROPERTY_VALUE, $fieldName) > 0;
     }
@@ -241,7 +241,7 @@ abstract class BitrixArrayItemBase implements ActiveReadModelInterface, ItemInte
      *
      * @return bool
      */
-    protected function isExists(string $fieldName): bool
+    protected function isExists($fieldName)
     {
         return property_exists($this, $fieldName);
     }

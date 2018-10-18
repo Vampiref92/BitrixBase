@@ -14,7 +14,7 @@ class SizeImageDecorator extends Image implements SizeImageInterface
     /**
      * @return string
      */
-    public function getSrc() : string
+    public function getSrc()
     {
         return sprintf('/size%s', parent::getSrc());
     }

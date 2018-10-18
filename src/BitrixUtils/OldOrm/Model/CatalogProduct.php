@@ -149,7 +149,7 @@ class CatalogProduct
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -159,7 +159,7 @@ class CatalogProduct
      *
      * @return CatalogProduct
      */
-    public function setId(int $id): CatalogProduct
+    public function setId($id)
     {
         $this->id = $id;
 
@@ -169,7 +169,7 @@ class CatalogProduct
     /**
      * @return float
      */
-    public function getWeight(): ?float
+    public function getWeight()
     {
         return $this->weight;
     }
@@ -179,7 +179,7 @@ class CatalogProduct
      *
      * @return CatalogProduct
      */
-    public function setWeight(float $weight): CatalogProduct
+    public function setWeight($weight)
     {
         $this->weight = $weight;
 
@@ -189,7 +189,7 @@ class CatalogProduct
     /**
      * @return float
      */
-    public function getHeight(): ?float
+    public function getHeight()
     {
         return $this->height;
     }
@@ -199,7 +199,7 @@ class CatalogProduct
      *
      * @return CatalogProduct
      */
-    public function setHeight(float $height): CatalogProduct
+    public function setHeight($height)
     {
         $this->height = $height;
 
@@ -209,7 +209,7 @@ class CatalogProduct
     /**
      * @return float
      */
-    public function getWidth(): ?float
+    public function getWidth()
     {
         return $this->width;
     }
@@ -219,7 +219,7 @@ class CatalogProduct
      *
      * @return CatalogProduct
      */
-    public function setWidth(float $width): CatalogProduct
+    public function setWidth($width)
     {
         $this->width = $width;
 
@@ -229,7 +229,7 @@ class CatalogProduct
     /**
      * @return float
      */
-    public function getLength(): ?float
+    public function getLength()
     {
         return $this->length;
     }
@@ -239,7 +239,7 @@ class CatalogProduct
      *
      * @return CatalogProduct
      */
-    public function setLength(float $length): CatalogProduct
+    public function setLength($length)
     {
         $this->length = $length;
 
@@ -251,7 +251,7 @@ class CatalogProduct
      *
      * @return CatalogProduct
      */
-    public function setMeasureId(int $measureId): CatalogProduct
+    public function setMeasureId($measureId)
     {
         $this->measureId = $measureId;
 
@@ -261,7 +261,7 @@ class CatalogProduct
     /**
      * @return int
      */
-    public function getProductIblockId(): int
+    public function getProductIblockId()
     {
         return $this->productIblockId;
     }
@@ -269,7 +269,7 @@ class CatalogProduct
     /**
      * @return string
      */
-    public function getProductXmlId(): string
+    public function getProductXmlId()
     {
         return $this->productXmlId;
     }
@@ -277,7 +277,7 @@ class CatalogProduct
     /**
      * @return string
      */
-    public function getProductName(): string
+    public function getProductName()
     {
         return $this->productName;
     }
@@ -285,7 +285,7 @@ class CatalogProduct
     /**
      * @return int
      */
-    public function getMeasureId(): int
+    public function getMeasureId()
     {
         return $this->measureId;
     }
@@ -293,7 +293,7 @@ class CatalogProduct
     /**
      * @return int
      */
-    public function getVatId(): int
+    public function getVatId()
     {
         return $this->vatId;
     }
@@ -302,7 +302,7 @@ class CatalogProduct
      * @param int $vatId
      * @return CatalogProduct
      */
-    public function setVatId(int $vatId): CatalogProduct
+    public function setVatId($vatId)
     {
         $this->vatId = $vatId;
 
@@ -312,7 +312,7 @@ class CatalogProduct
     /**
      * @return bool
      */
-    public function isAvailable(): bool
+    public function isAvailable()
     {
         return $this->available;
     }
@@ -321,7 +321,7 @@ class CatalogProduct
      * @param bool $available
      * @return CatalogProduct
      */
-    public function setAvailable(bool $available): CatalogProduct
+    public function setAvailable($available)
     {
         $this->available = $available;
 
@@ -331,7 +331,7 @@ class CatalogProduct
     /**
      * @return bool
      */
-    public function canBuyZero(): bool
+    public function canBuyZero()
     {
         return $this->canBuyZero;
     }
@@ -340,7 +340,7 @@ class CatalogProduct
      * @param bool $canBuyZero
      * @return CatalogProduct
      */
-    public function setCanBuyZero(bool $canBuyZero): CatalogProduct
+    public function setCanBuyZero($canBuyZero)
     {
         $this->canBuyZero = $canBuyZero;
 
@@ -350,7 +350,7 @@ class CatalogProduct
     /**
      * @return bool
      */
-    public function getVatIncluded(): bool
+    public function getVatIncluded()
     {
         return $this->vatIncluded;
     }
@@ -360,7 +360,7 @@ class CatalogProduct
      *
      * @return CatalogProduct
      */
-    public function setVatIncluded(bool $vatIncluded): CatalogProduct
+    public function setVatIncluded($vatIncluded)
     {
         $this->vatIncluded = $vatIncluded;
 

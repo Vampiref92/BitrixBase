@@ -29,7 +29,7 @@ class IblockSectQuery extends IblockSectionQuery
      *
      * @return IblockSectCollection
      */
-    public function exec() : CollectionBase
+    public function exec()
     {
         return new IblockSectCollection($this->doExec());
     }
@@ -39,7 +39,7 @@ class IblockSectQuery extends IblockSectionQuery
      *
      * @return array
      */
-    public function getBaseFilter() : array
+    public function getBaseFilter()
     {
         $filter = [
             'GLOBAL_ACTIVE' => 'Y',
@@ -57,7 +57,7 @@ class IblockSectQuery extends IblockSectionQuery
      *
      * @return array
      */
-    public function getBaseSelect() : array
+    public function getBaseSelect()
     {
         return [
             'ID',

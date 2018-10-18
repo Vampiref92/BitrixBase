@@ -24,7 +24,7 @@ class CropImageDecorator extends Image implements CropImageInterface
     /**
      * @inheritDoc
      */
-    public function setCropWidth(int $cropWidth) : self
+    public function setCropWidth($cropWidth)
     {
         $this->cropWidth = $cropWidth > 0 ? $cropWidth : '-';
         
@@ -34,7 +34,7 @@ class CropImageDecorator extends Image implements CropImageInterface
     /**
      * @inheritDoc
      */
-    public function setCropHeight(int $cropHeight) : self
+    public function setCropHeight($cropHeight)
     {
         $this->cropHeight = $cropHeight > 0 ? $cropHeight : '-';
         
@@ -44,7 +44,7 @@ class CropImageDecorator extends Image implements CropImageInterface
     /**
      * @inheritDoc
      */
-    public function getCropWidth() : int
+    public function getCropWidth()
     {
         return (int)$this->cropWidth;
     }
@@ -52,7 +52,7 @@ class CropImageDecorator extends Image implements CropImageInterface
     /**
      * @inheritDoc
      */
-    public function getCropHeight() : int
+    public function getCropHeight()
     {
         return (int)$this->cropHeight;
     }
@@ -60,7 +60,7 @@ class CropImageDecorator extends Image implements CropImageInterface
     /**
      * @return string
      */
-    public function getSrc() : string
+    public function getSrc()
     {
         return sprintf('/crop/%sx%s%s', $this->getCropWidth() ?: '-', $this->getCropHeight() ?: '-', parent::getSrc());
     }

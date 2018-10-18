@@ -10,7 +10,7 @@ class IblockSectCollection extends CdbResultCollectionBase
     /**
      * @inheritdoc
      */
-    protected function fetchElement(): Generator
+    protected function fetchElement()
     {
         while ($fields = $this->getCdbResult()->GetNext()) {
             yield new IblockSect($fields);

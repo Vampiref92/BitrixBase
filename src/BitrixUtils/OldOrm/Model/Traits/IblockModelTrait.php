@@ -23,7 +23,7 @@ trait IblockModelTrait
     /**
      * @return int
      */
-    public function getIblockId(): int
+    public function getIblockId()
     {
         return (int)$this->IBLOCK_ID;
     }
@@ -33,7 +33,7 @@ trait IblockModelTrait
      *
      * @return $this
      */
-    public function withIblockId(int $iblockId)
+    public function withIblockId($iblockId)
     {
         $this->IBLOCK_ID = $iblockId;
 
@@ -43,7 +43,7 @@ trait IblockModelTrait
     /**
      * @return string
      */
-    public function getListPageUrl(): string
+    public function getListPageUrl()
     {
         return $this->LIST_PAGE_URL;
     }
@@ -53,7 +53,7 @@ trait IblockModelTrait
      *
      * @return $this
      */
-    public function withListPageUrl(string $url)
+    public function withListPageUrl($url)
     {
         $this->LIST_PAGE_URL = $url;
 
@@ -63,7 +63,7 @@ trait IblockModelTrait
     /**
      * @return string
      */
-    public function getCode(): string
+    public function getCode()
     {
         return $this->CODE;
     }
@@ -73,7 +73,7 @@ trait IblockModelTrait
      *
      * @return $this
      */
-    public function withCode(string $CODE)
+    public function withCode($CODE)
     {
         $this->CODE = $CODE;
 

@@ -17,7 +17,7 @@ abstract class IblockSectionQuery extends IblockQueryBase
     /**
      * @inheritdoc
      */
-    public function doExec() : CDBResult
+    public function doExec()
     {
         return CIBlockSection::GetList($this->getOrder(),
                                        $this->getFilterWithBase(),
@@ -29,7 +29,7 @@ abstract class IblockSectionQuery extends IblockQueryBase
     /**
      * @return bool
      */
-    public function isCountElements() : bool
+    public function isCountElements()
     {
         return $this->countElements;
     }
@@ -39,7 +39,7 @@ abstract class IblockSectionQuery extends IblockQueryBase
      *
      * @return $this
      */
-    public function withCountElements(bool $countElements) : IblockQueryBase
+    public function withCountElements($countElements)
     {
         $this->countElements = $countElements;
         

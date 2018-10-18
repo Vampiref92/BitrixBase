@@ -36,7 +36,7 @@ abstract class QueryBase
     /**
      * @return array
      */
-    public function getSelect(): array
+    public function getSelect()
     {
         return $this->select;
     }
@@ -56,7 +56,7 @@ abstract class QueryBase
     /**
      * @return array
      */
-    public function getFilter(): array
+    public function getFilter()
     {
         return $this->filter;
     }
@@ -79,7 +79,7 @@ abstract class QueryBase
      *
      * @return $this
      */
-    public function withFilterParameter(string $name, $value)
+    public function withFilterParameter($name, $value)
     {
         $name = trim($name);
 
@@ -95,7 +95,7 @@ abstract class QueryBase
      *
      * @return $this
      */
-    public function withoutFilterParameter(string $name)
+    public function withoutFilterParameter($name)
     {
         $name = trim($name);
 
@@ -109,7 +109,7 @@ abstract class QueryBase
     /**
      * @return array
      */
-    public function getGroup(): array
+    public function getGroup()
     {
         return $this->group;
     }
@@ -129,7 +129,7 @@ abstract class QueryBase
     /**
      * @return array
      */
-    public function getOrder(): array
+    public function getOrder()
     {
         return $this->order;
     }
@@ -149,7 +149,7 @@ abstract class QueryBase
     /**
      * @return array
      */
-    public function getNav(): array
+    public function getNav()
     {
         return $this->nav;
     }
@@ -171,7 +171,7 @@ abstract class QueryBase
      *
      * @return CollectionBase
      */
-    abstract public function exec(): CollectionBase;
+    abstract public function exec();
 
     /**
      * Непосредственное выполнение запроса через API Битрикса
@@ -185,16 +185,16 @@ abstract class QueryBase
      *
      * @return array
      */
-    abstract public function getBaseFilter(): array;
+    abstract public function getBaseFilter();
 
     /**
      * Возвращает базовую выборку полей. Например, те поля, которые обязательно нужны для создания сущности.
      *
      * @return array
      */
-    abstract public function getBaseSelect(): array;
+    abstract public function getBaseSelect();
 
-    public function getFilterWithBase(): array
+    public function getFilterWithBase()
     {
         return array_merge($this->getFilter(), $this->getBaseFilter());
     }
@@ -202,7 +202,7 @@ abstract class QueryBase
     /**
      * @return array
      */
-    public function getSelectWithBase(): array
+    public function getSelectWithBase()
     {
         return array_unique(array_merge($this->getSelect(), $this->getBaseSelect()));
     }

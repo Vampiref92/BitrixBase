@@ -12,7 +12,7 @@ class CatalogGroupQuery extends QueryBase
     /**
      * @inheritdoc
      */
-    public function getBaseSelect(): array
+    public function getBaseSelect()
     {
         return [
             'ID',
@@ -34,7 +34,7 @@ class CatalogGroupQuery extends QueryBase
     /**
      * @inheritdoc
      */
-    public function getBaseFilter(): array
+    public function getBaseFilter()
     {
         return [];
     }
@@ -42,7 +42,7 @@ class CatalogGroupQuery extends QueryBase
     /**
      * @inheritdoc
      */
-    public function doExec(): CDBResult
+    public function doExec()
     {
         return CCatalogGroup::GetList(
             $this->getOrder(),
@@ -56,7 +56,7 @@ class CatalogGroupQuery extends QueryBase
     /**
      * @inheritdoc
      */
-    public function exec(): CollectionBase
+    public function exec()
     {
         return new CatalogGroupCollection($this->doExec());
     }

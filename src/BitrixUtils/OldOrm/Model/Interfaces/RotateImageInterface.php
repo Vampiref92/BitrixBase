@@ -12,10 +12,10 @@ interface RotateImageInterface extends FileInterface
     /**
      * @param int $angle
      */
-    public function setAngle(int $angle);
+    public function setAngle($angle);
     
     /**
      * @return int
      */
-    public function getAngle() : int;
+    public function getAngle();
 }

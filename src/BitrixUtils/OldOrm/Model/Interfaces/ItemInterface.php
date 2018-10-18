@@ -7,48 +7,48 @@ interface ItemInterface
     /**
      * @return int
      */
-    public function getId(): int;
+    public function getId();
 
     /**
      * @param int $id
      *
      * @return static
      */
-    public function withId(int $id);
+    public function withId($id);
 
     /**
      * @return string
      */
-    public function getXmlId(): string;
+    public function getXmlId();
 
     /**
      * @param string $xmlId
      *
      * @return static
      */
-    public function withXmlId(string $xmlId);
+    public function withXmlId($xmlId);
 
     /**
      * @return string
      */
-    public function getName(): string;
+    public function getName();
 
     /**
      * @param string $name
      *
      * @return static
      */
-    public function withName(string $name);
+    public function withName($name);
 
     /**
      * @return int
      */
-    public function getSort(): int;
+    public function getSort();
 
     /**
      * @param int $sort
      *
      * @return static
      */
-    public function withSort(int $sort);
+    public function withSort($sort);
 }

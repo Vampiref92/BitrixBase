@@ -12,20 +12,20 @@ interface ResizeImageInterface extends FileInterface
     /**
      * @param int $resizeWidth
      */
-    public function setResizeWidth(int $resizeWidth);
+    public function setResizeWidth($resizeWidth);
     
     /**
      * @param int $resizeHeight
      */
-    public function setResizeHeight(int $resizeHeight);
+    public function setResizeHeight($resizeHeight);
     
     /**
      * @return int
      */
-    public function getResizeWidth() : int;
+    public function getResizeWidth();
     
     /**
      * @return int
      */
-    public function getResizeHeight() : int;
+    public function getResizeHeight();
 }

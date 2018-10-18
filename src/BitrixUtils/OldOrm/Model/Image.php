@@ -37,7 +37,7 @@ class Image extends File implements ImageInterface
     /**
      * @return int
      */
-    public function getWidth() : int
+    public function getWidth()
     {
         return (int)$this->width;
     }
@@ -57,7 +57,7 @@ class Image extends File implements ImageInterface
     /**
      * @return int
      */
-    public function getHeight() : int
+    public function getHeight()
     {
         return (int)$this->height;
     }

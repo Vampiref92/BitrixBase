@@ -14,7 +14,7 @@ class CatalogProductQuery extends QueryBase
      *
      * @return CollectionBase
      */
-    public function exec(): CollectionBase
+    public function exec()
     {
         return new CatalogProductCollection($this->doExec());
     }
@@ -24,7 +24,7 @@ class CatalogProductQuery extends QueryBase
      *
      * @return CDBResult
      */
-    public function doExec(): CDBResult
+    public function doExec()
     {
         return \CCatalogProduct::GetList(
             $this->getOrder(),
@@ -40,7 +40,7 @@ class CatalogProductQuery extends QueryBase
      *
      * @return array
      */
-    public function getBaseFilter(): array
+    public function getBaseFilter()
     {
         return [];
     }
@@ -50,7 +50,7 @@ class CatalogProductQuery extends QueryBase
      *
      * @return array
      */
-    public function getBaseSelect(): array
+    public function getBaseSelect()
     {
         return [
             'ID',

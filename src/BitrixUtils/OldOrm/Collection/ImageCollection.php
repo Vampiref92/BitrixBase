@@ -5,6 +5,7 @@ namespace Vf92\BitrixUtils\OldOrm\Collection;
 use Adv\Bitrixtools\Collection\ObjectArrayCollection;
 use Bitrix\Main\FileTable;
 use FourPaws\App\Templates\MediaEnum;
+use Vf92\BitrixUtils\HLBlock\HLBlockFactory;
 use Vf92\BitrixUtils\OldOrm\Model\Image;
 use InvalidArgumentException;
 

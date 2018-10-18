@@ -116,7 +116,7 @@ class IblockElement extends BitrixArrayItemBase
     /**
      * @return int
      */
-    public function getIblockSectionId(): int
+    public function getIblockSectionId()
     {
         return (int)$this->IBLOCK_SECTION_ID;
     }
@@ -126,7 +126,7 @@ class IblockElement extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withIblockSectionId(int $id)
+    public function withIblockSectionId($id)
     {
         $this->IBLOCK_SECTION_ID = $id;
 
@@ -136,7 +136,7 @@ class IblockElement extends BitrixArrayItemBase
     /**
      * @return string
      */
-    public function getDetailPageUrl(): string
+    public function getDetailPageUrl()
     {
         return $this->DETAIL_PAGE_URL;
     }
@@ -146,7 +146,7 @@ class IblockElement extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withDetailPageUrl(string $url)
+    public function withDetailPageUrl($url)
     {
         $this->DETAIL_PAGE_URL = $url;
 
@@ -156,7 +156,7 @@ class IblockElement extends BitrixArrayItemBase
     /**
      * @return string
      */
-    public function getCanonicalPageUrl(): string
+    public function getCanonicalPageUrl()
     {
         return $this->CANONICAL_PAGE_URL;
     }
@@ -166,7 +166,7 @@ class IblockElement extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withCanonicalPageUrl(string $url)
+    public function withCanonicalPageUrl($url)
     {
         $this->CANONICAL_PAGE_URL = $url;
 
@@ -176,7 +176,7 @@ class IblockElement extends BitrixArrayItemBase
     /**
      * @return TextContent
      */
-    public function getPreviewText(): TextContent
+    public function getPreviewText()
     {
         if (null === $this->previewText) {
             $this->previewText = (new TextContent())
@@ -204,7 +204,7 @@ class IblockElement extends BitrixArrayItemBase
     /**
      * @return TextContent
      */
-    public function getDetailText(): TextContent
+    public function getDetailText()
     {
         if (null === $this->detailText) {
             $this->detailText = (new TextContent())->withText($this->DETAIL_TEXT)
@@ -231,7 +231,7 @@ class IblockElement extends BitrixArrayItemBase
     /**
      * @return null|DateTimeImmutable
      */
-    public function getDateActiveFrom(): ?DateTimeImmutable
+    public function getDateActiveFrom()
     {
         if (null === $this->dateActiveFrom && $this->DATE_ACTIVE_FROM) {
             $this->dateActiveFrom = BitrixUtils::bitrixStringDateTime2DateTimeImmutable($this->DATE_ACTIVE_FROM);
@@ -256,7 +256,7 @@ class IblockElement extends BitrixArrayItemBase
     /**
      * @return null|DateTimeImmutable
      */
-    public function getDateActiveTo(): ?DateTimeImmutable
+    public function getDateActiveTo()
     {
         if (null === $this->dateActiveTo && $this->DATE_ACTIVE_TO) {
             $this->dateActiveTo = BitrixUtils::bitrixStringDateTime2DateTimeImmutable($this->DATE_ACTIVE_TO);
@@ -281,7 +281,7 @@ class IblockElement extends BitrixArrayItemBase
     /**
      * @return array
      */
-    public function getSectionsIdList(): array
+    public function getSectionsIdList()
     {
         if (
             null === $this->sectionIdList

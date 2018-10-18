@@ -73,7 +73,7 @@ class IblockSect extends BitrixArrayItemBase
     /**
      * @return string
      */
-    public function getSectionPageUrl(): string
+    public function getSectionPageUrl()
     {
         return $this->SECTION_PAGE_URL;
     }
@@ -83,7 +83,7 @@ class IblockSect extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withSectionPageUrl(string $url): self
+    public function withSectionPageUrl($url)
     {
         $this->SECTION_PAGE_URL = $url;
 
@@ -93,7 +93,7 @@ class IblockSect extends BitrixArrayItemBase
     /**
      * @return TextContent
      */
-    public function geDescription(): TextContent
+    public function geDescription()
     {
         if (null === $this->description) {
             $this->description = (new TextContent())
@@ -109,7 +109,7 @@ class IblockSect extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withDescription(TextContent $description): self
+    public function withDescription(TextContent $description)
     {
         $this->description = $description;
 
@@ -119,7 +119,7 @@ class IblockSect extends BitrixArrayItemBase
     /**
      * @return int
      */
-    public function getIblockId() : int
+    public function getIblockId()
     {
         return $this->IBLOCK_ID;
     }
@@ -129,7 +129,7 @@ class IblockSect extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withIblockId(int $iblockId): self
+    public function withIblockId($iblockId)
     {
         $this->IBLOCK_ID = $iblockId;
     
@@ -139,9 +139,9 @@ class IblockSect extends BitrixArrayItemBase
     /**
      * @return string
      */
-    public function getCode() : string
+    public function getCode()
     {
-        return $this->CODE ?? '';
+        return $this->CODE ?: '';
     }
     
     /**
@@ -149,7 +149,7 @@ class IblockSect extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withCode(string $code): self
+    public function withCode($code)
     {
         $this->CODE = $code;
         
@@ -159,7 +159,7 @@ class IblockSect extends BitrixArrayItemBase
     /**
      * @return int
      */
-    public function getIblockSectionId() : int
+    public function getIblockSectionId()
     {
         return $this->IBLOCK_SECTION_ID;
     }
@@ -169,7 +169,7 @@ class IblockSect extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withIblockSectionId(int $iblockSectionId): self
+    public function withIblockSectionId($iblockSectionId)
     {
         $this->IBLOCK_SECTION_ID = $iblockSectionId;
         return $this;
@@ -179,7 +179,7 @@ class IblockSect extends BitrixArrayItemBase
     /**
      * @return int
      */
-    public function getPicture() : int
+    public function getPicture()
     {
         return $this->PICTURE;
     }
@@ -189,7 +189,7 @@ class IblockSect extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withPicture(int $picture): self
+    public function withPicture($picture)
     {
         $this->PICTURE = $picture;
         return $this;
@@ -199,7 +199,7 @@ class IblockSect extends BitrixArrayItemBase
     /**
      * @return int
      */
-    public function getDetailPicture() : int
+    public function getDetailPicture()
     {
         return $this->DETAIL_PICTURE;
     }
@@ -209,7 +209,7 @@ class IblockSect extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withDetailPicture(int $detailPicture): self
+    public function withDetailPicture($detailPicture)
     {
         $this->DETAIL_PICTURE = $detailPicture;
     
@@ -219,7 +219,7 @@ class IblockSect extends BitrixArrayItemBase
     /**
      * @return int
      */
-    public function getDepthLevel() : int
+    public function getDepthLevel()
     {
         return $this->DEPTH_LEVEL;
     }
@@ -229,7 +229,7 @@ class IblockSect extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withDepthLevel(int $depthLevel): self
+    public function withDepthLevel($depthLevel)
     {
         $this->DEPTH_LEVEL = $depthLevel;
     

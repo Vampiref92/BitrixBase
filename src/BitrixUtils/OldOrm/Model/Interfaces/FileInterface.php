@@ -12,25 +12,25 @@ interface FileInterface extends ActiveReadModelInterface
     /**
      * @return int
      */
-    public function getId() : int;
+    public function getId();
     
     /**
      * @param int $id
      */
-    public function setId(int $id);
+    public function setId($id);
     
     /**
      * @return string
      */
-    public function getSrc() : string;
+    public function getSrc();
     
     /**
      * @param string $src
      */
-    public function setSrc(string $src);
+    public function setSrc($src);
     
     /**
      * @return string
      */
-    public function __toString() : string;
+    public function __toString();
 }

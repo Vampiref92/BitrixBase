@@ -27,7 +27,7 @@ class IblockElementQuery extends IblockQueryBase
     /**
      * @return \CDBResult
      */
-    public function doExec(): \CDBResult
+    public function doExec()
     {
         return \CIBlockElement::GetList(
             $this->getOrder(),
@@ -38,7 +38,7 @@ class IblockElementQuery extends IblockQueryBase
         );
     }
 
-    public function getBaseSelect(): array
+    public function getBaseSelect()
     {
         return [
             'ACTIVE',
@@ -63,7 +63,7 @@ class IblockElementQuery extends IblockQueryBase
     /**
      * @inheritdoc
      */
-    public function getBaseFilter(): array
+    public function getBaseFilter()
     {
         $filter = [];
 
@@ -77,7 +77,7 @@ class IblockElementQuery extends IblockQueryBase
     /**
      * @inheritdoc
      */
-    public function exec(): CollectionBase
+    public function exec()
     {
         return new IblockElementCollection($this->doExec());
     }

@@ -32,5 +32,5 @@ abstract class CollectionBase extends AbstractLazyCollection
     /**
      * Извлечение модели
      */
-    abstract protected function fetchElement(): \Generator;
+    abstract protected function fetchElement();
 }

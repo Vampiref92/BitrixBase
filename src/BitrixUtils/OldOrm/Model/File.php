@@ -52,7 +52,7 @@ class File implements FileInterface
      * @return static
      *
      */
-    public static function createFromPrimary(string $primary)
+    public static function createFromPrimary($primary)
     {
         $fields = FileTable::getById($primary)->fetch();
 
@@ -66,7 +66,7 @@ class File implements FileInterface
     /**
      * @return string
      */
-    public function getSrc(): string
+    public function getSrc()
     {
         if ($this->src === null) {
             try {
@@ -90,7 +90,7 @@ class File implements FileInterface
      *
      * @return static
      */
-    public function setSrc(string $src): self
+    public function setSrc($src)
     {
         $this->src = $src;
 
@@ -100,7 +100,7 @@ class File implements FileInterface
     /**
      * @return string
      */
-    public function getSubDir(): string
+    public function getSubDir()
     {
         return (string)$this->fields['SUBDIR'];
     }
@@ -108,7 +108,7 @@ class File implements FileInterface
     /**
      * @return string
      */
-    public function getFileName(): string
+    public function getFileName()
     {
         return (string)$this->fields['FILE_NAME'];
     }
@@ -116,7 +116,7 @@ class File implements FileInterface
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return (int)$this->fields['ID'];
     }
@@ -126,7 +126,7 @@ class File implements FileInterface
      *
      * @return static
      */
-    public function setId(int $id): self
+    public function setId($id)
     {
         $this->fields['ID'] = $id;
 
@@ -136,7 +136,7 @@ class File implements FileInterface
     /**
      * @return string
      */
-    public function __toString(): string
+    public function __toString()
     {
         return $this->getSrc();
     }
@@ -145,7 +145,7 @@ class File implements FileInterface
      * @todo move to interface
      * @return array
      */
-    public function getFields(): array
+    public function getFields()
     {
         return $this->fields;
     }

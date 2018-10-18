@@ -11,8 +11,8 @@ use Vf92\BitrixUtils\OldOrm\Model\Traits\IblockModelTrait;
  */
 abstract class IblockSection extends BitrixArrayItemBase
 {
-    protected const ROOT_SECTION_NAME = 'root';
-    protected const ROOT_SECTION_CODE = 'root';
+    const ROOT_SECTION_NAME = 'root';
+    const ROOT_SECTION_CODE = 'root';
 
     use IblockModelTrait;
 
@@ -67,7 +67,7 @@ abstract class IblockSection extends BitrixArrayItemBase
      */
     protected $ELEMENT_CNT = 0;
 
-    protected function getElementCount(): int
+    protected function getElementCount()
     {
         return $this->ELEMENT_CNT;
     }
@@ -77,7 +77,7 @@ abstract class IblockSection extends BitrixArrayItemBase
      *
      * @return static
      */
-    protected function setElementCount(int $elementCount)
+    protected function setElementCount($elementCount)
     {
         $this->ELEMENT_CNT = $elementCount;
         return $this;
@@ -86,7 +86,7 @@ abstract class IblockSection extends BitrixArrayItemBase
     /**
      * @return int
      */
-    public function getIblockSectionId(): int
+    public function getIblockSectionId()
     {
         return (int)$this->IBLOCK_SECTION_ID;
     }
@@ -96,7 +96,7 @@ abstract class IblockSection extends BitrixArrayItemBase
      *
      * @return static
      */
-    public function setIblockSectionId(int $IBLOCK_SECTION_ID)
+    public function setIblockSectionId($IBLOCK_SECTION_ID)
     {
         $this->IBLOCK_SECTION_ID = $IBLOCK_SECTION_ID;
         return $this;
@@ -106,7 +106,7 @@ abstract class IblockSection extends BitrixArrayItemBase
     /**
      * @return int
      */
-    public function getDepthLevel(): int
+    public function getDepthLevel()
     {
         return (int)$this->DEPTH_LEVEL;
     }
@@ -116,7 +116,7 @@ abstract class IblockSection extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withSectionPageUrl(string $url)
+    public function withSectionPageUrl($url)
     {
         $this->SECTION_PAGE_URL = $url;
 
@@ -128,7 +128,7 @@ abstract class IblockSection extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withDepthLevel(int $level)
+    public function withDepthLevel($level)
     {
         $this->DEPTH_LEVEL = $level;
 
@@ -138,7 +138,7 @@ abstract class IblockSection extends BitrixArrayItemBase
     /**
      * @return int
      */
-    public function getLeftMargin(): int
+    public function getLeftMargin()
     {
         return $this->LEFT_MARGIN;
     }
@@ -148,7 +148,7 @@ abstract class IblockSection extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withLeftMargin(int $leftMargin)
+    public function withLeftMargin($leftMargin)
     {
         $this->LEFT_MARGIN = $leftMargin;
 
@@ -158,7 +158,7 @@ abstract class IblockSection extends BitrixArrayItemBase
     /**
      * @return int
      */
-    public function getRightMargin(): int
+    public function getRightMargin()
     {
         return $this->RIGHT_MARGIN;
     }
@@ -168,7 +168,7 @@ abstract class IblockSection extends BitrixArrayItemBase
      *
      * @return $this
      */
-    public function withRightMargin(int $rightMargin)
+    public function withRightMargin($rightMargin)
     {
         $this->RIGHT_MARGIN = $rightMargin;
 
@@ -178,8 +178,8 @@ abstract class IblockSection extends BitrixArrayItemBase
     /**
      * @return string
      */
-    public function getSectionPageUrl(): string
+    public function getSectionPageUrl()
     {
-        return $this->SECTION_PAGE_URL ?? '';
+        return $this->SECTION_PAGE_URL ?: '';
     }
 }

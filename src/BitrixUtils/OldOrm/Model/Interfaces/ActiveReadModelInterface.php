@@ -16,5 +16,5 @@ interface ActiveReadModelInterface
      *
      * @return static
      */
-    public static function createFromPrimary(string $primary);
+    public static function createFromPrimary($primary);
 }

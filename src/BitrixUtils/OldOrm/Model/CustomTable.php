@@ -35,7 +35,7 @@ abstract class CustomTable implements ActiveReadModelInterface, ToArrayInterface
      *
      * @return bool
      */
-    protected function isExists(string $fieldName) : bool
+    protected function isExists($fieldName)
     {
         return property_exists($this, $fieldName);
     }
@@ -43,7 +43,7 @@ abstract class CustomTable implements ActiveReadModelInterface, ToArrayInterface
     /**
      * @inheritDoc
      */
-    public static function createFromPrimary(string $primary)
+    public static function createFromPrimary($primary)
     {
         /**
          * @todo Заглушка. Удалить после реализации создания в более конкретных классах.
@@ -53,7 +53,7 @@ abstract class CustomTable implements ActiveReadModelInterface, ToArrayInterface
     /**
      * @return array
      */
-    public function toArray(): array
+    public function toArray()
     {
         $result = [];
         //TODO Дописать лучше часть про поля
