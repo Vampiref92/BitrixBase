@@ -2,13 +2,7 @@
 
 namespace Vf92\BitrixUtils\Constructor;
 
-use Bitrix\Iblock\SectionTable;
-use Bitrix\Main\ArgumentException;
-use Bitrix\Main\Entity\DataManager;
-use Bitrix\Main\Entity\ReferenceField;
-use Bitrix\Main\ORM\Fields\Relations\Reference;
-use Bitrix\Main\ORM\Query\Join;
-use Bitrix\Main\SystemException;
+use Bitrix\Main;
 use Vf92\BitrixUtils\Config\Version;
 
 /**
@@ -23,8 +17,8 @@ class IblockSectionUfPropEntityConstructor extends EntityConstructor
     /**
      * @param int $iblockId
      *
-     * @return DataManager|string
-     * @throws SystemException
+     * @return Main\Entity\DataManager|string
+     * @throws Main\SystemException
      */
     public static function getDataClass($iblockId)
     {
@@ -34,9 +28,9 @@ class IblockSectionUfPropEntityConstructor extends EntityConstructor
     /**
      * @param $iblockId
      *
-     * @return DataManager|string
-     * @throws SystemException
-     * @throws ArgumentException
+     * @return Main\Entity\DataManager|string
+     * @throws Main\SystemException
+     * @throws Main\ArgumentException
      */
     public static function getMultipleDataClass($iblockId)
     {
@@ -47,9 +41,9 @@ class IblockSectionUfPropEntityConstructor extends EntityConstructor
      * @param        $iblockId
      * @param string $type
      *
-     * @return DataManager|string
-     * @throws SystemException
-     * @throws ArgumentException
+     * @return Main\Entity\DataManager|string
+     * @throws Main\SystemException
+     * @throws Main\ArgumentException
      */
     protected static function getBaseDataClass($iblockId, $type = 's')
     {
@@ -58,19 +52,19 @@ class IblockSectionUfPropEntityConstructor extends EntityConstructor
 
         $additionalFields = [];
         if (Version::getInstance()->isVersionMoreEqualThan('18')) {
-            $additionalFields[] = (new Reference(
+            $additionalFields[] = (new Main\ORM\Fields\Relations\Reference(
                 'SECTION',
-                SectionTable::getEntity(),
-                Join::on('this.VALUE_ID', 'ref.ID')
+                \Bitrix\Iblock\SectionTable::getEntity(),
+                Main\Entity\Query\Join::on('this.VALUE_ID', 'ref.ID')
             ))->configureJoinType('inner');
         } else {
             $referenceFilter = ['=this.VALUE_ID' => 'ref.ID'];
             if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                $referenceFilter =Join::on('this.VALUE_ID', 'ref.ID');
+                $referenceFilter = Main\Entity\Query\Join::on('this.VALUE_ID', 'ref.ID');
             }
-            $additionalFields[] = new ReferenceField(
+            $additionalFields[] = new Main\Entity\ReferenceField(
                 'SECTION',
-                SectionTable::getEntity(),
+                \Bitrix\Iblock\SectionTable::getEntity(),
                 $referenceFilter
             );
         }

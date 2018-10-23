@@ -2,14 +2,7 @@
 
 namespace Vf92\BitrixUtils\Constructor;
 
-use Bitrix\Iblock\ElementTable;
-use Bitrix\Iblock\PropertyTable;
-use Bitrix\Main\ArgumentException;
-use Bitrix\Main\Entity\DataManager;
-use Bitrix\Main\Entity\ReferenceField;
-use Bitrix\Main\ORM\Fields\Relations\Reference;
-use Bitrix\Main\ORM\Query\Join;
-use Bitrix\Main\SystemException;
+use Bitrix\Main;
 use Vf92\BitrixUtils\Config\Version;
 
 /**
@@ -24,50 +17,55 @@ class IblockPropEntityConstructor extends EntityConstructor
     /**
      * @param int $iblockId
      *
-     * @return DataManager|string
-     * @throws SystemException
+     * @return Main\Entity\DataManager|string
+     * @throws Main\SystemException
      */
     public static function getDataClass($iblockId)
     {
         return static::getBaseDataClass($iblockId, static::SINGLE_TYPE);
     }
 
+    /**
+     * @return Main\Entity\DataManager|string
+     * @throws Main\ArgumentException
+     * @throws Main\SystemException
+     */
     public static function geV1DataClass()
     {
         $className = 'ElementPropV1';
         $tableName = 'b_iblock_element_property';
         $additionalFields = [];
         if (Version::getInstance()->isVersionMoreEqualThan('18')) {
-            $additionalFields[] = (new Reference(
+            $additionalFields[] = (new Main\ORM\Fields\Relations\Reference(
                 'ELEMENT',
-                ElementTable::getEntity(),
-                Join::on('this.IBLOCK_ELEMENT_ID', 'ref.ID')
+                \Bitrix\Iblock\ElementTable::getEntity(),
+                Main\Entity\Query\Join::on('this.IBLOCK_ELEMENT_ID', 'ref.ID')
             ))->configureJoinType('inner');
         } else {
             $referenceFilter = ['=this.IBLOCK_ELEMENT_ID' => 'ref.ID'];
             if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                $referenceFilter =Join::on('this.IBLOCK_ELEMENT_ID', 'ref.ID');
+                $referenceFilter = Main\Entity\Query\Join::on('this.IBLOCK_ELEMENT_ID', 'ref.ID');
             }
-            $additionalFields[] = new ReferenceField(
+            $additionalFields[] = new Main\Entity\ReferenceField(
                 'ELEMENT',
-                ElementTable::getEntity(),
+                \Bitrix\Iblock\ElementTable::getEntity(),
                 $referenceFilter
             );
         }
         if (Version::getInstance()->isVersionMoreEqualThan('18')) {
-            $additionalFields[] = (new Reference(
+            $additionalFields[] = (new Main\ORM\Fields\Relations\Reference(
                 'PROPERTY',
-                PropertyTable::getEntity(),
-                Join::on('this.IBLOCK_PROPERTY_ID', 'ref.ID')
+                \Bitrix\Iblock\PropertyTable::getEntity(),
+                Main\Entity\Query\Join::on('this.IBLOCK_PROPERTY_ID', 'ref.ID')
             ))->configureJoinType('inner');
         } else {
             $referenceFilter = ['=this.IBLOCK_PROPERTY_ID' => 'ref.ID'];
             if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                $referenceFilter =Join::on('this.IBLOCK_PROPERTY_ID', 'ref.ID');
+                $referenceFilter = Main\Entity\Query\Join::on('this.IBLOCK_PROPERTY_ID', 'ref.ID');
             }
-            $additionalFields[] = new ReferenceField(
+            $additionalFields[] = new Main\Entity\ReferenceField(
                 'PROPERTY',
-                PropertyTable::getEntity(),
+                \Bitrix\Iblock\PropertyTable::getEntity(),
                 $referenceFilter
             );
         }
@@ -78,27 +76,27 @@ class IblockPropEntityConstructor extends EntityConstructor
     /**
      * @param $iblockId
      *
-     * @return DataManager|string
-     * @throws SystemException
-     * @throws ArgumentException
+     * @return Main\Entity\DataManager|string
+     * @throws Main\SystemException
+     * @throws Main\ArgumentException
      */
     public static function getMultipleDataClass($iblockId)
     {
         $additionalFields = [];
         if (Version::getInstance()->isVersionMoreEqualThan('18')) {
-            $additionalFields[] = (new Reference(
+            $additionalFields[] = (new Main\ORM\Fields\Relations\Reference(
                 'PROPERTY',
-                PropertyTable::getEntity(),
-                Join::on('this.IBLOCK_PROPERTY_ID', 'ref.ID')
+                \Bitrix\Iblock\PropertyTable::getEntity(),
+                Main\Entity\Query\Join::on('this.IBLOCK_PROPERTY_ID', 'ref.ID')
             ))->configureJoinType('inner');
         } else {
             $referenceFilter = ['=this.IBLOCK_PROPERTY_ID' => 'ref.ID'];
             if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                $referenceFilter =Join::on('this.IBLOCK_PROPERTY_ID', 'ref.ID');
+                $referenceFilter = Main\Entity\Query\Join::on('this.IBLOCK_PROPERTY_ID', 'ref.ID');
             }
-            $additionalFields[] = new ReferenceField(
+            $additionalFields[] = new Main\Entity\ReferenceField(
                 'PROPERTY',
-                PropertyTable::getEntity(),
+                \Bitrix\Iblock\PropertyTable::getEntity(),
                 $referenceFilter
             );
         }
@@ -110,28 +108,28 @@ class IblockPropEntityConstructor extends EntityConstructor
      * @param string $type
      * @param array  $additionalFields
      *
-     * @return DataManager|string
-     * @throws SystemException
-     * @throws ArgumentException
+     * @return Main\Entity\DataManager|string
+     * @throws Main\SystemException
+     * @throws Main\ArgumentException
      */
     protected static function getBaseDataClass($iblockId, $type = 's', array $additionalFields = [])
     {
         $className = 'ElementProp' . ToUpper($type) . $iblockId;
         $tableName = 'b_iblock_element_prop_' . ToLower($type) . $iblockId;
         if (Version::getInstance()->isVersionMoreEqualThan('18')) {
-            $additionalFields[] = (new Reference(
+            $additionalFields[] = (new Main\ORM\Fields\Relations\Reference(
                 'ELEMENT',
-                ElementTable::getEntity(),
-                Join::on('this.IBLOCK_ELEMENT_ID', 'ref.ID')
+                \Bitrix\Iblock\ElementTable::getEntity(),
+                Main\Entity\Query\Join::on('this.IBLOCK_ELEMENT_ID', 'ref.ID')
             ))->configureJoinType('inner');
         } else {
             $referenceFilter = ['=this.IBLOCK_ELEMENT_ID' => 'ref.ID'];
             if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                $referenceFilter =Join::on('this.IBLOCK_ELEMENT_ID', 'ref.ID');
+                $referenceFilter = Main\Entity\Query\Join::on('this.IBLOCK_ELEMENT_ID', 'ref.ID');
             }
-            $additionalFields[] = new ReferenceField(
+            $additionalFields[] = new Main\Entity\ReferenceField(
                 'ELEMENT',
-                ElementTable::getEntity(),
+                \Bitrix\Iblock\ElementTable::getEntity(),
                 $referenceFilter
             );
         }

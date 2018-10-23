@@ -5,6 +5,10 @@ namespace Vf92\BitrixUtils\Constructor;
 use Bitrix\Main\Entity\DataManager;
 use Bitrix\Main\SystemException;
 
+/**
+ * Class IblockPropMultipleEntityConstructor
+ * @package Vf92\BitrixUtils\Constructor
+ */
 class IblockPropMultipleEntityConstructor extends EntityConstructor
 {
     /**

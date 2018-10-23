@@ -4,7 +4,6 @@ namespace Vf92\BitrixUtils\Constructor;
 
 use Bitrix\Main;
 use Bitrix\Main\Entity\DataManager;
-use Vf92\BitrixUtils\BitrixUtils;
 use Vf92\MiscUtils\MiscUtils;
 
 /**
@@ -51,7 +50,7 @@ class EntityConstructor
 
         $eval = 'use Bitrix\Main;
         
-				class ' . $entity_data_class . ' extends \Bitrix\Main\Entity\DataManager
+				class ' . $entity_data_class . ' extends Main\Entity\DataManager
 				{
 					public static function getTableName()
 					{
@@ -151,6 +150,12 @@ class EntityConstructor
         return $fieldsMap;
     }
 
+    /**
+     * @param $fieldsMap
+     *
+     * @return array
+     * @throws Main\SystemException
+     */
     public static function getNewFieldsMap($fieldsMap)
     {
         $newFieldsMap = [
