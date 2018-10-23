@@ -39,7 +39,6 @@ class EntityConstructor
             return $entity_data_class;
         }
 
-        $currentFieldsMap = [];
         $mapOld = static::getFieldsMap($tableName);
         $mapNew = static::getNewFieldsMap($mapOld);
         if (\count($mapOld) === \count($mapNew)) {
@@ -59,7 +58,25 @@ class EntityConstructor
 
 					public static function getMap()
 					{
-						return ' . var_export(array_merge(static::getFieldsMap($tableName), $additionalFields), true) . ';
+						return [';
+                        $allFields = array_merge($currentFieldsMap, $additionalFields);
+                        foreach ($allFields as $key => $val) {
+                            if (\is_object($val)) {
+                                continue;
+                            }
+                            if (!\is_numeric($key)) {
+                                $eval .= '\'' . $key . '\' => ';
+                            }
+                            if (\is_array($val)) {
+                                $val = var_export($val, true);
+                            } else {
+                                if (!\is_string($val)) {
+                                    $val .= '\'' . $val . '\'';
+                                }
+                            }
+                            $eval .= $val . ', ' . PHP_EOL;
+                        }
+                        $eval .= '];
 					}
 				}
 			';
@@ -170,31 +187,31 @@ class EntityConstructor
             MiscUtils::eraseArray($params);
             switch ($columnInfo['data_type']) {
                 case 'integer':
-                    $newFieldsMap[] = 'new Main\Entity\IntegerField("' . $columnName . '", ' . var_export($params,
+                    $newFieldsMap[] = 'new Main\Entity\IntegerField(\'' . $columnName . '\', ' . var_export($params,
                             true) . ')';
                     break;
                 case 'float':
-                    $newFieldsMap[] = 'new Main\Entity\FloatField("' . $columnName . '", ' . var_export($params,
+                    $newFieldsMap[] = 'new Main\Entity\FloatField(\'' . $columnName . '\', ' . var_export($params,
                             true) . ')';
                     break;
                 case 'boolean':
-                    $newFieldsMap[] = 'new Main\Entity\BooleanField("' . $columnName . '", ' . var_export($params,
+                    $newFieldsMap[] = 'new Main\Entity\BooleanField(\'' . $columnName . '\', ' . var_export($params,
                             true) . ')';
                     break;
                 case 'date':
-                    $newFieldsMap[] = 'new Main\Entity\DateField("' . $columnName . '", ' . var_export($params,
+                    $newFieldsMap[] = 'new Main\Entity\DateField(\'' . $columnName . '\', ' . var_export($params,
                             true) . ')';
                     break;
                 case 'datetime':
-                    $newFieldsMap[] = 'new Main\Entity\DateTimeField("' . $columnName . '", ' . var_export($params,
+                    $newFieldsMap[] = 'new Main\Entity\DateTimeField(\'' . $columnName . '\', ' . var_export($params,
                             true) . ')';
                     break;
                 case 'string':
                     if ($columnInfo['length'] > 255) {
-                        $newFieldsMap[] = 'new Main\Entity\TextField("' . $columnName . '", ' . var_export($params,
+                        $newFieldsMap[] = 'new Main\Entity\TextField(\'' . $columnName . '\', ' . var_export($params,
                                 true) . ')';
                     } else {
-                        $newFieldsMap[] = 'new Main\Entity\StringField("' . $columnName . '", ' . var_export($params,
+                        $newFieldsMap[] = 'new Main\Entity\StringField(\'' . $columnName . '\', ' . var_export($params,
                                 true) . ')';
                     }
                     break;

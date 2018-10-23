@@ -37,34 +37,34 @@ class IblockPropEntityConstructor extends EntityConstructor
         $additionalFields = [];
         if (Version::getInstance()->isVersionMoreEqualThan('18')) {
             $additionalFields[] = '(new Main\ORM\Fields\Relations\Reference(
-                "ELEMENT",
+                \'ELEMENT\',
                 \Bitrix\Iblock\ElementTable::getEntity(),
-                Main\Entity\Query\Join::on("this.IBLOCK_ELEMENT_ID", "ref.ID")
-            ))->configureJoinType("inner")';
+                Main\Entity\Query\Join::on(\'this.IBLOCK_ELEMENT_ID\', \'ref.ID\')
+            ))->configureJoinType(\'inner\')';
         } else {
-            $referenceFilter = '["=this.IBLOCK_ELEMENT_ID" => "ref.ID"]';
+            $referenceFilter = '[\'=this.IBLOCK_ELEMENT_ID\' => \'ref.ID\']';
             if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                $referenceFilter = 'Main\Entity\Query\Join::on("this.IBLOCK_ELEMENT_ID", "ref.ID")';
+                $referenceFilter = 'Main\Entity\Query\Join::on(\'this.IBLOCK_ELEMENT_ID\', \'ref.ID\')';
             }
             $additionalFields[] = 'new Main\Entity\ReferenceField(
-                "ELEMENT",
+                \'ELEMENT\',
                 \Bitrix\Iblock\ElementTable::getEntity(),
                 '.$referenceFilter.'
             )';
         }
         if (Version::getInstance()->isVersionMoreEqualThan('18')) {
             $additionalFields[] = '(new Main\ORM\Fields\Relations\Reference(
-                "PROPERTY",
+                \'PROPERTY\',
                 \Bitrix\Iblock\PropertyTable::getEntity(),
-                Main\Entity\Query\Join::on("this.IBLOCK_PROPERTY_ID", "ref.ID")
-            ))->configureJoinType("inner")';
+                Main\Entity\Query\Join::on(\'this.IBLOCK_PROPERTY_ID\', \'ref.ID\')
+            ))->configureJoinType(\'inner\')';
         } else {
-            $referenceFilter = '["=this.IBLOCK_PROPERTY_ID" => "ref.ID"]';
+            $referenceFilter = '[\'=this.IBLOCK_PROPERTY_ID\' => \'ref.ID\']';
             if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                $referenceFilter = 'Main\Entity\Query\Join::on("this.IBLOCK_PROPERTY_ID", "ref.ID")';
+                $referenceFilter = 'Main\Entity\Query\Join::on(\'this.IBLOCK_PROPERTY_ID\', \'ref.ID\')';
             }
             $additionalFields[] = 'new Main\Entity\ReferenceField(
-                "PROPERTY",
+                \'PROPERTY\',
                 \Bitrix\Iblock\PropertyTable::getEntity(),
                 '.$referenceFilter.'
             )';
@@ -85,17 +85,17 @@ class IblockPropEntityConstructor extends EntityConstructor
         $additionalFields = [];
         if (Version::getInstance()->isVersionMoreEqualThan('18')) {
             $additionalFields[] = '(new Main\ORM\Fields\Relations\Reference(
-                "PROPERTY",
+                \'PROPERTY\',
                 \Bitrix\Iblock\PropertyTable::getEntity(),
-                Main\Entity\Query\Join::on("this.IBLOCK_PROPERTY_ID", "ref.ID")
-            ))->configureJoinType("inner")';
+                Main\Entity\Query\Join::on(\'this.IBLOCK_PROPERTY_ID\', \'ref.ID\')
+            ))->configureJoinType(\'inner\')';
         } else {
-            $referenceFilter = '["=this.IBLOCK_PROPERTY_ID" => "ref.ID"]';
+            $referenceFilter = '[\'=this.IBLOCK_PROPERTY_ID\' => \'ref.ID\']';
             if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                $referenceFilter = 'Main\Entity\Query\Join::on("this.IBLOCK_PROPERTY_ID", "ref.ID")';
+                $referenceFilter = 'Main\Entity\Query\Join::on(\'this.IBLOCK_PROPERTY_ID\', \'ref.ID\')';
             }
             $additionalFields[] = 'new Main\Entity\ReferenceField(
-                "PROPERTY",
+                \'PROPERTY\',
                 \Bitrix\Iblock\PropertyTable::getEntity(),
                 '.$referenceFilter.'
             )';
@@ -118,17 +118,17 @@ class IblockPropEntityConstructor extends EntityConstructor
         $tableName = 'b_iblock_element_prop_' . ToLower($type) . $iblockId;
         if (Version::getInstance()->isVersionMoreEqualThan('18')) {
             $additionalFields[] = '(new Main\ORM\Fields\Relations\Reference(
-                "ELEMENT",
+                \'ELEMENT\',
                 \Bitrix\Iblock\ElementTable::getEntity(),
-                Main\Entity\Query\Join::on("this.IBLOCK_ELEMENT_ID", "ref.ID")
-            ))->configureJoinType("inner")';
+                Main\Entity\Query\Join::on(\'this.IBLOCK_ELEMENT_ID\', \'ref.ID\')
+            ))->configureJoinType(\'inner\')';
         } else {
-            $referenceFilter = '["=this.IBLOCK_ELEMENT_ID" => "ref.ID"]';
+            $referenceFilter = '[\'=this.IBLOCK_ELEMENT_ID\' => \'ref.ID\']';
             if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                $referenceFilter = 'Main\Entity\Query\Join::on("this.IBLOCK_ELEMENT_ID", "ref.ID")';
+                $referenceFilter = 'Main\Entity\Query\Join::on(\'this.IBLOCK_ELEMENT_ID\', \'ref.ID\')';
             }
             $additionalFields[] = 'new Main\Entity\ReferenceField(
-                "ELEMENT",
+                \'ELEMENT\',
                 \Bitrix\Iblock\ElementTable::getEntity(),
                 '.$referenceFilter.'
             )';
