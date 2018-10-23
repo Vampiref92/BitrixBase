@@ -49,7 +49,8 @@ class EntityConstructor
             $currentFieldsMap = $mapOld;
         }
 
-        $eval = '
+        $eval = 'use Bitrix\Main;
+        
 				class ' . $entity_data_class . ' extends \Bitrix\Main\Entity\DataManager
 				{
 					public static function getTableName()
