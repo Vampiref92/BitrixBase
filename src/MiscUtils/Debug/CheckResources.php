@@ -12,9 +12,9 @@ class CheckResources
 {
     protected static $instance = null;
     protected $step = 1;
-    protected $arResources;
-    protected $arFormatedResources;
-    protected $bUse;
+    protected $resources;
+    protected $formattedResources;
+    protected $use;
 
     /**
      * @return \Vf92\MiscUtils\Debug\CheckResources
@@ -30,39 +30,39 @@ class CheckResources
 
     public function setStep()
     {
-        if ($this->bUse) {
-            if (!isset($this->arResources['START'])) {
+        if ($this->use) {
+            if (!isset($this->resources['START'])) {
                 $this->init();
             } else {
-                $memory_value = memory_get_usage();
+                $memoryValue = memory_get_usage();
                 $time = getmicrotime();
-                $used_memory = $memory_value - $this->arResources['START']['MEMORY']['CURRENT'];
-                $this->arResources['STEP-' . $this->step] = [
+                $usedMemory = $memoryValue - $this->resources['START']['MEMORY']['CURRENT'];
+                $this->resources['STEP-' . $this->step] = [
                     'TIME'   => [
                         'CURRENT' => $time,
                     ],
                     'MEMORY' => [
-                        'CURRENT' => $memory_value,
-                        'USED'    => $used_memory,
+                        'CURRENT' => $memoryValue,
+                        'USED'    => $usedMemory,
                     ],
                 ];
-                $differenceTime = $time - $this->arResources['START']['TIME']['CURRENT'];
-                $this->arFormatedResources['STEP-' . $this->step] = [
+                $differenceTime = $time - $this->resources['START']['TIME']['CURRENT'];
+                $this->formattedResources['STEP-' . $this->step] = [
                     'TIME'   => [
                         'USED' => ($differenceTime/1000). 'с ['.$differenceTime.' мс]',
                     ],
                     'MEMORY' => [
-                        'CURRENT' => WordHelper::formatSize($memory_value),
-                        'USED'    => WordHelper::formatSize($used_memory),
+                        'CURRENT' => WordHelper::formatSize($memoryValue),
+                        'USED'    => WordHelper::formatSize($usedMemory),
                     ],
                 ];
                 if ($this->step > 1) {
                     $lastStep = $this->step - 1;
-                    $this->arFormatedResources['STEP-' . $this->step]['TIME']['USED_INTERVAL_STEP'] =
-                        (($time - $this->arResources['STEP-' . $lastStep]['TIME']['CURRENT'])/1000) . 'с';
-                    $this->arFormatedResources['STEP-' . $this->step]['MEMORY']['USED_INTERVAL_STEP'] =
+                    $this->formattedResources['STEP-' . $this->step]['TIME']['USED_INTERVAL_STEP'] =
+                        (($time - $this->resources['STEP-' . $lastStep]['TIME']['CURRENT'])/1000) . 'с';
+                    $this->formattedResources['STEP-' . $this->step]['MEMORY']['USED_INTERVAL_STEP'] =
                         WordHelper::formatSize(
-                            $memory_value - $this->arResources['STEP-' . $lastStep]['MEMORY']['CURRENT']
+                            $memoryValue - $this->resources['STEP-' . $lastStep]['MEMORY']['CURRENT']
                         );
                 }
                 $this->step++;
@@ -72,24 +72,24 @@ class CheckResources
 
     public function init()
     {
-        if ($this->bUse) {
-            if (!isset($this->arResources['START'])) {
-                $memory_value = memory_get_usage();
+        if ($this->use) {
+            if (!isset($this->resources['START'])) {
+                $memoryValue = memory_get_usage();
                 $time = getmicrotime();
-                $this->arResources['START'] = [
+                $this->resources['START'] = [
                     'TIME'   => [
                         'CURRENT' => $time,
                     ],
                     'MEMORY' => [
-                        'CURRENT' => $memory_value,
+                        'CURRENT' => $memoryValue,
                     ],
                 ];
-                $this->arFormatedResources['START'] = [
+                $this->formattedResources['START'] = [
                     'TIME'   => [
                         'USED' => (string)0 . 'c',
                     ],
                     'MEMORY' => [
-                        'CURRENT' => WordHelper::formatSize($memory_value),
+                        'CURRENT' => WordHelper::formatSize($memoryValue),
                     ],
                 ];
             }
@@ -101,12 +101,12 @@ class CheckResources
      */
     public function show($expand = true)
     {
-        if ($this->bUse) {
+        if ($this->use) {
             if (function_exists('pp')) {
-                pp($this->arFormatedResources, $expand);
+                pp($this->formattedResources, $expand);
             } else {
                 echo '<pre>';
-                print_r($this->arFormatedResources);
+                print_r($this->formattedResources);
                 echo '</pre>';
             }
         }
@@ -117,8 +117,8 @@ class CheckResources
      */
     public function get()
     {
-        if ($this->bUse) {
-            return $this->arFormatedResources;
+        if ($this->use) {
+            return $this->formattedResources;
         }
 
         return false;
@@ -129,6 +129,6 @@ class CheckResources
      */
     public function setUse($bUse = true)
     {
-        $this->bUse = $bUse;
+        $this->use = $bUse;
     }
 }
