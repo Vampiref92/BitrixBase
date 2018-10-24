@@ -35,7 +35,7 @@ class CheckResources
                 $this->init();
             } else {
                 $memory_value = memory_get_usage();
-                $time = time();
+                $time = getmicrotime();
                 $used_memory = $memory_value - $this->arResources['START']['MEMORY']['CURRENT'];
                 $this->arResources['STEP-' . $this->step] = [
                     'TIME'   => [
@@ -46,9 +46,10 @@ class CheckResources
                         'USED'    => $used_memory,
                     ],
                 ];
+                $differenceTime = $time - $this->arResources['START']['TIME']['CURRENT'];
                 $this->arFormatedResources['STEP-' . $this->step] = [
                     'TIME'   => [
-                        'USED' => intval($time - $this->arResources['START']['TIME']['CURRENT']) . 'с',
+                        'USED' => ($differenceTime/1000). 'с ['.$differenceTime.' мс]',
                     ],
                     'MEMORY' => [
                         'CURRENT' => WordHelper::formatSize($memory_value),
@@ -58,7 +59,7 @@ class CheckResources
                 if ($this->step > 1) {
                     $lastStep = $this->step - 1;
                     $this->arFormatedResources['STEP-' . $this->step]['TIME']['USED_INTERVAL_STEP'] =
-                        intval($time - $this->arResources['STEP-' . $lastStep]['TIME']['CURRENT']) . 'с';
+                        (($time - $this->arResources['STEP-' . $lastStep]['TIME']['CURRENT'])/1000) . 'с';
                     $this->arFormatedResources['STEP-' . $this->step]['MEMORY']['USED_INTERVAL_STEP'] =
                         WordHelper::formatSize(
                             $memory_value - $this->arResources['STEP-' . $lastStep]['MEMORY']['CURRENT']
@@ -74,7 +75,7 @@ class CheckResources
         if ($this->bUse) {
             if (!isset($this->arResources['START'])) {
                 $memory_value = memory_get_usage();
-                $time = time();
+                $time = getmicrotime();
                 $this->arResources['START'] = [
                     'TIME'   => [
                         'CURRENT' => $time,
