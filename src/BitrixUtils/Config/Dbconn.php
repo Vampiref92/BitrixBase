@@ -34,7 +34,7 @@ class Dbconn
         }
 
         if (!empty($list['umask'])) {
-            $content .= '@umask(' . $list['umask'] . ')';
+            $content .= '@umask(' . $list['umask'] . ');';
             $content .= PHP_EOL;
         }
 
@@ -106,13 +106,13 @@ class Dbconn
             }
         }
 
-        $res = preg_match_all('/define\([\'"]([^\'"]*)[\'"]\s?,\s?[\'"]?([^)]*)[\'"]?\);/im', $file, $defineMatches);
+        $res = preg_match_all('/define\([\'"]([^\'"]*)[\'"]\s?,\s?[\'"]?([^\'")]*)[\'"]?\);/im', $file, $defineMatches);
         if ($res !== false && !empty($defineMatches[1]) && !empty($defineMatches[2])) {
             $defineList = array_combine(array_values($defineMatches[1]), array_values($defineMatches[2]));
             $defineList = static::formatValues($defineList);
         }
 
-        $res = preg_match_all('/\$DB([^\s=]*)\s?=?\s?[\'"]([^\'"]*)[\'"]\;/im', $file, $dbMatches);
+        $res = preg_match_all('/\$DB([^\s=]*)\s?=?\s?[\'"]?(true|false|\d|([^\'"]*))[\'"]?\;/im', $file, $dbMatches);
         if ($res !== false && !empty($dbMatches[1]) && !empty($dbMatches[2])) {
             $dbList = static::clearValues(array_combine(array_values($dbMatches[1]), array_values($dbMatches[2])));
         }
@@ -171,18 +171,18 @@ class Dbconn
         $result = [];
         $list = self::clearValues($list);
         foreach ($list as $key => $val) {
-            if (preg_match('/((^DB)|(^MYSQL)|(_DB)|(_MYSQL)|(_CONNECT$)){1}/i', $key) !== false) {
-                $result['db'][$key] = $val;
-            } elseif (preg_match('/^CACHED_/i', $key) !== false) {
+            if (preg_match('/^(CACHED_)+/is', $key) === 1) {
                 $result['cached'][$key] = $val;
-            } elseif (preg_match('/((^BX_CACHE_TYPE$)|(^BX_CACHE_SID$)|(^BX_MEMCACHE_HOST$)|(^BX_MEMCACHE_PORT$)){1}/i',
-                    $key) !== false) {
+            } elseif (preg_match('/((^BX_CACHE_TYPE$)|(^BX_CACHE_SID$)|(^BX_MEMCACHE_HOST$)|(^BX_MEMCACHE_PORT$))+/is',
+                    $key) === 1) {
                 $result['cache'][$key] = $val;
-            } elseif (preg_match('/_PERMISSIONS$/i', $key) !== false) {
+            } elseif (preg_match('/(_PERMISSIONS)+$/i', $key) === 1) {
                 $result['permissions'][$key] = $val;
-            } elseif (preg_match('/((^SHORT_INSTALL$)|(^VM_INSTALL$)|(^BX_UTF$)|(^BX_COMPRESSION_DISABLED$)){1}/i',
-                    $key) !== false) {
+            } elseif (preg_match('/((^SHORT_INSTALL$)|(^VM_INSTALL$)|(^BX_UTF$)|(^BX_COMPRESSION_DISABLED$))+/i',
+                    $key) === 1) {
                 $result['project'][$key] = $val;
+            } elseif (preg_match('/((^DB)|(^MYSQL)|(_DB)|(_MYSQL)|(_CONNECT$))+/is', $key) === 1) {
+                $result['db'][$key] = $val;
             } else {
                 $result['custom'][$key] = $val;
             }
@@ -210,7 +210,7 @@ class Dbconn
             if (\is_string($value)) {
                 $content .= '\'';
             }
-            $content .= PHP_EOL;
+            $content .= ';'.PHP_EOL;
         }
         $content .= PHP_EOL;
         return $content;
@@ -236,7 +236,7 @@ class Dbconn
             if (\is_string($value)) {
                 $content .= '\'';
             }
-            $content .= ')' . PHP_EOL;
+            $content .= ');' . PHP_EOL;
         }
         $content .= PHP_EOL;
 
