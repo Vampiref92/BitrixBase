@@ -35,7 +35,7 @@ class Dbconn
 
         if (!empty($list['umask'])) {
             $content .= '@umask(' . $list['umask'] . ');';
-            $content .= PHP_EOL;
+            $content .= PHP_EOL . PHP_EOL;
         }
 
         if (!empty($list['define']['cache'])) {
@@ -55,7 +55,7 @@ class Dbconn
 
         if (!empty($list['custom'])) {
             $content .= '//Unresolved values' . PHP_EOL;
-            $content .= $list['custom'];
+            $content .= implode(PHP_EOL, $list['custom']);
             $content .= PHP_EOL;
         }
 
@@ -95,10 +95,26 @@ class Dbconn
 
         $defineList = [];
         $dbList = [];
-        $umaskList = [];
+        $umask = '';
         $custom = [];
 
-        $res = preg_match_all('/if\s?\(.*\)[{:]?.*;((endif;)|})?/is', $file, $customMatches);
+        $res = preg_match_all('/if\s?\(.*\)\s?{.*}(\r\n|\n)?/is', $file, $customMatches);
+        if ($res !== false && !empty($customMatches[0])) {
+            foreach ($customMatches[0] as $customMatch) {
+                $custom[] = $customMatch;
+                $file = str_replace($customMatch, '', $file);
+            }
+        }
+
+        $res = preg_match_all('/if\s?\(.*\)\s?:.*endif;(\r\n|\n)?/is', $file, $customMatches);
+        if ($res !== false && !empty($customMatches[0])) {
+            foreach ($customMatches[0] as $customMatch) {
+                $custom[] = $customMatch;
+                $file = str_replace($customMatch, '', $file);
+            }
+        }
+
+        $res = preg_match_all('/if\s?\(.*\)\s?.*;(\r\n|\n)?/is', $file, $customMatches);
         if ($res !== false && !empty($customMatches[0])) {
             foreach ($customMatches[0] as $customMatch) {
                 $custom[] = $customMatch;
@@ -119,7 +135,7 @@ class Dbconn
 
         $res = preg_match_all('/@?umask\((.*)\);/im', $file, $umaskMatches);
         if ($res !== false && !empty($umaskMatches[1])) {
-            $umaskList = static::clearValues($umaskMatches[1]);
+            $umaskList = current(static::clearValues($umaskMatches[1]));
         }
 
         return [
@@ -200,17 +216,19 @@ class Dbconn
         $content = '';
         foreach ($list as $code => $value) {
             $content .= '$DB' . $code . ' = ';
-            if (\is_string($value)) {
+            $needQuote = false;
+            if (!\is_bool($value) && !\is_numeric($value) && \is_string($value)) {
+                $needQuote = true;
                 $content .= '\'';
             }
             if (\is_bool($value)) {
                 $value = MiscUtils::getStringBoolByBool($value);
             }
             $content .= (string)$value;
-            if (\is_string($value)) {
+            if ($needQuote) {
                 $content .= '\'';
             }
-            $content .= ';'.PHP_EOL;
+            $content .= ';' . PHP_EOL;
         }
         $content .= PHP_EOL;
         return $content;
@@ -226,14 +244,16 @@ class Dbconn
         $content = '';
         foreach ($list as $code => $value) {
             $content .= 'define(\'' . $code . '\' , ';
-            if (\is_string($value)) {
+            $needQuote = false;
+            if (!\is_bool($value) && !\is_numeric($value) && \is_string($value)) {
+                $needQuote = true;
                 $content .= '\'';
             }
             if (\is_bool($value)) {
                 $value = MiscUtils::getStringBoolByBool($value);
             }
             $content .= (string)$value;
-            if (\is_string($value)) {
+            if ($needQuote) {
                 $content .= '\'';
             }
             $content .= ');' . PHP_EOL;
