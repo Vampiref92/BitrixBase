@@ -34,25 +34,45 @@ class IblockSectionUfPropEntityConstructor extends EntityConstructor
      */
     public static function getMultipleDataClass($iblockId)
     {
-        return static::getBaseDataClass($iblockId, static::MULTIPLE_TYPE);
+        $additionalFields = [];
+        if (Version::getInstance()->isVersionMoreEqualThan('18')) {
+            $additionalFields[] = '(new Main\ORM\Fields\Relations\Reference(
+                \'USER_FIELD\',
+                \Bitrix\Main\UserFieldTable::getEntity(),
+                Main\Entity\Query\Join::on(\'this.FIELD_ID\', \'ref.ID\')
+            ))->configureJoinType(\'inner\')';
+        } else {
+            $referenceFilter = '[\'=this.FIELD_ID\' => \'ref.ID\']';
+            if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
+                $referenceFilter = 'Main\Entity\Query\Join::on(\'this.FIELD_ID\', \'ref.ID\')';
+            }
+            $additionalFields[] = 'new Main\Entity\ReferenceField(
+                \'USER_FIELD\',
+                \Bitrix\Main\UserFieldTable::getEntity(),
+                ' . $referenceFilter . '
+            )';
+        }
+
+        return static::getBaseDataClass($iblockId, static::MULTIPLE_TYPE, $additionalFields);
     }
 
     /**
      * @param        $iblockId
      * @param string $type
      *
+     * @param array  $additionalFields
+     *
      * @return Main\Entity\DataManager|string
      * @throws Main\SystemException
-     * @throws Main\ArgumentException
      */
-    protected static function getBaseDataClass($iblockId, $type = 's')
+    protected static function getBaseDataClass($iblockId, $type = 's', array $additionalFields = [])
     {
         $className = 'Ut' . ToLower($type) . 'Iblock' . $iblockId . 'Section';
         $tableName = 'b_ut' . ToLower($type) . '_iblock_' . $iblockId . '_section';
 
-        $additionalFields = [];
+        $additionalFieldsBase = [];
         if (Version::getInstance()->isVersionMoreEqualThan('18')) {
-            $additionalFields[] = '(new Main\ORM\Fields\Relations\Reference(
+            $additionalFieldsBase[] = '(new Main\ORM\Fields\Relations\Reference(
                 \'SECTION\',
                 \Bitrix\Iblock\SectionTable::getEntity(),
                 Main\Entity\Query\Join::on(\'this.VALUE_ID\', \'ref.ID\')
@@ -62,12 +82,13 @@ class IblockSectionUfPropEntityConstructor extends EntityConstructor
             if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
                 $referenceFilter = 'Main\Entity\Query\Join::on(\'this.VALUE_ID\', \'ref.ID\')';
             }
-            $additionalFields[] = 'new Main\Entity\ReferenceField(
+            $additionalFieldsBase[] = 'new Main\Entity\ReferenceField(
                 \'SECTION\',
                 \Bitrix\Iblock\SectionTable::getEntity(),
-                '.$referenceFilter.'
+                ' . $referenceFilter . '
             )';
         }
+        $additionalFields = array_merge($additionalFieldsBase, $additionalFields);
         return parent::compileEntityDataClass($className, $tableName, $additionalFields);
     }
 }
