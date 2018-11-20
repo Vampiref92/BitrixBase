@@ -1,13 +1,12 @@
 <?php
 
-namespace Vf92\BitrixUtils\OldOrm\Collection;
+namespace Vf92\BitrixUtils\Orm\Collection;
 
-use Vf92\MiscUtils\Collection\ObjectArrayCollection;
 use Bitrix\Main\FileTable;
-use Vf92\Enum\MediaEnum;
-use Vf92\BitrixUtils\HLBlock\HLBlockFactory;
-use Vf92\BitrixUtils\OldOrm\Model\Image;
 use InvalidArgumentException;
+use Vf92\BitrixUtils\Orm\Model\Image;
+use Vf92\Enum\MediaEnum;
+use Vf92\MiscUtils\Collection\ObjectArrayCollection;
 
 class ImageCollection extends ObjectArrayCollection
 {

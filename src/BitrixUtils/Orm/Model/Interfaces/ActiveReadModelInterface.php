@@ -1,6 +1,6 @@
 <?php
 
-namespace Vf92\BitrixUtils\OldOrm\Model\Interfaces;
+namespace Vf92\BitrixUtils\Orm\Model\Interfaces;
 
 interface ActiveReadModelInterface
 {

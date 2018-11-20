@@ -1,8 +1,8 @@
 <?php
 
-namespace Vf92\BitrixUtils\OldOrm\Model;
+namespace Vf92\BitrixUtils\Orm\Model;
 
-use Vf92\BitrixUtils\OldOrm\Model\Interfaces\ImageInterface;
+use Vf92\BitrixUtils\Orm\Model\Interfaces\ImageInterface;
 
 /**
  * Class Image

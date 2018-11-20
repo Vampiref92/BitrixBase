@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Vf92\BitrixUtils\OldOrm\Model;
+namespace Vf92\BitrixUtils\Orm\Model;
 
-use Vf92\BitrixUtils\OldOrm\Model\Interfaces\ActiveReadModelInterface;
-use Vf92\BitrixUtils\OldOrm\Model\Interfaces\ToArrayInterface;
+use Vf92\BitrixUtils\Orm\Model\Interfaces\ActiveReadModelInterface;
+use Vf92\BitrixUtils\Orm\Model\Interfaces\ToArrayInterface;
 
 /**
  * Class CustomTable

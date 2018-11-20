@@ -1,13 +1,13 @@
 <?php
 
-namespace Vf92\BitrixUtils\OldOrm\Model;
+namespace Vf92\BitrixUtils\Orm\Model;
 
 use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\FileTable;
-use Vf92\BitrixUtils\OldOrm\Model\Exceptions\FileNotFoundException;
-use Vf92\BitrixUtils\OldOrm\Model\Interfaces\FileInterface;
+use Vf92\BitrixUtils\Orm\Model\Exceptions\FileNotFoundException;
+use Vf92\BitrixUtils\Orm\Model\Interfaces\FileInterface;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
