@@ -1,6 +1,6 @@
 <?php
 
-namespace Vf92\BitrixUtils\Main;
+namespace Vf92\BitrixUtils\User;
 
 use Bitrix\Main\ArgumentException;
 use Bitrix\Main\ObjectPropertyException;
