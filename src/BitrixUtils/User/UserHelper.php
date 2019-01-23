@@ -11,9 +11,13 @@ use CUser;
 use Vf92\BitrixUtils\Constructor\EntityConstructor;
 use Vf92\BitrixUtils\User\Exception\GroupNotFoundException;
 
-/** @deprecated */
+/**
+ * Class UserHelper
+ * @package Vf92\BitrixUtils\User
+ */
 class UserHelper
 {
+    static $curUser = null;
     /**
      * Проверяет вхождение пользователя в группу
      *

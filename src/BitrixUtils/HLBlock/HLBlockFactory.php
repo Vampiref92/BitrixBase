@@ -10,6 +10,10 @@ use Exception;
 use LogicException;
 use RuntimeException;
 
+/**
+ * Class HLBlockFactory
+ * @package Vf92\BitrixUtils\HLBlock
+ */
 class HLBlockFactory
 {
     /**
