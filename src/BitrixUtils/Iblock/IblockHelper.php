@@ -2,12 +2,16 @@
 
 namespace Vf92\BitrixUtils\Iblock;
 
+use Bitrix\Iblock\IblockFieldTable;
 use Bitrix\Iblock\IblockTable;
 use Bitrix\Iblock\PropertyTable;
 use Bitrix\Iblock\TypeTable;
 use Bitrix\Main\ArgumentException;
+use Bitrix\Main\Entity\ReferenceField;
+use Bitrix\Main\ORM\Query\Join;
 use InvalidArgumentException;
 use Vf92\BitrixUtils\Config\Version;
+use Vf92\BitrixUtils\Iblock\Exception\IblockFieldSettingsException;
 use Vf92\BitrixUtils\Iblock\Exception\IblockNotFoundException;
 use Vf92\BitrixUtils\Iblock\Exception\IblockPropertyNotFoundException;
 
@@ -195,5 +199,37 @@ class IblockHelper
         }
 
         return self::$iblockInfo;
+    }
+
+    /**
+     * @param $iblockId
+     * @return array|false
+     * @throws ArgumentException
+     * @throws IblockFieldSettingsException
+     * @throws IblockNotFoundException
+     * @throws \Bitrix\Main\ObjectPropertyException
+     * @throws \Bitrix\Main\SystemException
+     */
+    public static function getIblockCodeSettingsById($iblockId){
+        $iblockId = (int)$iblockId;
+        if($iblockId<=0){
+            throw new ArgumentException('Идентификатор инфоблока не является числом, большим 0','iblockId');
+        }
+        $queryResult = IblockTable::query()
+            ->setSelect(['ID','CODE_REQUIRED'=>'IBLOCK_FIELDS.IS_REQUIRED','CODE_SETTINGS'=>'IBLOCK_FIELDS.DEFAULT_VALUE'])
+            ->registerRuntimeField(new ReferenceField('IBLOCK_FIELDS',IblockFieldTable::getEntity(),Join::on('this.ID','ref.IBLOCK_ID')))
+            ->where('ID',$iblockId)
+            ->where('IBLOCK_FIELDS.FIELD_ID','CODE')
+            ->exec();
+        if($item = $queryResult->fetch()){
+            $item['CODE_SETTINGS'] = unserialize($item['CODE_SETTINGS']);
+            if($item['CODE_SETTINGS']===false){
+                throw new IblockFieldSettingsException();
+            }
+            return $item;
+        }
+        else{
+            throw new IblockNotFoundException();
+        }
     }
 }
