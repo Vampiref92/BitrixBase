@@ -402,40 +402,40 @@ class ElementHelper
         if ((int)$newElementFields['IBLOCK_ID'] !== (int)$currentElement['FIELDS']['IBLOCK_ID']) {
             $rsProps = \CIBlockProperty::GetList(
                 array(),
-                array('IBLOCK_ID' => $newElementFields['IBLOCK_ID'], 'PROPERTY_TYPE' => 'L', 'CHECK_PERMISSIONS' => 'N')
+                array('IBLOCK_ID' => $newElementFields['IBLOCK_ID'], 'PROPERTY_TYPE' => 'L')
             );
-            while ($arProp = $rsProps->Fetch()) {
+            while ($prop = $rsProps->Fetch()) {
                 $arValueList = array();
                 $arNameList = array();
-                $rsValues = \CIBlockProperty::GetPropertyEnum($arProp['ID']);
+                $rsValues = \CIBlockProperty::GetPropertyEnum($prop['ID']);
                 while ($arValue = $rsValues->Fetch()) {
                     $arValueList[$arValue['XML_ID']] = $arValue['ID'];
                     $arNameList[$arValue['ID']] = trim($arValue['VALUE']);
                 }
                 if (!empty($arValueList)) {
-                    $arPropListCache[$arProp['CODE']] = $arValueList;
+                    $propListCache[$prop['CODE']] = $arValueList;
                 }
                 if (!empty($arNameList)) {
-                    $arNamePropListCache[$arProp['CODE']] = $arNameList;
+                    $arNamePropListCache[$prop['CODE']] = $arNameList;
                 }
             }
             $rsProps = \CIBlockProperty::GetList(
                 array(),
-                array('IBLOCK_ID' => $currentElement['FIELDS']['IBLOCK_ID'], 'PROPERTY_TYPE' => 'L', 'ACTIVE' => 'Y', 'CHECK_PERMISSIONS' => 'N')
+                array('IBLOCK_ID' => $currentElement['FIELDS']['IBLOCK_ID'], 'PROPERTY_TYPE' => 'L')
             );
-            while ($arProp = $rsProps->Fetch()) {
+            while ($prop = $rsProps->Fetch()) {
                 $arValueList = array();
                 $arNameList = array();
-                $rsValues = \CIBlockProperty::GetPropertyEnum($arProp['ID']);
+                $rsValues = \CIBlockProperty::GetPropertyEnum($prop['ID']);
                 while ($arValue = $rsValues->Fetch()) {
                     $arValueList[$arValue['ID']] = $arValue['XML_ID'];
                     $arNameList[$arValue['ID']] = trim($arValue['VALUE']);
                 }
                 if (!empty($arValueList)) {
-                    $arOldPropListCache[$arProp['CODE']] = $arValueList;
+                    $arOldPropListCache[$prop['CODE']] = $arValueList;
                 }
                 if (!empty($arNameList)) {
-                    $arOldNamePropListCache[$arProp['CODE']] = $arNameList;
+                    $arOldNamePropListCache[$prop['CODE']] = $arNameList;
                 }
             }
         }
@@ -490,40 +490,40 @@ class ElementHelper
                     }
                 }
             } elseif ($prop['PROPERTY_TYPE'] === 'L') {
-                if (!empty($arProp['VALUE_ENUM_ID'])) {
+                if (!empty($prop['VALUE_ENUM_ID'])) {
                     if ((int)$newElementFields['IBLOCK_ID'] === (int)$currentElement['FIELDS']['IBLOCK_ID']) {
-                        $newElementFields['PROPERTY_VALUES'][$arProp['CODE']] = $arProp['VALUE_ENUM_ID'];
+                        $newElementFields['PROPERTY_VALUES'][$prop['CODE']] = $prop['VALUE_ENUM_ID'];
                     } else {
-                        if (isset($arPropListCache[$arProp['CODE']]) && isset($arOldPropListCache[$arProp['CODE']])) {
-                            if (is_array($arProp['VALUE_ENUM_ID'])) {
-                                $newElementFields['PROPERTY_VALUES'][$arProp['CODE']] = array();
-                                foreach ($arProp['VALUE_ENUM_ID'] as &$intValueID) {
-                                    $strValueXmlID = $arOldPropListCache[$arProp['CODE']][$intValueID];
-                                    if (isset($arPropListCache[$arProp['CODE']][$strValueXmlID])) {
-                                        $newElementFields['PROPERTY_VALUES'][$arProp['CODE']][] = $arPropListCache[$arProp['CODE']][$strValueXmlID];
+                        if (isset($propListCache[$prop['CODE']]) && isset($arOldPropListCache[$prop['CODE']])) {
+                            if (is_array($prop['VALUE_ENUM_ID'])) {
+                                $newElementFields['PROPERTY_VALUES'][$prop['CODE']] = array();
+                                foreach ($prop['VALUE_ENUM_ID'] as &$intValueID) {
+                                    $strValueXmlID = $arOldPropListCache[$prop['CODE']][$intValueID];
+                                    if (isset($propListCache[$prop['CODE']][$strValueXmlID])) {
+                                        $newElementFields['PROPERTY_VALUES'][$prop['CODE']][] = $propListCache[$prop['CODE']][$strValueXmlID];
                                     } else {
-                                        $strValueName = $arOldNamePropListCache[$arProp['CODE']][$intValueID];
-                                        $intValueKey = array_search($strValueName, $arNamePropListCache[$arProp['CODE']]);
+                                        $strValueName = $arOldNamePropListCache[$prop['CODE']][$intValueID];
+                                        $intValueKey = array_search($strValueName, $arNamePropListCache[$prop['CODE']]);
                                         if ($intValueKey !== false) {
-                                            $newElementFields['PROPERTY_VALUES'][$arProp['CODE']][] = $intValueKey;
+                                            $newElementFields['PROPERTY_VALUES'][$prop['CODE']][] = $intValueKey;
                                         }
                                     }
                                 }
                                 if (isset($intValueID)) {
                                     unset($intValueID);
                                 }
-                                if (empty($newElementFields['PROPERTY_VALUES'][$arProp['CODE']])) {
-                                    unset($newElementFields['PROPERTY_VALUES'][$arProp['CODE']]);
+                                if (empty($newElementFields['PROPERTY_VALUES'][$prop['CODE']])) {
+                                    unset($newElementFields['PROPERTY_VALUES'][$prop['CODE']]);
                                 }
                             } else {
-                                $strValueXmlID = $arOldPropListCache[$arProp['CODE']][$arProp['VALUE_ENUM_ID']];
-                                if (isset($arPropListCache[$arProp['CODE']][$strValueXmlID])) {
-                                    $newElementFields['PROPERTY_VALUES'][$arProp['CODE']] = $arPropListCache[$arProp['CODE']][$strValueXmlID];
+                                $strValueXmlID = $arOldPropListCache[$prop['CODE']][$prop['VALUE_ENUM_ID']];
+                                if (isset($propListCache[$prop['CODE']][$strValueXmlID])) {
+                                    $newElementFields['PROPERTY_VALUES'][$prop['CODE']] = $propListCache[$prop['CODE']][$strValueXmlID];
                                 } else {
-                                    $strValueName = $arOldNamePropListCache[$arProp['CODE']][$arProp['VALUE_ENUM_ID']];
-                                    $intValueKey = array_search($strValueName, $arNamePropListCache[$arProp['CODE']]);
+                                    $strValueName = $arOldNamePropListCache[$prop['CODE']][$prop['VALUE_ENUM_ID']];
+                                    $intValueKey = array_search($strValueName, $arNamePropListCache[$prop['CODE']]);
                                     if ($intValueKey !== false) {
-                                        $newElementFields['PROPERTY_VALUES'][$arProp['CODE']] = $intValueKey;
+                                        $newElementFields['PROPERTY_VALUES'][$prop['CODE']] = $intValueKey;
                                     }
                                 }
                             }
