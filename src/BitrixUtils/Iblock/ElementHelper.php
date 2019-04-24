@@ -295,10 +295,6 @@ class ElementHelper
         if ($arCurProduct = $productRes->Fetch()) {
             $arProduct = $arCurProduct;
             $arProduct['ID'] = $newItemId;
-            $arProduct['QUANTITY'] = 0;
-            $arProduct['QUANTITY_TRACE'] = $arProduct['QUANTITY_TRACE_ORIG'];
-            $arProduct['CAN_BUY_ZERO'] = $arProduct['CAN_BUY_ZERO_ORIG'];
-            $arProduct['NEGATIVE_AMOUNT_TRACE'] = $arProduct['NEGATIVE_AMOUNT_TRACE_ORIG'];
             if (isset($arProduct['SUBSCRIBE_ORIG'])) {
                 $arProduct['SUBSCRIBE'] = $arProduct['SUBSCRIBE_ORIG'];
             }
