@@ -8,12 +8,13 @@ use Bitrix\Iblock\ElementTable;
 use Bitrix\Iblock\InheritedProperty\ElementTemplates;
 use Bitrix\Iblock\SectionTable;
 use Bitrix\Main\ArgumentException;
+use Bitrix\Main\Error;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\Result;
 use Bitrix\Main\SystemException;
 use Vf92\BitrixUtils\Config\Version;
-use Vf92\BitrixUtils\Iblock\Exception\ElementCopyException;
 use Vf92\BitrixUtils\Iblock\Exception\ElementNotFoundException;
+use Vf92\BitrixUtils\Iblock\Exception\ElementOffersCopyException;
 use Vf92\BitrixUtils\Iblock\Exception\IblockNotFoundException;
 use Vf92\BitrixUtils\Iblock\Exception\SectionNotFoundException;
 
@@ -151,6 +152,12 @@ class ElementHelper
             $currentElementInfo['IPROPERTY_TEMPLATES'] = $seoTemplates;
         }
         unset($seoTemplates);
+
+        $offers = \CCatalogSKU::getOffersList($elementId);
+        if (is_array($offers)) {
+            reset($offers);
+            $currentElementInfo['OFFERS'] = current($offers);
+        }
         return $currentElementInfo;
     }
 
@@ -195,7 +202,7 @@ class ElementHelper
      * @throws ObjectPropertyException
      * @throws SectionNotFoundException
      * @throws SystemException
-     * @throws ElementCopyException
+     * @throws ElementOffersCopyException
      */
     public static function copy($elementId, $sectionIds = false, $iblockId = false)
     {
@@ -240,7 +247,19 @@ class ElementHelper
         $el = new \CIBlockElement();
         $newItemId = $el->Add($newElementFields);
         if (!$newItemId) {
-            throw new ElementCopyException();
+            $result->addError(new Error('Ошибка добавления элемента каталога: '.$el->LAST_ERROR));
+            return $result;
+        }
+        $priceRes = \CPrice::GetListEx(
+            array(),
+            array('PRODUCT_ID' => $elementId),
+            false,
+            false,
+            array('PRODUCT_ID', 'EXTRA_ID', 'CATALOG_GROUP_ID', 'PRICE', 'CURRENCY', 'QUANTITY_FROM', 'QUANTITY_TO')
+        );
+        while ($arPrice = $priceRes->Fetch()){
+            $arPrice['PRODUCT_ID'] = $newItemId;
+            \CPrice::Add($arPrice);
         }
         $arProduct = array(
             'ID' => $newItemId
@@ -273,7 +292,7 @@ class ElementHelper
                 'TYPE'
             )
         );
-        if ($arCurProduct = $productRes->Fetch()){
+        if ($arCurProduct = $productRes->Fetch()) {
             $arProduct = $arCurProduct;
             $arProduct['ID'] = $newItemId;
             $arProduct['QUANTITY'] = 0;
@@ -288,7 +307,29 @@ class ElementHelper
                     unset($arProduct[$productKey]);
             }
         }
-        \CCatalogProduct::Add($arProduct, false);
+        if (!\CCatalogProduct::Add($arProduct, false)) {
+            $result->addError(new Error('Ошибка добавления параметров товара к элементу каталога'));
+            return $result;
+        }
+
+        if (!empty($currentElement['OFFERS'])) {
+            $newOffers = [];
+            foreach ($currentElement['OFFERS'] as $offer) {
+                $offerCopyResult = static::copy($offer['ID']);
+                if (!$offerCopyResult->isSuccess()) {
+                    throw new ElementOffersCopyException();
+                }
+                $offerId = $offerCopyResult->getData()['NEW_ITEM'];
+                \CIBlockElement::SetPropertyValuesEx($offerId,false,['CML2_LINK'=>$newItemId]);
+                $newOffers[] = $offerId;
+            }
+            if(empty($newOffers)){
+                throw new ElementOffersCopyException();
+            }
+        }
+
+        $result->setData(['NEW_ITEM' => $newItemId]);
+
         return $result;
     }
 
