@@ -9,6 +9,7 @@ use Bitrix\Iblock\InheritedProperty\ElementTemplates;
 use Bitrix\Iblock\SectionTable;
 use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Error;
+use Bitrix\Main\IO\File;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\Result;
 use Bitrix\Main\SystemException;
@@ -119,10 +120,14 @@ class ElementHelper
         $currentElementInfo['FIELDS']['PREVIEW_PICTURE'] = (int)$currentElementInfo['FIELDS']['PREVIEW_PICTURE'];
         if ($currentElementInfo['FIELDS']['PREVIEW_PICTURE'] > 0) {
             $currentElementInfo['FIELDS']['PREVIEW_PICTURE'] = \CFile::MakeFileArray($currentElementInfo['FIELDS']['PREVIEW_PICTURE']);
-            if (empty($currentElementInfo['FIELDS']['PREVIEW_PICTURE'])) {
+            if (empty($currentElementInfo['FIELDS']['PREVIEW_PICTURE']) || !File::isFileExists($currentElementInfo['FIELDS']['PREVIEW_PICTURE']['tmp_name'])) {
                 $currentElementInfo['FIELDS']['PREVIEW_PICTURE'] = false;
             } else {
-                $currentElementInfo['FIELDS']['PREVIEW_PICTURE']['COPY_FILE'] = 'Y';
+                if (\in_array($currentElementInfo['FIELDS']['PREVIEW_PICTURE']['type'], ['image/jpeg', 'image/png', 'image/gif', 'image/bmp'])){
+                    $currentElementInfo['FIELDS']['PREVIEW_PICTURE']['COPY_FILE'] = 'Y';
+                } else {
+                    $currentElementInfo['FIELDS']['PREVIEW_PICTURE'] = false;
+                }
             }
         } else {
             $currentElementInfo['FIELDS']['PREVIEW_PICTURE'] = false;
@@ -130,10 +135,14 @@ class ElementHelper
         $currentElementInfo['FIELDS']['DETAIL_PICTURE'] = (int)$currentElementInfo['FIELDS']['DETAIL_PICTURE'];
         if ($currentElementInfo['FIELDS']['DETAIL_PICTURE'] > 0) {
             $currentElementInfo['FIELDS']['DETAIL_PICTURE'] = \CFile::MakeFileArray($currentElementInfo['FIELDS']['DETAIL_PICTURE']);
-            if (empty($currentElementInfo['FIELDS']['DETAIL_PICTURE'])) {
+            if (empty($currentElementInfo['FIELDS']['DETAIL_PICTURE']) || !File::isFileExists($currentElementInfo['FIELDS']['DETAIL_PICTURE']['tmp_name'])) {
                 $currentElementInfo['FIELDS']['DETAIL_PICTURE'] = false;
             } else {
-                $currentElementInfo['FIELDS']['DETAIL_PICTURE']['COPY_FILE'] = 'Y';
+                if (\in_array($currentElementInfo['FIELDS']['DETAIL_PICTURE']['type'], ['image/jpeg', 'image/png', 'image/gif', 'image/bmp'])){
+                    $currentElementInfo['FIELDS']['DETAIL_PICTURE']['COPY_FILE'] = 'Y';
+                } else {
+                    $currentElementInfo['FIELDS']['DETAIL_PICTURE'] = false;
+                }
             }
         } else {
             $currentElementInfo['FIELDS']['DETAIL_PICTURE'] = false;
@@ -215,6 +224,7 @@ class ElementHelper
             $iblockId = (int)$iblockId;
             $elementIblock = IblockHelper::getIblockCodeSettingsById($iblockId);
         }
+        $elementSections = [];
         if ($sectionIds !== false) {
             if (!is_array($sectionIds)) {
                 throw new ArgumentException('Идентификаторы разделов должны быть переданы в виде массива', 'sectionIds');
@@ -227,7 +237,6 @@ class ElementHelper
                 ->setSelect(['ID', 'IBLOCK_ID'])
                 ->whereIn('ID', $sectionIds)
                 ->exec();
-            $elementSections = [];
             while ($elementSection = $queryResult->fetch()) {
                 if ($iblockId !== false && (int)$elementSection['IBLOCK_ID'] !== (int)$iblockId) {
                     continue;
@@ -242,6 +251,9 @@ class ElementHelper
             }
         }
         $currentElement = static::getElementFullInfoById($elementId);
+        if (!isset($elementIblock)) {
+            $elementIblock = IblockHelper::getIblockCodeSettingsById($currentElement['FIELDS']['IBLOCK_ID']);
+        }
         $newElementFields = static::buildNewElementFields($elementIblock, $elementSections, $currentElement);
 
         $el = new \CIBlockElement();
@@ -359,7 +371,7 @@ class ElementHelper
             'CODE' => $currentElement['FIELDS']['~CODE'],
             'TAGS' => $currentElement['FIELDS']['~TAGS'],
             'XML_ID' => $currentElement['FIELDS']['~XML_ID'],
-            'IPROPERTY_TEMPLATES' => $currentElement['IPROPERTY_TEMPLATES'],
+            'IPROPERTY_TEMPLATES' => !empty($currentElement['IPROPERTY_TEMPLATES']) ? $currentElement['IPROPERTY_TEMPLATES'] : [],
             'PROPERTY_VALUES' => []
         );
         $newElementFields['IBLOCK_SECTION'] = false;
