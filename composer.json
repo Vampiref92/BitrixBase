@@ -34,9 +34,6 @@
 
     "doctrine/collections": "^1.4",
 
-    "webarchitect609/bitrix-cache": "^1.0",
-    "webarchitect609/bitrix-neverinclude": "^0.4.2",
-
     "symfony/http-foundation":"^3.1",
     "symfony/routing": ">=3.4",
     "symfony/yaml": ">=3.1",
