@@ -33,4 +33,19 @@ interface FileInterface extends ActiveReadModelInterface
      * @return string
      */
     public function __toString();
+
+    /**
+     * @return array
+     */
+    public function getFields();
+
+    /**
+     * @return string
+     */
+    public function getFileName();
+
+    /**
+     * @return string
+     */
+    public function getSubDir();
 }

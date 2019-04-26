@@ -8,7 +8,6 @@ use Bitrix\Main\Config\Option;
 use Bitrix\Main\FileTable;
 use Vf92\BitrixUtils\Orm\Model\Exceptions\FileNotFoundException;
 use Vf92\BitrixUtils\Orm\Model\Interfaces\FileInterface;
-use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Class File
@@ -18,15 +17,11 @@ use JMS\Serializer\Annotation as Serializer;
 class File implements FileInterface
 {
     /**
-     * @Serializer\Type("array")
-     * @Serializer\Groups({"elastic"})
      * @var array
      */
     protected $fields;
 
     /**
-     * @Serializer\Type("string")
-     * @Serializer\Groups({"elastic"})
      * @var string
      */
     protected $src;
@@ -48,9 +43,11 @@ class File implements FileInterface
     /**
      * @param string $primary
      *
-     * @throws FileNotFoundException
      * @return static
-     *
+     * @throws FileNotFoundException
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ObjectPropertyException
+     * @throws \Bitrix\Main\SystemException
      */
     public static function createFromPrimary($primary)
     {
@@ -142,7 +139,6 @@ class File implements FileInterface
     }
 
     /**
-     * @todo move to interface
      * @return array
      */
     public function getFields()
