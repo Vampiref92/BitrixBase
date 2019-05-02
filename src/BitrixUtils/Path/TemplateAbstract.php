@@ -36,7 +36,7 @@ abstract class TemplateAbstract
     /**
      * @param Context $context
      *
-     * @return TemplateAbstract
+     * @return static
      */
     public static function getInstance(Context $context)
     {

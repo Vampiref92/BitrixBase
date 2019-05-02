@@ -118,7 +118,7 @@ class HLBlockHelper
         $fields = [];
 
         $dataManager = EntityConstructor::compileEntityDataClass('UserFieldLang', 'b_user_field_lang',
-            [new Reference('USER_FIELD', UserFieldTable::getEntity(), Join::on('this.USER_FIELD_ID', 'ref.ID'))]);
+            ['new Main\ORM\Fields\Relations\Reference(\'USER_FIELD\', Main\UserFieldTable::getEntity(), Main\Entity\Query\Join::on(\'this.USER_FIELD_ID\', \'ref.ID\'))']);
 
         $query = $dataManager::query();
         $res = $query->setSelect([
