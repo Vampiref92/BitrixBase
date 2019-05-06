@@ -7,6 +7,7 @@ use Bitrix\Main\Entity\ReferenceField;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
 use Bitrix\Main\UserTable;
+use CSite;
 use CUser;
 use Vf92\BitrixUtils\Constructor\EntityConstructor;
 use Vf92\BitrixUtils\User\Exception\GroupNotFoundException;
@@ -18,6 +19,7 @@ use Vf92\BitrixUtils\User\Exception\GroupNotFoundException;
 class UserHelper
 {
     static $curUser = null;
+
     /**
      * Проверяет вхождение пользователя в группу
      *
@@ -75,5 +77,24 @@ class UserHelper
         }
 
         return trim($result['LOGIN']);
+    }
+
+    /** $data= [LOGIN,EMAIL,NAME,LAST_NAME,SECOND_NAME,ID]
+     *
+     * @param      $data
+     * @param null $format
+     *
+     * @return string
+     */
+    public static function getFullName($data, $format = null)
+    {
+        if($format === null){
+            $format = CSite::GetNameFormat();
+        }
+        return (string)CUser::FormatName($format,
+            $data,
+            true,
+            true
+        );
     }
 }

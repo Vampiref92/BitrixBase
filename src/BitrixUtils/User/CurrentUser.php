@@ -4,6 +4,8 @@
 namespace Vf92\BitrixUtils\User;
 
 
+use Bitrix\Main\UserTable;
+use Bitrix\Main\EO_User;
 use Vf92\BitrixUtils\User\Exception\CurerntUserNotFoundException;
 
 /**
@@ -33,7 +35,7 @@ class CurrentUser
      */
     public function getId()
     {
-        return $this->curUser !== null ? (int)$this->curUser->GetID() : 0;
+        return $this->getBitrixObject() !== null ? (int)$this->getBitrixObject()->GetID() : 0;
     }
 
     /**
@@ -41,7 +43,7 @@ class CurrentUser
      */
     public function isAuth()
     {
-        return $this->curUser !== null ? (bool)$this->curUser->IsAuthorized() : false;
+        return $this->getBitrixObject() !== null ? (bool)$this->getBitrixObject()->IsAuthorized() : false;
     }
 
     /**
@@ -49,7 +51,7 @@ class CurrentUser
      */
     public function isAdmin()
     {
-        return $this->curUser !== null ? (bool)$this->curUser->IsAdmin() : false;
+        return $this->getBitrixObject() !== null ? (bool)$this->getBitrixObject()->IsAdmin() : false;
     }
 
     /**
@@ -57,7 +59,23 @@ class CurrentUser
      */
     public function getName()
     {
-        return $this->curUser !== null ? (string)$this->curUser->GetFirstName() : '';
+        return $this->getBitrixObject() !== null ? (string)$this->getBitrixObject()->GetFirstName() : '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->getBitrixObject() !== null ? (string)$this->getBitrixObject()->GetLastName() : '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecondName()
+    {
+        return $this->getBitrixObject() !== null ? (string)$this->getBitrixObject()->GetSecondName() : '';
     }
 
     /**
@@ -65,7 +83,24 @@ class CurrentUser
      */
     public function getFullName()
     {
-        return $this->curUser !== null ? (string)$this->curUser->GetFullName() : '';
+        return $this->getBitrixObject() !== null ? (string)$this->getBitrixObject()->GetFullName() : '';
+    }
+
+    /**
+     * @param null $format
+     *
+     * @return string
+     */
+    public function getFullNameByFormat($format = null)
+    {
+        return UserHelper::getFullName([
+            'NAME'        => $this->getName(),
+            'SECOND_NAME' => $this->getSecondName(),
+            'LAST_NAME'   => $this->getLastName(),
+            'LOGIN'       => $this->getLogin(),
+            'ID'          => $this->getId(),
+            'EMAIL'       => $this->getEmail(),
+        ], $format);
     }
 
     /**
@@ -73,7 +108,15 @@ class CurrentUser
      */
     public function getLogin()
     {
-        return $this->curUser !== null ? (string)$this->curUser->GetLogin() : '';
+        return $this->getBitrixObject() !== null ? (string)$this->getBitrixObject()->GetLogin() : '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->getBitrixObject()->GetEmail() ?: '';
     }
 
     /**
@@ -82,5 +125,16 @@ class CurrentUser
     public function getBitrixObject()
     {
         return $this->curUser;
+    }
+
+    /**
+     * @return null|EO_User
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ObjectPropertyException
+     * @throws \Bitrix\Main\SystemException
+     */
+    public function getD7BitrixObject()
+    {
+        return UserTable::getById($this->getId())->fetchObject();
     }
 }
