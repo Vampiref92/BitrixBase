@@ -2,6 +2,8 @@
 
 namespace Vf92\BitrixUtils\Orm\Model\Interfaces;
 
+use Vf92\BitrixUtils\Orm\Model\Image;
+
 /**
  * Interface ImageInterface
  *
@@ -9,12 +11,6 @@ namespace Vf92\BitrixUtils\Orm\Model\Interfaces;
  */
 interface ImageInterface extends FileInterface
 {
-    /**
-     * @param int $height
-     *
-     * @return static
-     */
-    public function setHeight($height);
 
     /**
      * @return int
@@ -22,14 +18,15 @@ interface ImageInterface extends FileInterface
     public function getHeight();
 
     /**
-     * @param int $width
-     *
-     * @return static
-     */
-    public function setWidth($width);
-
-    /**
      * @return int
      */
     public function getWidth();
+
+    /**
+     * @param     $size
+     * @param int $resizeType
+     *
+     * @return Image
+     */
+    public function getResizeImage($size, $resizeType = BX_RESIZE_IMAGE_PROPORTIONAL);
 }

@@ -2,6 +2,7 @@
 
 namespace Vf92\BitrixUtils\Orm\Model;
 
+use Cfile;
 use Vf92\BitrixUtils\Orm\Model\Interfaces\ImageInterface;
 
 /**
@@ -14,13 +15,16 @@ class Image extends File implements ImageInterface
     /**
      * @var int
      */
-    protected $width;
-    
+    protected $width = 0;
+
     /**
      * @var int
      */
-    protected $height;
-    
+    protected $height = 0;
+
+    /** @var null|Image */
+    protected $original = null;
+
     /**
      * Image constructor.
      *
@@ -28,12 +32,16 @@ class Image extends File implements ImageInterface
      */
     public function __construct(array $fields = [])
     {
-        $this->setWidth($fields['WIDTH']);
-        $this->setHeight($fields['HEIGHT']);
-        
+        if(!empty($fields['WIDTH'])) {
+            $this->setWidth($fields['WIDTH']);
+        }
+        if(!empty($fields['HEIGHT'])) {
+            $this->setHeight($fields['HEIGHT']);
+        }
+
         parent::__construct($fields);
     }
-    
+
     /**
      * @return int
      */
@@ -41,19 +49,19 @@ class Image extends File implements ImageInterface
     {
         return (int)$this->width;
     }
-    
+
     /**
      * @param int $width
      *
      * @return static
      */
-    public function setWidth($width)
+    protected function setWidth($width)
     {
         $this->width = (int)$width;
-        
+
         return $this;
     }
-    
+
     /**
      * @return int
      */
@@ -61,16 +69,52 @@ class Image extends File implements ImageInterface
     {
         return (int)$this->height;
     }
-    
+
     /**
      * @param int $height
      *
      * @return static
      */
-    public function setHeight($height)
+    protected function setHeight($height)
     {
         $this->height = (int)$height;
-        
+
         return $this;
+    }
+
+    /**
+     * @param     $size
+     * @param int $resizeType
+     *
+     * @return Image
+     */
+    public function getResizeImage($size, $resizeType = BX_RESIZE_IMAGE_PROPORTIONAL)
+    {
+        $resizedFile = Cfile::ResizeImageGet($this->getId(), $size, $resizeType, true);
+        $fields = [
+            'SRC'    => $resizedFile['src'],
+            'WIDTH'  => $resizedFile['width'],
+            'HEIGHT' => $resizedFile['height'],
+            'SIZE'   => $resizedFile['size'],
+        ];
+        $resizeObj = new static($fields);
+        $resizeObj->setOriginal($this);
+        return $resizeObj;
+    }
+
+    /**
+     * @return Image|null
+     */
+    public function getOriginal()
+    {
+        return $this->original;
+    }
+
+    /**
+     * @param Image $original
+     */
+    public function setOriginal(Image $original)
+    {
+        $this->original = $original;
     }
 }

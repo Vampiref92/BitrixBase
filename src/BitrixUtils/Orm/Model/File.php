@@ -35,6 +35,8 @@ class File implements FileInterface
     {
         if ($fields['src']) {
             $this->setSrc($fields['src']);
+        } else if ($fields['SRC']) {
+            $this->setSrc($fields['SRC']);
         }
         
         $this->fields = $fields;
@@ -87,7 +89,7 @@ class File implements FileInterface
      *
      * @return static
      */
-    public function setSrc($src)
+    protected function setSrc($src)
     {
         $this->src = $src;
 
@@ -116,18 +118,6 @@ class File implements FileInterface
     public function getId()
     {
         return (int)$this->fields['ID'];
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return static
-     */
-    public function setId($id)
-    {
-        $this->fields['ID'] = $id;
-
-        return $this;
     }
 
     /**
