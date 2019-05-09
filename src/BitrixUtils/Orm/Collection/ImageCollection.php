@@ -24,12 +24,14 @@ class ImageCollection extends ObjectArrayCollection
      */
     public static function createFromIds(array $ids = [])
     {
-        $collection = new static();
-        if ($ids) {
+        if (!empty($ids)) {
+            $collection = new static();
             $result = FileTable::query()->addFilter('ID', $ids)->addSelect('*')->exec();
             while ($item = $result->fetch()) {
                 $collection->add(new Image($item));
             }
+        } else {
+            $collection = static::createNoImageCollection();
         }
 
         return $collection;
@@ -44,12 +46,18 @@ class ImageCollection extends ObjectArrayCollection
     {
         $collection = new static();
 
-        $collection->add(new Image([
-            'src'    => MediaEnum::NO_IMAGE_WEB_PATH,
-            'width'  => 500,
-            'height' => 362,
-        ]));
+        $collection->add(Image::getNoImage());
 
+        return $collection;
+    }
+
+    public function getResizeCollection($size, $resizeType = BX_RESIZE_IMAGE_PROPORTIONAL)
+    {
+        $collection = new static();
+        /** @var Image $item */
+        foreach ($this->getIterator() as $item) {
+            $collection->add($item->getResizeImage($size, $resizeType));
+        }
         return $collection;
     }
 

@@ -4,6 +4,7 @@ namespace Vf92\BitrixUtils\Orm\Model;
 
 use Cfile;
 use Vf92\BitrixUtils\Orm\Model\Interfaces\ImageInterface;
+use Vf92\Enum\MediaEnum;
 
 /**
  * Class Image
@@ -32,6 +33,12 @@ class Image extends File implements ImageInterface
      */
     public function __construct(array $fields = [])
     {
+        if (!empty($fields['width'])){
+            $fields['WIDTH']=$fields['width'];
+        }
+        if (!empty($fields['height'])){
+            $fields['HEIGHT']=$fields['height'];
+        }
         if(!empty($fields['WIDTH'])) {
             $this->setWidth($fields['WIDTH']);
         }
@@ -116,5 +123,14 @@ class Image extends File implements ImageInterface
     public function setOriginal(Image $original)
     {
         $this->original = $original;
+    }
+
+    public static function getNoImage()
+    {
+        return new static([
+            'src'    => MediaEnum::NO_IMAGE_WEB_PATH,
+            'width'  => MediaEnum::NO_IMAGE_WIDTH,
+            'height' => MediaEnum::NO_IMAGE_HEIGHT,
+        ]);
     }
 }
