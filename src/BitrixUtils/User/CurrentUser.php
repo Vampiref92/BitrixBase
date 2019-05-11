@@ -31,6 +31,15 @@ class CurrentUser
     }
 
     /**
+     * @return CurrentUser
+     * @throws CurerntUserNotFoundException
+     */
+    public static function get()
+    {
+        return new static();
+    }
+
+    /**
      * @return int
      */
     public function getId()
