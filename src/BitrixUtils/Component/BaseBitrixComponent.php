@@ -21,7 +21,7 @@ abstract class BaseBitrixComponent extends \CBitrixComponent implements LoggerAw
     /**
      * @var string
      */
-    private $templatePage = '';
+    protected $templatePage = '';
 
     /**
      * @param $params
