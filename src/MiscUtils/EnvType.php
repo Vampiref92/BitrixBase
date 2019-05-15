@@ -18,17 +18,17 @@ class EnvType
     public static function getServerType()
     {
         if (
-            (isset($_SERVER['APP_ENV']) && $_SERVER['APP_ENV'] == self::DEV)
-            || (isset($_SERVER['HTTP_APP_ENV']) && $_SERVER['HTTP_APP_ENV'] == self::DEV)
-            || (isset($_COOKIE['DEV']) && $_COOKIE['DEV'] == 'Y')
-            || getenv('APP_ENV') == self::DEV
+            (isset($_SERVER['APP_ENV']) && $_SERVER['APP_ENV'] === self::DEV)
+            || (isset($_SERVER['HTTP_APP_ENV']) && $_SERVER['HTTP_APP_ENV'] === self::DEV)
+            || (isset($_COOKIE['DEV']) && $_COOKIE['DEV'] === 'Y')
+            || getenv('APP_ENV') === self::DEV
         ) {
             return self::DEV;
         } elseif (
-            (isset($_SERVER['APP_ENV']) && $_SERVER['APP_ENV'] == self::STAGE)
-            || (isset($_SERVER['HTTP_APP_ENV']) && $_SERVER['HTTP_APP_ENV'] == self::STAGE)
+            (isset($_SERVER['APP_ENV']) && $_SERVER['APP_ENV'] === self::STAGE)
+            || (isset($_SERVER['HTTP_APP_ENV']) && $_SERVER['HTTP_APP_ENV'] === self::STAGE)
             || (isset($_COOKIE['STAGE']) && $_COOKIE['STAGE'] == 'Y')
-            || getenv('APP_ENV') == self::STAGE
+            || getenv('APP_ENV') === self::STAGE
         ) {
             return self::STAGE;
         } else {
@@ -55,7 +55,7 @@ class EnvType
     /**
      * @return bool
      */
-    public function isStage()
+    public static function isStage()
     {
         return self::getServerType() === self::STAGE;
     }
