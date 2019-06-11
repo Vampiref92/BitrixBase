@@ -6,6 +6,8 @@ namespace Vf92\BitrixUtils\User;
 
 use Bitrix\Main\UserTable;
 use Bitrix\Main\EO_User;
+use Vf92\BitrixUtils\Config\Exception\VersionException;
+use Vf92\BitrixUtils\Config\Version;
 use Vf92\BitrixUtils\User\Exception\CurerntUserNotFoundException;
 
 /**
@@ -141,9 +143,13 @@ class CurrentUser
      * @throws \Bitrix\Main\ArgumentException
      * @throws \Bitrix\Main\ObjectPropertyException
      * @throws \Bitrix\Main\SystemException
+     * @throws VersionException
      */
     public function getD7BitrixObject()
     {
-        return UserTable::getById($this->getId())->fetchObject();
+        if (Version::getInstance()->isVersionMoreEqualThan('18.0.4')) {
+            return UserTable::getById($this->getId())->fetchObject();
+        }
+        throw new VersionException('Для выполнения данной функции нужна версия не ниже 18.0.4');
     }
 }
