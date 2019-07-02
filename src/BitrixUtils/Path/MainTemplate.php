@@ -69,7 +69,7 @@ class MainTemplate extends TemplateAbstract
 
     public function hasPersonalPage()
     {
-        return ($this->isPersonal() || ($this->isPersonalPage() && !$this->$this->isBasket() && !$this->isOrder() && !$this->isFavorite() && !$this->isCompare()));
+        return ($this->isPersonal() || ($this->isPersonalPage() && !$this->isBasket() && !$this->isOrder() && !$this->isFavorite() && !$this->isCompare()));
     }
 
     public function isBasket()
