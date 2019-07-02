@@ -122,9 +122,9 @@ class HLBlockHelper
 
         $query = $dataManager::query();
         $res = $query->setSelect([
-            'ID',
             'EDIT_FORM_LABEL',
             'LIST_COLUMN_LABEL',
+            'ID'     => 'USER_FIELD.ID',
             'ENTITY_ID'     => 'USER_FIELD.ENTITY_ID',
             'FIELD_NAME'    => 'USER_FIELD.FIELD_NAME',
             'USER_TYPE_ID'  => 'USER_FIELD.USER_TYPE_ID',
