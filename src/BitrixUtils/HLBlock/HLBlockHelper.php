@@ -146,6 +146,7 @@ class HLBlockHelper
             $fields[] = [
                 'CODE'    => $field['FIELD_NAME'],
                 'NAME'    => $field['LIST_COLUMN_LABEL'],
+                'ID'    => $field['ID'],
                 'FULL_EL' => $field,
             ];
         }
