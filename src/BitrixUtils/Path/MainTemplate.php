@@ -41,4 +41,34 @@ class MainTemplate extends TemplateAbstract
 
         return \defined('NEED_AUTH') && NEED_AUTH === true && !$USER->IsAuthorized();
     }
+
+    public function isCatalog()
+    {
+        return $this->isDir('/catalog');
+    }
+
+    public function isCatalogPage()
+    {
+        return $this->isPartitionDir('/catalog');
+    }
+
+    public function isPersonal()
+    {
+        return $this->isDir('/personal');
+    }
+
+    public function isPersonalPage()
+    {
+        return $this->isPartitionDir('/personal');
+    }
+
+    public function isBasket()
+    {
+        return $this->isDir('/personal/cart');
+    }
+
+    public function isOrder()
+    {
+        return $this->isDir('/personal/order/make');
+    }
 }
