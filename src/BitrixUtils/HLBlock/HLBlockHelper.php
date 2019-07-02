@@ -122,6 +122,7 @@ class HLBlockHelper
 
         $query = $dataManager::query();
         $res = $query->setSelect([
+            'ID',
             'EDIT_FORM_LABEL',
             'LIST_COLUMN_LABEL',
             'ENTITY_ID'     => 'USER_FIELD.ENTITY_ID',
