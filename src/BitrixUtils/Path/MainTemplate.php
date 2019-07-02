@@ -52,6 +52,11 @@ class MainTemplate extends TemplateAbstract
         return $this->isPartitionDir('/catalog');
     }
 
+    public function hasCatalogPage()
+    {
+        return $this->isCatalog() || $this->isCatalogPage();
+    }
+
     public function isPersonal()
     {
         return $this->isDir('/personal');
@@ -60,6 +65,11 @@ class MainTemplate extends TemplateAbstract
     public function isPersonalPage()
     {
         return $this->isPartitionDir('/personal');
+    }
+
+    public function hasPersonalPage()
+    {
+        return $this->isPersonal() || $this->isPersonalPage();
     }
 
     public function isBasket()
