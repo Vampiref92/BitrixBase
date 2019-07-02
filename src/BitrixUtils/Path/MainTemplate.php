@@ -69,7 +69,7 @@ class MainTemplate extends TemplateAbstract
 
     public function hasPersonalPage()
     {
-        return $this->isPersonal() || $this->isPersonalPage();
+        return ($this->isPersonal() || ($this->isPersonalPage() && !$this->$this->isBasket() && !$this->isOrder() && !$this->isFavorite() && !$this->isCompare()));
     }
 
     public function isBasket()
@@ -80,5 +80,15 @@ class MainTemplate extends TemplateAbstract
     public function isOrder()
     {
         return $this->isDir('/personal/order/make');
+    }
+
+    public function isCompare()
+    {
+        return $this->isDir('/personal/compare');
+    }
+
+    public function isFavorite()
+    {
+        return $this->isDir('/personal/favorite');
     }
 }
