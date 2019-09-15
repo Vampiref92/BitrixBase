@@ -6,6 +6,7 @@ use Bitrix\Main\ObjectException;
 use Bitrix\Main\Type\Date;
 use Bitrix\Main\Type\DateTime;
 use DateTime as NormalDateTime;
+use Exception;
 use Vf92\MiscUtils\Helpers\DateHelper as MiscDateHelper;
 
 /**
@@ -21,8 +22,9 @@ class DateHelper extends MiscDateHelper
      * @param DateTime $bxDatetime
      *
      * @return NormalDateTime
+     * @throws Exception
      */
-    public static function convertToDateTime(DateTime $bxDatetime)
+    public static function convertToDateTime(DateTime $bxDatetime): NormalDateTime
     {
         return (new NormalDateTime())->setTimestamp($bxDatetime->getTimestamp());
     }
@@ -36,10 +38,11 @@ class DateHelper extends MiscDateHelper
      * @param int    $timestamp
      *
      * @return string
+     * @throws Exception
      */
-    public static function formatDate($dateFormat, $timestamp)
+    public static function formatDate(string $dateFormat, int $timestamp): string
     {
-        $date = (new \DateTime)->setTimestamp($timestamp);
+        $date = (new NormalDateTime)->setTimestamp($timestamp);
         if (false !== mb_strpos($dateFormat, 'll')) {
             $str = null;
             switch ($date->format('w')) {
@@ -71,10 +74,9 @@ class DateHelper extends MiscDateHelper
         }
         if (false !== mb_strpos($dateFormat, 'XX')) {
             $tmpDate = clone $date;
-            $currentDate = new \DateTime();
+            $currentDate = new NormalDateTime();
             $tmpDate->setTime(0, 0, 0);
             $currentDate->setTime(0, 0, 0);
-
             $diff = $tmpDate->diff($currentDate)->days;
             switch (true) {
                 case $diff === 0:
@@ -88,7 +90,6 @@ class DateHelper extends MiscDateHelper
             }
             $dateFormat = str_replace('XX', $str, $dateFormat);
         }
-
         return FormatDate($dateFormat, $timestamp);
     }
 
@@ -100,7 +101,7 @@ class DateHelper extends MiscDateHelper
      * @return string
      * @throws ObjectException
      */
-    public static function getFormattedActiveDate($dateFrom = '', $dateTo = '', array $setting = [])
+    public static function getFormattedActiveDate(string $dateFrom = '', string $dateTo = '', array $setting = []): string
     {
         $result = '';
         if (!isset($setting['with_text'])) {
@@ -118,45 +119,44 @@ class DateHelper extends MiscDateHelper
         $currentDate = new Date();
         if (!empty($dateFrom) && !empty($dateTo)) {
             $result = $setting['with_text'] . ' ';
-            $dateFrom = new Date($dateFrom);
-            $dateTo = new Date($dateTo);
-            if ((int)$dateFrom->format('Y') === $dateFrom->format('Y')) {
-                if ((int)$dateFrom->format('n') === $dateFrom->format('n')) {
-                    $result .= $dateFrom->format('d');
+            $dateFromGen = new Date($dateFrom);
+            $dateToGen = new Date($dateTo);
+            if ((int)$dateFromGen->format('Y') === (int)$dateToGen->format('Y')) {
+                if ((int)$dateFromGen->format('n') === $dateToGen->format('n')) {
+                    $result .= $dateFromGen->format('d');
                     $result .= ' ' . $setting['to_text'] . ' ';
-                    $result .= static::replaceRuMonth($dateTo->format('d #n#', static::GENITIVE));
+                    $result .= static::replaceRuMonth($dateFromGen->format('d #n#'), static::GENITIVE);
                 } else {
-                    $result .= static::replaceRuMonth($dateFrom->format('d #n#', static::GENITIVE));
+                    $result .= static::replaceRuMonth($dateFromGen->format('d #n#'), static::GENITIVE);
                     $result .= ' ' . $setting['to_text'] . ' ';
-                    $result .= static::replaceRuMonth($dateTo->format('d #n#', static::GENITIVE));
+                    $result .= static::replaceRuMonth($dateToGen->format('d #n#'), static::GENITIVE);
                 }
-                if ((int)$dateFrom->format('Y') !== $currentDate->format('Y')) {
-                    $result .= $dateFrom->format('Y года');
+                if ((int)$dateFromGen->format('Y') !== $dateFromGen->format('Y')) {
+                    $result .= $dateFromGen->format('Y года');
                 }
             } else {
-                $result .= static::replaceRuMonth($dateFrom->format('d #n# Y года', static::GENITIVE));
+                $result .= static::replaceRuMonth($dateFromGen->format('d #n# Y года'), static::GENITIVE);
                 $result .= ' ' . $setting['to_text'] . ' ';
-                $result .= static::replaceRuMonth($dateTo->format('d #n# Y года', static::GENITIVE));
+                $result .= static::replaceRuMonth($dateToGen->format('d #n# Y года'), static::GENITIVE);
             }
         } elseif (!empty($dateFrom)) {
             $result = $setting['with_text'] . ' ';
-            $dateFrom = new Date($dateFrom);
-            if ((int)$dateFrom->format('Y') === $currentDate->format('Y')) {
-                $result .= static::replaceRuMonth($dateFrom->format('d #n#', static::GENITIVE));
+            $dateFromGen = new Date($dateFrom);
+            if ((int)$dateFromGen->format('Y') === $currentDate->format('Y')) {
+                $result .= static::replaceRuMonth($dateFromGen->format('d #n#'), static::GENITIVE);
             } else {
-                $result .= static::replaceRuMonth($dateFrom->format('d #n# Y года', static::GENITIVE));
+                $result .= static::replaceRuMonth($dateFromGen->format('d #n# Y года'), static::GENITIVE);
             }
         } elseif (!empty($dateTo)) {
             $result = $setting['to_text2'] . ' ';
-            $dateTo = new Date($dateTo);
-            if ((int)$dateTo->format('Y') === $currentDate->format('Y')) {
-                $result .= static::replaceRuMonth($dateTo->format('d #n#', static::GENITIVE));
+            $dateToGen = new Date($dateTo);
+            if ((int)$dateToGen->format('Y') === $currentDate->format('Y')) {
+                $result .= static::replaceRuMonth($dateToGen->format('d #n#'), static::GENITIVE);
             } else {
-                $result .= static::replaceRuMonth($dateTo->format('d #n# Y ' . $setting['year_text'],
-                    static::GENITIVE));
+                $result .= static::replaceRuMonth($dateToGen->format('d #n# Y ' . $setting['year_text']),
+                    static::GENITIVE);
             }
         }
-
         return $result;
     }
 }

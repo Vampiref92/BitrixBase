@@ -25,12 +25,25 @@ use Bitrix\Main\Web\Uri;
  */
 abstract class TemplateAbstract
 {
+
+    /**
+     * @var
+     */
     protected static $instance;
-    
+
+    /**
+     * @var Context
+     */
     private          $context;
-    
+
+    /**
+     * @var string
+     */
     private          $path;
-    
+
+    /**
+     * @var bool|string|null
+     */
     private          $dir;
     
     /**
@@ -38,7 +51,7 @@ abstract class TemplateAbstract
      *
      * @return static
      */
-    public static function getInstance(Context $context)
+    public static function getInstance(Context $context): TemplateAbstract
     {
         if (!static::$instance) {
             static::$instance = new static($context);
@@ -68,12 +81,17 @@ abstract class TemplateAbstract
      *
      * @return bool
      */
-    public function isPage($page)
+    public function isPage($page): bool
     {
         return $this->path === $page;
     }
 
-    public function isPartitionPage($src)
+    /**
+     * @param $src
+     *
+     * @return bool
+     */
+    public function isPartitionPage($src): bool
     {
         return preg_match(sprintf('~%s~', $src), $this->getPath()) > 0;
     }
@@ -81,7 +99,7 @@ abstract class TemplateAbstract
     /**
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -89,7 +107,7 @@ abstract class TemplateAbstract
     /**
      * @return bool
      */
-    public function isAjaxRequest()
+    public function isAjaxRequest(): bool
     {
         $server = $this->getServer();
         
@@ -99,7 +117,7 @@ abstract class TemplateAbstract
     /**
      * @return HttpRequest
      */
-    public function getRequest()
+    public function getRequest(): HttpRequest
     {
         return $this->context->getRequest();
     }
@@ -107,7 +125,7 @@ abstract class TemplateAbstract
     /**
      * @return Uri
      */
-    public function getUri()
+    public function getUri(): Uri
     {
         return new Uri($this->getRequest()->getRequestUri());
     }
@@ -115,7 +133,7 @@ abstract class TemplateAbstract
     /**
      * @return Server
      */
-    public function getServer()
+    public function getServer(): Server
     {
         return $this->context->getServer();
     }
@@ -123,7 +141,7 @@ abstract class TemplateAbstract
     /**
      * @return Culture
      */
-    public function getCulture()
+    public function getCulture(): Culture
     {
         return $this->context->getCulture();
     }
@@ -131,27 +149,45 @@ abstract class TemplateAbstract
     /**
      * @return Response
      */
-    public function getResponse()
+    public function getResponse(): Response
     {
         return $this->context->getResponse();
     }
-    
+
+    /**
+     * @return bool|string|null
+     */
     public function getDir()
     {
         return $this->dir;
     }
-    
-    public function isPartitionDir($src)
+
+    /**
+     * @param $src
+     *
+     * @return bool
+     */
+    public function isPartitionDir($src): bool
     {
         return preg_match(sprintf('~^%s/[-/@\w]+~', $src), $this->getDir()) > 0;
     }
-    
-    public function isDir($dir)
+
+    /**
+     * @param $dir
+     *
+     * @return bool
+     */
+    public function isDir($dir): bool
     {
         return $this->dir === $dir;
     }
 
-    public function isPartitionDirByFilePath($src)
+    /**
+     * @param $src
+     *
+     * @return bool
+     */
+    public function isPartitionDirByFilePath($src): bool
     {
         return preg_match(sprintf('~^%s/[-/@\w]+~', $src), $this->getServer()->getScriptName()) > 0;
     }

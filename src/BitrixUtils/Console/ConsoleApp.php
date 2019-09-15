@@ -8,7 +8,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Throwable;
+use function dirname;
 
+/**
+ * Class ConsoleApp
+ * @package Vf92\BitrixUtils\Console
+ */
 class ConsoleApp
 {
     /**
@@ -21,32 +26,54 @@ class ConsoleApp
      */
     private $documentRoot;
 
+    /**
+     * ConsoleApp constructor.
+     *
+     * @param string $documentRoot
+     */
     public function __construct(string $documentRoot)
     {
         $this->documentRoot = $documentRoot;
     }
 
-    public function getName()
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return 'project';
     }
 
-    public function getVersion()
+
+    /**
+     * @return string
+     */
+    public function getVersion(): string
     {
         return '1.0.0';
     }
 
-    public function getDir()
+    /**
+     * @return string
+     */
+    public function getDir(): string
     {
         return __DIR__;
     }
 
-    public function getProjectClass()
+    /**
+     * @return string
+     */
+    public function getProjectClass(): string
     {
         return 'Project';
     }
 
-    public function run(InputInterface $input = null, OutputInterface $output = null)
+    /**
+     * @param InputInterface|null  $input
+     * @param OutputInterface|null $output
+     */
+    public function run(InputInterface $input = null, OutputInterface $output = null): void
     {
         try {
 
@@ -55,40 +82,34 @@ class ConsoleApp
             $this->finish();
 
         } catch (Throwable $exception) {
-
-            echo sprintf(
-                "[%s] %s (%s)\n%s\n",
-                get_class($exception),
-                $exception->getMessage(),
-                $exception->getCode(),
-                $exception->getTraceAsString()
-            );
-
+            echo sprintf("[%s] %s (%s)\n%s\n", get_class($exception), $exception->getMessage(), $exception->getCode(),
+                $exception->getTraceAsString());
             //Non-zero because error
             die(1);
 
         }
     }
 
-    private function init()
+    private function init(): void
     {
-        if (php_sapi_name() !== 'cli') {
+        if (PHP_SAPI !== 'cli') {
             die('Can not run in this mode. Bye!');
         }
-
         if (empty($_SERVER['DOCUMENT_ROOT'])) {
             $_SERVER['DOCUMENT_ROOT'] = $this->documentRoot;
         }
-        require_once __DIR__.'../../../tools/bxAjaxProlog.php';
-
+        require_once __DIR__ . '../../../tools/bxAjaxProlog.php';
         // ini_set('memory_limit', '2G');
         error_reporting(E_ERROR);
     }
 
     /**
+     * @param InputInterface|null  $input
+     * @param OutputInterface|null $output
+     *
      * @throws Exception
      */
-    private function launchSymfonyConsoleApp(InputInterface $input = null, OutputInterface $output = null)
+    private function launchSymfonyConsoleApp(InputInterface $input = null, OutputInterface $output = null): void
     {
         $this->application = new Application();
         $this->application->setName($this->getName() . ' console interface');
@@ -98,7 +119,7 @@ class ConsoleApp
         $this->application->run($input, $output);
     }
 
-    private function finish()
+    private function finish(): void
     {
         //TODO Возможно, требуется оптимизировать, чтобы Битрикс не делал чего-то лишнего в консоли
         /** @noinspection PhpIncludeInspection */
@@ -107,26 +128,21 @@ class ConsoleApp
 
     /**
      * Регистрирует все команды из namespace
+     *
+     * @param string $dir
+     * @param $projectClass
      */
-    private function registerCommands($dir, $projectClass)
+    private function registerCommands(string $dir, $projectClass): void
     {
         $files = new Finder();
         $files->files()->in($dir . '/Command');
-
         foreach ($files as $file) {
 
-            $classPath = str_replace(
-                [
-                    \dirname($dir),
-                    '.php',
-                ],
-                '',
-                $file->getRealPath()
-            );
-
-
+            $classPath = str_replace([
+                dirname($dir),
+                '.php',
+            ], '', $file->getRealPath());
             $command = "\\" . $projectClass . str_replace('/', '\\', $classPath);
-
             $this->application->add(new $command);
         }
     }

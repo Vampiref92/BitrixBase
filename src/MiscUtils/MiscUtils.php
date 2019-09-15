@@ -3,6 +3,11 @@
 namespace Vf92\MiscUtils;
 
 use Bitrix\Main\Type\DateTime;
+use function is_array;
+use function is_bool;
+use function is_numeric;
+use function is_object;
+use function is_string;
 
 /**
  * Class MiscTools
@@ -19,7 +24,7 @@ class MiscUtils
      *
      * @return string
      */
-    public static function getClassName($object)
+    public static function getClassName($object): string
     {
         $className = get_class($object);
         $pos = strrpos($className, '\\');
@@ -27,18 +32,17 @@ class MiscUtils
 
             return substr($className, $pos + 1);
         }
-
         return $pos;
     }
 
     /**
      * @param array $arItems
      */
-    public static function trimArrayStrings(&$arItems)
+    public static function trimArrayStrings(array &$arItems): void
     {
-        if (\is_array($arItems) && !empty($arItems)) {
+        if (is_array($arItems) && !empty($arItems)) {
             foreach ($arItems as $key => $val) {
-                if (\is_array($val)) {
+                if (is_array($val)) {
                     self::trimArrayStrings($val);
                 } else {
                     $arItems[$key] = trim($val);
@@ -48,25 +52,24 @@ class MiscUtils
     }
 
     /**
-     * @param  float|int $size
-     * @param int        $round
+     * @param float|int $size
+     * @param int       $round
      *
      * @return string
      */
-    public static function getFormattedSize($size, $round = 2)
+    public static function getFormattedSize($size, int $round = 2): string
     {
         $sizes = ['B', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
         for ($i = 0; $size > 1024 && $i < count($sizes) - 1; $i++) {
             $size /= 1024;
         }
-
         return round($size, $round) . ' ' . $sizes[$i];
     }
 
     /**
      * @param array $list
      */
-    public static function eraseArray(&$list)
+    public static function eraseArray(array &$list): void
     {
         $tmpList = [];
         foreach ($list as $key => $val) {
@@ -77,14 +80,16 @@ class MiscUtils
 
     /**
      * @param array $list
+     *
+     * @return array
      */
-    public static function eraseArrayReturn($list)
+    public static function eraseArrayReturn(array $list): array
     {
         foreach ($list as $key => $val) {
-            if (\is_object($val)) {
+            if (is_object($val)) {
                 continue;
             }
-            if (\is_array($val)) {
+            if (is_array($val)) {
                 if (!empty($val)) {
                     $newVal = self::eraseArrayReturn($val);
                     if ($newVal === null || empty($newVal)) {
@@ -144,15 +149,13 @@ class MiscUtils
                             $result[$key] = $val;
                         }
                     } else {
-                        $return = self::getUniqueArray(
-                            [
+                        $return = self::getUniqueArray([
                                 'arr1'                 => $val,
                                 'arr2'                 => $params['arr2'][$key],
                                 'bReturnFullDiffArray' => $params['bReturnFullDiffArray'],
                                 'skipKeys'             => $params['skipKeys'],
                                 'isChild'              => true,
-                            ]
-                        );
+                            ]);
                         if (!empty($return)) {
                             if ($params['bReturnFullDiffArray'] && $params['isChild']) {
                                 $diff[$key] = $return;
@@ -174,7 +177,7 @@ class MiscUtils
                         $tmpVal = '0';
                         $tmpArr2Val = '1';
                         if (is_object($val)) {
-                            if (is_a($val, 'Bitrix\Main\Type\DateTime')) {
+                            if ($val instanceof \Bitrix\Main\Type\DateTime) {
                                 /** @var DateTime $val */
                                 $tmpVal = $val->format(DateTime::getFormat());
                                 /** @var DateTime $val2 */
@@ -183,8 +186,7 @@ class MiscUtils
                                 unset($val2);
                             }
                         }
-                        if ((is_object($val) && $tmpVal !== $tmpArr2Val)
-                            || (!is_object($val) && $val !== $params['arr2'][$key])) {
+                        if ((is_object($val) && $tmpVal !== $tmpArr2Val) || (!is_object($val) && $val !== $params['arr2'][$key])) {
                             if ($params['bReturnFullDiffArray'] && $params['isChild']) {
                                 $diff[$key] = $val;
                             } else {
@@ -195,10 +197,9 @@ class MiscUtils
                 }
             }
         }
-        if ($diff !== null && count($diff) > 0 && $arTmp !== null && !empty($arTmp)) {
+        if ($arTmp !== null && !empty($arTmp) && $diff !== null && count($diff) > 0) {
             $result = $arTmp;
         }
-
         return $result;
     }
 
@@ -207,9 +208,9 @@ class MiscUtils
      *
      * @return string
      */
-    public static function getStringBoolByBool($val)
+    public static function getStringBoolByBool(bool $val): string
     {
-        if (\is_bool($val)) {
+        if (is_bool($val)) {
             if ($val === true) {
                 $val = 'true';
             } else {
@@ -224,11 +225,11 @@ class MiscUtils
      *
      * @return bool
      */
-    public static function getBoolByStringBool($val)
+    public static function getBoolByStringBool(string $val): bool
     {
         $res = null;
-        if (\is_string($val)) {
-            if (\is_numeric($val)) {
+        if (is_string($val)) {
+            if (is_numeric($val)) {
                 if ((int)$val === 1) {
                     $res = true;
                 } elseif ((int)$val === 0) {

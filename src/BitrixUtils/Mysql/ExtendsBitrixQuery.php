@@ -1,15 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 21.02.18
- * Time: 17:52
- */
-
 namespace Vf92\BitrixUtils\Mysql;
 
 use Bitrix\Main\Entity\Query;
 
+/**
+ * Class ExtendsBitrixQuery
+ * @package Vf92\BitrixUtils\Mysql
+ */
 class ExtendsBitrixQuery extends Query
 {
     /**
@@ -45,7 +42,7 @@ class ExtendsBitrixQuery extends Query
      * Получаем сформированное условие по запросу(where)
      * @return string
      */
-    public function getBuildWhere()
+    public function getBuildWhere(): string
     {
         $sql = $this->query_build_parts['WHERE'];
 
@@ -56,7 +53,7 @@ class ExtendsBitrixQuery extends Query
      * Получаем сформированную сортировку(order)
      * @return string
      */
-    public function getBuildOrder()
+    public function getBuildOrder(): string
     {
         $sql = $this->query_build_parts['ORDER'];
 

@@ -4,7 +4,14 @@ namespace Vf92\BitrixUtils\Constructor;
 
 use Bitrix\Main;
 use Bitrix\Main\Entity\DataManager;
+use CPerfomanceTable;
 use Vf92\MiscUtils\MiscUtils;
+use function count;
+use function in_array;
+use function is_array;
+use function is_numeric;
+use function is_object;
+use function is_string;
 
 /**
  * Class EntityConstructor
@@ -20,33 +27,23 @@ class EntityConstructor
      * @return DataManager|string
      * @throws Main\SystemException
      */
-    public static function compileEntityDataClass($className, $tableName, array $additionalFields = [])
+    public static function compileEntityDataClass(string $className, string $tableName, array $additionalFields = [])
     {
         $entity_data_class = $className;
-
         if (!preg_match('/^[a-z0-9_]+$/i', $entity_data_class)) {
-            throw new Main\SystemException(
-                sprintf(
-                    'Invalid entity name `%s`.',
-                    $entity_data_class
-                )
-            );
+            throw new Main\SystemException(sprintf('Invalid entity name `%s`.', $entity_data_class));
         }
-
         $entity_data_class .= 'Table';
-
         if (class_exists($entity_data_class)) {
             return $entity_data_class;
         }
-
         $mapOld = static::getFieldsMap($tableName);
         $mapNew = static::getNewFieldsMap($mapOld);
-        if (\count($mapOld) === \count($mapNew)) {
+        if (count($mapOld) === count($mapNew)) {
             $currentFieldsMap = $mapNew;
         } else {
             $currentFieldsMap = $mapOld;
         }
-
         $eval = 'use Bitrix\Main;
         
 				class ' . $entity_data_class . ' extends Main\Entity\DataManager
@@ -59,47 +56,43 @@ class EntityConstructor
 					public static function getMap()
 					{
 						return [';
-                        $allFields = array_merge($currentFieldsMap, $additionalFields);
-                        foreach ($allFields as $key => $val) {
-                            if (\is_object($val)) {
-                                continue;
-                            }
-                            if (!\is_numeric($key)) {
-                                $eval .= '\'' . $key . '\' => ';
-                            }
-                            if (\is_array($val)) {
-                                $val = var_export($val, true);
-                            } else {
-                                if (!\is_string($val)) {
-                                    $val .= '\'' . $val . '\'';
-                                }
-                            }
-                            $eval .= $val . ', ' . PHP_EOL;
-                        }
-                        $eval .= '];
+        $allFields = array_merge($currentFieldsMap, $additionalFields);
+        foreach ($allFields as $key => $val) {
+            if (is_object($val)) {
+                continue;
+            }
+            if (!is_numeric($key)) {
+                $eval .= '\'' . $key . '\' => ';
+            }
+            if (is_array($val)) {
+                $val = var_export($val, true);
+            } else {
+                if (!is_string($val)) {
+                    $val .= '\'' . $val . '\'';
+                }
+            }
+            $eval .= $val . ', ' . PHP_EOL;
+        }
+        $eval .= '];
 					}
 				}
 			';
-
         eval($eval);
-
         return $entity_data_class;
     }
 
     /**
-     * @param $tableName
+     * @param string $tableName
      *
      * @return array|mixed
      */
-    public static function getFieldsMap($tableName)
+    public static function getFieldsMap(string $tableName): array
     {
         /** @todo переделать с массива на классы */
         $fieldsMap = [];
-        $obTable = new \CPerfomanceTable;
+        $obTable = new CPerfomanceTable;
         $obTable->Init($tableName);
-
         $arFields = $obTable->GetTableFields(false, true);
-
         $arUniqueIndexes = $obTable->GetUniqueIndexes();
         $hasID = false;
         foreach ($arUniqueIndexes as $indexName => $indexColumns) {
@@ -107,12 +100,10 @@ class EntityConstructor
                 $hasID = $indexName;
             }
         }
-
         if ($hasID) {
             $arUniqueIndexes = [$hasID => $arUniqueIndexes[$hasID]];
         }
-
-        if (\is_array($arFields) && !empty($arFields)) {
+        if (is_array($arFields) && !empty($arFields)) {
             foreach ($arFields as $columnName => $columnInfo) {
                 if ($columnInfo['orm_type'] === 'boolean') {
                     $columnInfo['nullable'] = true;
@@ -123,17 +114,12 @@ class EntityConstructor
                         'Y',
                     ];
                 }
-
-                if ($columnInfo['type'] === 'int'
-                    && ($columnInfo['default'] > 0)
-                    && !$columnInfo['nullable']) {
+                if ($columnInfo['type'] === 'int' && ($columnInfo['default'] > 0) && !$columnInfo['nullable']) {
                     $columnInfo['nullable'] = true;
                 }
-
                 $match = [];
-                if (preg_match('/^(.+)_TYPE$/', $columnName, $match)
-                    && array_key_exists($match[1], $arFields)
-                    && (int)$columnInfo['length'] === 4) {
+                if (preg_match('/^(.+)_TYPE$/', $columnName, $match) && array_key_exists($match[1],
+                        $arFields) && (int)$columnInfo['length'] === 4) {
                     $columnInfo['nullable'] = true;
                     $columnInfo['orm_type'] = 'enum';
                     $columnInfo['enum_values'] = [
@@ -141,12 +127,10 @@ class EntityConstructor
                         'html',
                     ];
                 }
-
                 $fieldsMap[$columnName]['data_type'] = $columnInfo['orm_type'];
-
                 $primary = false;
                 foreach ($arUniqueIndexes as $indexName => $arColumns) {
-                    if (\in_array($columnName, $arColumns, true)) {
+                    if (in_array($columnName, $arColumns, true)) {
                         $fieldsMap[$columnName]['primary'] = true;
                         $primary = true;
                         break;
@@ -163,20 +147,17 @@ class EntityConstructor
                 }
             }
         }
-
         return $fieldsMap;
     }
 
     /**
-     * @param $fieldsMap
+     * @param array $fieldsMap
      *
      * @return array
-     * @throws Main\SystemException
      */
-    public static function getNewFieldsMap($fieldsMap)
+    public static function getNewFieldsMap(array $fieldsMap): array
     {
-        $newFieldsMap = [
-        ];
+        $newFieldsMap = [];
         foreach ($fieldsMap as $columnName => $columnInfo) {
             $params = [
                 'autocomplete' => $columnInfo['autocomplete'],

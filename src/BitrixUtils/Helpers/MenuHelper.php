@@ -2,6 +2,7 @@
 
 namespace Vf92\BitrixUtils\Helpers;
 
+use function count;
 
 /**
  * Class MenuHelper
@@ -9,21 +10,39 @@ namespace Vf92\BitrixUtils\Helpers;
  */
 Class MenuHelper
 {
+    /**
+     * @var
+     */
     protected $lastKey;
+    /**
+     * @var
+     */
     protected $countSubArrayItems;
+    /**
+     * @var
+     */
     protected $arSubArrayItems;
+    /**
+     * @var
+     */
     protected $childrenSectionsName;
+    /**
+     * @var
+     */
     protected $depthLvlName;
 
     /**
-     * @param        $array
+     * @param array $array
      * @param string $childrenSectionsName
      * @param string $depthLvlName
      *
      * @return array
      */
-    public function getMultiLvlArray($array, $childrenSectionsName = 'SECTIONS', $depthLvlName = 'DEPTH_LEVEL')
-    {
+    public function getMultiLvlArray(
+        array $array,
+        string $childrenSectionsName = 'SECTIONS',
+        string $depthLvlName = 'DEPTH_LEVEL'
+    ): array {
         $this->childrenSectionsName = $childrenSectionsName;
         $this->depthLvlName = $depthLvlName;
         $this->lastKey = 0;
@@ -33,11 +52,11 @@ Class MenuHelper
     }
 
     /**
-     * @param $array
+     * @param array $array
      *
      * @return int
      */
-    public function countMultiArray($array)
+    public function countMultiArray(array $array): int
     {
         $count = 0;
         foreach ($array as $arItem) {
@@ -52,18 +71,17 @@ Class MenuHelper
     /**
      * @return array
      */
-    protected function returnSubArray()
+    protected function returnSubArray(): array
     {
         $k = $this->lastKey;
         $arSubMenu = [];
-
         while ($this->countSubArrayItems > $k) {
-            if (!empty($arSubMenu) && \count($arSubMenu) !== 0 && $arSubMenu[0][$this->depthLvlName] < $this->arSubArrayItems[$k][$this->depthLvlName]) {
+            if (!empty($arSubMenu) && count($arSubMenu) !== 0 && $arSubMenu[0][$this->depthLvlName] < $this->arSubArrayItems[$k][$this->depthLvlName]) {
                 $this->lastKey = $k;
-                $arSubMenu[\count($arSubMenu) - 1][$this->childrenSectionsName] = $this->returnSubArray();
-                $k += $this->countMultiArray($arSubMenu[\count($arSubMenu) - 1][$this->childrenSectionsName]);
+                $arSubMenu[count($arSubMenu) - 1][$this->childrenSectionsName] = $this->returnSubArray();
+                $k += $this->countMultiArray($arSubMenu[count($arSubMenu) - 1][$this->childrenSectionsName]);
                 continue;
-            } elseif (!empty($arSubMenu) && \count($arSubMenu) !== 0 && $arSubMenu[0][$this->depthLvlName] > $this->arSubArrayItems[$k][$this->depthLvlName]) {
+            } elseif (!empty($arSubMenu) && count($arSubMenu) !== 0 && $arSubMenu[0][$this->depthLvlName] > $this->arSubArrayItems[$k][$this->depthLvlName]) {
                 return $arSubMenu;
             } else {
                 $arSubMenu[] = $this->arSubArrayItems[$k];

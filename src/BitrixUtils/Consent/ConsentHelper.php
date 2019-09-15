@@ -2,11 +2,15 @@
 
 namespace Vf92\BitrixUtils\Consent;
 
-
+use Bitrix\Main\ArgumentException;
+use Bitrix\Main\ObjectPropertyException;
+use Bitrix\Main\SystemException;
 use Bitrix\Main\UserConsent\Internals\AgreementTable;
+use Bitrix\Main\UserConsent\Internals\EO_Agreement;
 use InvalidArgumentException;
-use Vf92\BitrixUtils\Concent\Exception\ConsentNotFoundException;
 use Vf92\BitrixUtils\Config\Version;
+use Vf92\BitrixUtils\Exceptions\Config\VersionException;
+use Vf92\BitrixUtils\Exceptions\Consent\ConsentNotFoundException;
 
 /**
  * Class ConsentHelper
@@ -19,42 +23,30 @@ class ConsentHelper
      *
      * @return int
      * @throws ConsentNotFoundException
-     * @throws \Bitrix\Main\ArgumentException
-     * @throws \Bitrix\Main\ObjectPropertyException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     * @throws VersionException
      */
-    public static function getConsentId($code){
-        if(empty($code)){
+    public static function getConsentId($code): int
+    {
+        if (Version::getInstance()->isVersionLessThan('18.0.4')) {
+            throw new VersionException();
+        }
+        if (empty($code)) {
             throw new InvalidArgumentException('code must be specified');
         }
         $query = AgreementTable::query()->setSelect(['ID']);
-        if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-            $res = $query->where('CODE', $code)->exec();
-            $itemId = 0;
-            if (Version::getInstance()->isVersionMoreEqualThan('18.0.4')) {
-                $item = $res->fetchObject();
-                if($item !== null) {
-                    $itemId = $item->getId();
-                }
-            } else {
-                $item = $res->fetch();
-                $itemId = (int)$item['ID'];
-            }
-            if($itemId > 0){
-                return $itemId;
-            }
-        } else {
-            $item = $query->setFilter(['CODE' => $code])->exec()->fetch();
-            if($item !== null){
-                return (int)$item['ID'];
-            }
+        $res = $query->where('CODE', $code)->exec();
+        $itemId = 0;
+        /** @var EO_Agreement $item */
+        $item = $res->fetchObject();
+        if ($item !== null) {
+            $itemId = $item->getId();
         }
-
-        throw new ConsentNotFoundException(
-            sprintf(
-                'Consent `%s` not found',
-                $code
-            )
-        );
+        if ($itemId > 0) {
+            return $itemId;
+        }
+        throw new ConsentNotFoundException(sprintf('Consent `%s` not found', $code));
     }
 }

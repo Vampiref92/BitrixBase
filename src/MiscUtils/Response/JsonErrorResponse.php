@@ -19,7 +19,6 @@ class JsonErrorResponse extends JsonResponse
     public static function create($message = null, $status = 200, $headers = [], array $options = [])
     {
         $content = static::buildContent($message, false, null, $options);
-
         return parent::create($content, $status, $headers);
     }
 
@@ -34,13 +33,12 @@ class JsonErrorResponse extends JsonResponse
      * @return JsonResponse
      */
     public static function createWithData(
-        $message = '',
+        string $message = '',
         array $data = [],
-        $status = 200,
+        int $status = 200,
         array $options = []
-    ) {
+    ): JsonResponse {
         $content = static::buildContent($message, false, $data, $options);
-
         return parent::create($content, $status);
     }
 }

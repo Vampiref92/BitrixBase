@@ -14,13 +14,12 @@ class WordHelper
      * @param int   $number числительное
      * @param array $forms  формы слова для 1, 2, 5. Напр. ['дверь', 'двери', 'дверей']
      *
-     * @return mixed
+     * @return string
      */
-    public static function declension($number, array $forms)
+    public static function declension(int $number, array $forms): string
     {
         $ar = [2, 0, 1, 1, 1, 2];
         $key = ($number % 100 > 4 && $number % 100 < 20) ? 2 : $ar[min($number % 10, 5)];
-
         return $forms[$key];
     }
 
@@ -34,24 +33,20 @@ class WordHelper
      *
      * @return string
      */
-    public static function showWeight($weight, $short = false, $fullLimit = 0)
+    public static function showWeight(float $weight, bool $short = false, int $fullLimit = 0): string
     {
         if ($short && ($fullLimit === 0 || ($fullLimit > 0 && $weight > $fullLimit))) {
             return static::numberFormat($weight / 1000, 2, true) . ' кг';
         }
-
         $parts = [];
-
         $kg = floor($weight / 1000);
         if ($kg) {
             $parts[] = static::numberFormat($kg, 0) . ' кг';
         }
-
         $g = $weight % 1000;
         if ($g) {
             $parts[] = $g . ' г';
         }
-
         return implode(' ', $parts);
     }
 
@@ -62,7 +57,7 @@ class WordHelper
      *
      * @return string
      */
-    public static function showLengthByMillimeters($lengthMm)
+    public static function showLengthByMillimeters(float $lengthMm): string
     {
         return static::numberFormat($lengthMm / 10, 1, true) . ' см';
     }
@@ -70,44 +65,44 @@ class WordHelper
     /**
      * Форматированный вывод чиел, с возможностью удаления незначащих нулей и с округлением до нужной точности
      *
-     * @param      $number
+     * @param  float|int    $number
      * @param int  $decimals
      *
      * @param bool $delEndNull
      *
      * @return string
      */
-    public static function numberFormat($number, $decimals = 2, $delEndNull = false)
+    public static function numberFormat($number, int $decimals = 2, bool $delEndNull = false): string
     {
-        $number = number_format($number, $decimals, '.', ' ');
+        $res = number_format($number, $decimals, '.', ' ');
         if ($delEndNull) {
-            $number = rtrim($number, '0');
-            $number = rtrim($number, '.');
+            $res = rtrim($res, '0');
+            $res = rtrim($res, '.');
         }
-        return $number;
+        return $res;
     }
 
     /**
      * Очистка текста от примесей(тегов, лишних спец. символов)
      *
-     * @param $string
+     * @param string $string
      *
      * @return mixed
      */
-    public static function clear($string)
+    public static function clear(string $string)
     {
         return str_replace(["\r", PHP_EOL], '', strip_tags(html_entity_decode($string)));
     }
 
     /**
-     * @param $size
+     * @param float|int $size
      *
      * @return string
      */
-    public static function formatSize($size)
+    public static function formatSize($size): string
     {
-        $fileSizeName = [" Bytes", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB"];
+        $fileSizeName = [' Bytes', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB'];
         $i = (int)floor(log($size, 1024));
-        return $size ? round($size / pow(1024, $i), 2) . $fileSizeName[$i] : '0 ' . $fileSizeName[0];
+        return $size ? round($size / (1024 ** $i), 2) . $fileSizeName[$i] : '0 ' . $fileSizeName[0];
     }
 }

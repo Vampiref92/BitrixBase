@@ -6,16 +6,26 @@ use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Engine\CurrentUser;
 use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
+use CForm;
+use CFormAnswer;
+use CFormField;
+use CFormResult;
+use CFormStatus;
 use Vf92\BitrixUtils\Config\Version;
 use Vf92\BitrixUtils\Constructor\EntityConstructor;
-use Vf92\BitrixUtils\Form\Exception\FileSaveException;
-use Vf92\BitrixUtils\Form\Exception\FileSizeException;
-use Vf92\BitrixUtils\Form\Exception\FileTypeException;
+use Vf92\BitrixUtils\Exceptions\Config\VersionException;
+use Vf92\BitrixUtils\Exceptions\File\FileSaveException;
+use Vf92\BitrixUtils\Exceptions\File\FileSizeException;
+use Vf92\BitrixUtils\Exceptions\File\FileTypeException;
+use Vf92\BitrixUtils\Exceptions\Form\FormNotFoundException;
+use function filter_var;
+use function in_array;
 
 /**
  * Class FormHelper
  *
  * @package Vf92\BitrixUtils\Helpers
+ * @todo переписать
  */
 class FormHelper
 {
@@ -28,18 +38,23 @@ class FormHelper
      * @throws ArgumentException
      * @throws ObjectPropertyException
      * @throws SystemException
+     * @throws VersionException
+     * @throws FormNotFoundException
      */
-    public static function getIdByCode($code)
+    public static function getIdByCode(string $code): int
     {
         $dataManager = EntityConstructor::compileEntityDataClass('Form', 'b_form');
         $query = $dataManager::query();
         $query->setSelect(['ID']);
-        if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-            $query->where('SID', $code);
-        } else {
-            $query->setFilter(['=SID' => $code]);
+        if (Version::getInstance()->isVersionLessThan('18.0.4')) {
+            throw new VersionException();
         }
-        return !empty($code) ? (int)$query->exec()->fetch()['ID'] : 0;
+        $query->where('SID', $code);
+        $item = $query->exec()->fetchObject();
+        if ($item === null) {
+            throw new FormNotFoundException();
+        }
+        return !empty($code) ? $item->getId() : 0;
     }
 
     /**
@@ -50,7 +65,7 @@ class FormHelper
      *
      * @return bool
      */
-    public static function checkRequiredFields(array $fields, array $requireFields = [])
+    public static function checkRequiredFields(array $fields, array $requireFields = []): bool
     {
         /** @todo использовать в классе нормальные валидаторы */
         foreach ($requireFields as $requiredField) {
@@ -59,7 +74,6 @@ class FormHelper
                 break;
             }
         }
-
         return true;
     }
 
@@ -70,9 +84,9 @@ class FormHelper
      *
      * @return bool
      */
-    public static function validEmail($email)
+    public static function validEmail(string $email): bool
     {
-        return \filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
 
     /**
@@ -82,14 +96,12 @@ class FormHelper
      *
      * @return bool
      */
-    public static function addResult(array $data)
+    public static function addResult(array $data): bool
     {
         if (isset($data['MAX_FILE_SIZE'])) {
             unset($data['MAX_FILE_SIZE']);
         }
-
         $webFormId = (int)$data['WEB_FORM_ID'];
-
         if (isset($data['g-recaptcha-response'])) {
             unset($data['g-recaptcha-response']);
         }
@@ -99,34 +111,30 @@ class FormHelper
             $userID = (int)CurrentUser::get()->getId();
         }
         unset($data['web_form_submit'], $data['WEB_FORM_ID']);
-
-        $formResult = new \CFormResult();
+        $formResult = new CFormResult();
         $resultId = (int)$formResult->Add($webFormId, $data, 'N', $userID > 0 ? $userID : false);
-
         if ($resultId) {
             $formResult->Mail($resultId);
         }
-
         return $resultId > 0;
     }
 
     /**
      * Сохранение файла
      *
-     * @param $fileCode
-     * @param $fileSizeMb
+     * @param string $fileCode
+     * @param float|int $fileSizeMb
      * @param $valid_types
      *
-     * @throws FileSaveException
-     * @throws FileSizeException
-     * @throws FileTypeException
      * @return array
+     * @throws FileSizeException
+     * @throws FileSaveException
+     * @throws FileTypeException
      */
-    public static function saveFile($fileCode, $fileSizeMb, array $valid_types)
+    public static function saveFile(string $fileCode, $fileSizeMb, array $valid_types): array
     {
         if (!empty($_FILES[$fileCode])) {
             $max_file_size = $fileSizeMb * 1024 * 1024;
-
             $file = $_FILES[$fileCode];
             if (is_uploaded_file($file['tmp_name'])) {
                 $filename = $file['tmp_name'];
@@ -135,14 +143,12 @@ class FormHelper
                 if (filesize($filename) > $max_file_size) {
                     throw new FileSizeException('Файл не должен быть больше ' . $fileSizeMb . 'Мб');
                 }
-                if (!\in_array($ext, $valid_types, true)) {
-                    throw new FileTypeException(
-                        'Разрешено загружать файлы только с расширениями ' . implode(' ,', $valid_types)
-                    );
+                if (!in_array($ext, $valid_types, true)) {
+                    throw new FileTypeException('Разрешено загружать файлы только с расширениями ' . implode(' ,',
+                            $valid_types));
                 }
                 return $file;
             }
-
             switch ($file['error']) {
                 case UPLOAD_ERR_INI_SIZE:
                 case UPLOAD_ERR_FORM_SIZE:
@@ -152,7 +158,6 @@ class FormHelper
                     throw new FileSaveException('Произошла ошибка при сохранении файла, попробуйте позже');
             }
         }
-
         return [];
     }
 
@@ -161,7 +166,7 @@ class FormHelper
      *
      * @param $form
      */
-    public static function addForm(array $form)
+    public static function addForm(array $form): void
     {
         $questions = [];
         if (isset($form['QUESTIONS'])) {
@@ -178,8 +183,7 @@ class FormHelper
             $statuses = $form['STATUSES'];
             unset($form['STATUSES']);
         }
-        $formId = (int)\CForm::Set($form);
-
+        $formId = (int)CForm::Set($form);
         if ($formId > 0) {
             if (!empty($statuses)) {
                 static::addStatuses($formId, $statuses);
@@ -199,10 +203,10 @@ class FormHelper
      * @param int   $formId
      * @param array $statuses
      */
-    public static function addStatuses($formId, array $statuses)
+    public static function addStatuses(int $formId, array $statuses): void
     {
         if ($formId > 0 && !empty($statuses)) {
-            $obFormStatus = new \CFormStatus();
+            $obFormStatus = new CFormStatus();
             foreach ($statuses as $status) {
                 $status['FORM_ID'] = $formId;
                 $obFormStatus->Set($status);
@@ -216,10 +220,10 @@ class FormHelper
      * @param int   $formId
      * @param array $questions
      */
-    public static function addQuestions($formId, array $questions)
+    public static function addQuestions(int $formId, array $questions): void
     {
         if ($formId > 0 && !empty($questions)) {
-            $obFormField = new \CFormField();
+            $obFormField = new CFormField();
             foreach ($questions as $question) {
                 $answers = [];
                 if (isset($question['ANSWERS'])) {
@@ -241,10 +245,10 @@ class FormHelper
      * @param array $answers
      * @param int   $questionId
      */
-    public static function addAnswers($questionId, array $answers)
+    public static function addAnswers(int $questionId, array $answers): void
     {
         if ($questionId > 0 && !empty($answers)) {
-            $obFormAnswer = new \CFormAnswer();
+            $obFormAnswer = new CFormAnswer();
             foreach ($answers as $answer) {
                 $answer['FIELD_ID'] = $questionId;
                 $obFormAnswer->Set($answer);
@@ -258,27 +262,27 @@ class FormHelper
      * @param int    $formId
      * @param string $createEmail
      */
-    public static function addMailTemplate($formId, $createEmail = 'N')
+    public static function addMailTemplate(int $formId, $createEmail = 'N'): void
     {
         if ($createEmail === 'Y') {
-            $arTemplates = \CForm::SetMailTemplate($formId, 'Y');
-            \CForm::Set(['arMAIL_TEMPLATE' => $arTemplates], $formId);
+            $arTemplates = CForm::SetMailTemplate($formId, 'Y');
+            CForm::Set(['arMAIL_TEMPLATE' => $arTemplates], $formId);
         }
     }
 
     /**
      * Удаление формы
      *
-     * @param $sid
+     * @param string $sid
      */
-    public static function deleteForm($sid)
+    public static function deleteForm(string $sid): void
     {
         $by = 'ID';
         $order = 'ASC';
         $isFiltered = false;
-        $res = \CForm::GetList($by, $order, ['SID' => $sid], $isFiltered);
+        $res = CForm::GetList($by, $order, ['SID' => $sid], $isFiltered);
         while ($item = $res->Fetch()) {
-            \CForm::Delete($item['ID']);
+            CForm::Delete($item['ID']);
         }
     }
 
@@ -290,7 +294,7 @@ class FormHelper
      *
      * @return array
      */
-    public static function getRealNamesFields($formId, array $fields = [])
+    public static function getRealNamesFields(int $formId, array $fields = []): array
     {
         $params = [
             'formId' => $formId,
@@ -302,21 +306,7 @@ class FormHelper
         $originalNames = [];
         if (!empty($items)) {
             foreach ($items as $item) {
-                if (!empty($fields) && \in_array($item['SID'], $fields, true)) {
-                    switch ($item['FIELD_TYPE']) {
-                        case 'radio':
-                        case 'dropdown':
-                            $postfix = $item['SID'];
-                            break;
-                        case 'checkbox':
-                        case 'multiselect':
-                            $postfix = $item['SID'] . '[]';
-                            break;
-                        default:
-                            $postfix = $item['ANSWER_ID'];
-                    }
-                    $originalNames[$item['SID']] = 'form_' . $item['FIELD_TYPE'] . '_' . $postfix;
-                } elseif (empty($fields)) {
+                if (empty($item['FIELD_TYPE']) || (!empty($fields) && in_array($item['SID'], $fields, true))) {
                     switch ($item['FIELD_TYPE']) {
                         case 'radio':
                         case 'dropdown':
@@ -333,7 +323,6 @@ class FormHelper
                 }
             }
         }
-
         return $originalNames;
     }
 
@@ -344,7 +333,7 @@ class FormHelper
      *
      * @return array
      */
-    public static function getQuestions(array $params)
+    public static function getQuestions(array $params): array
     {
         if ((int)$params['formId'] === 0) {
             return [];
@@ -364,11 +353,11 @@ class FormHelper
         if (!empty($params['type'])) {
             $filter = $params['type'];
         }
-        $obFormField = new \CFormField();
+        $obFormField = new CFormField();
         $isFiltered = false;
         $res = $obFormField->GetList($formId, $type, $by, $order, $filter, $isFiltered);
         $items = [];
-        $obAnswer = new \CFormAnswer();
+        $obAnswer = new CFormAnswer();
         while ($item = $res->Fetch()) {
             $isFilteredAnswer = false;
             $resAnswer = $obAnswer->GetList($item['ID'], $by, $order, ['ACTIVE' => 'Y'], $isFilteredAnswer);
@@ -384,7 +373,6 @@ class FormHelper
             }
             $items[] = $item;
         }
-
         return $items;
     }
 }

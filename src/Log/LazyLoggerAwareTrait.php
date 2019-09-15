@@ -2,6 +2,7 @@
 
 namespace Vf92\Log;
 
+use Exception;
 use Vf92\MiscUtils\MiscUtils;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
@@ -35,7 +36,7 @@ trait LazyLoggerAwareTrait
 
     /**
      * @return LoggerInterface
-     * @throws RuntimeException
+     * @throws Exception
      */
     public function log()
     {

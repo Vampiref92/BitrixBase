@@ -2,21 +2,41 @@
 
 namespace Vf92\BitrixUtils\Config;
 
-
 use Bitrix\Main\ModuleManager;
+use CUpdateClient;
+use function array_key_exists;
+use function count;
+use function explode;
+use function is_array;
+use function is_string;
 
+/**
+ * Class Version
+ * @package Vf92\BitrixUtils\Config
+ */
 class Version
 {
+    /**
+     * @var static
+     */
     private static $instance;
+    /**
+     * @var string
+     */
     private $redaction;
+    /**
+     * @var string
+     */
     private $moduleVersion;
 
-    public static function getInstance()
+    /**
+     * @return Version
+     */
+    public static function getInstance(): Version
     {
         if (self::$instance === null) {
             self::$instance = new self();
         }
-
         return self::$instance;
     }
 
@@ -24,7 +44,7 @@ class Version
      * Возвращает редакцию сайта на русском
      * @return string
      */
-    public function getProductRedaction()
+    public function getProductRedaction(): string
     {
         if ($this->redaction === null) {
             if (!defined('HELP_FILE')) {
@@ -32,9 +52,9 @@ class Version
             }
             require_once $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/classes/general/update_client.php';
             $errorMessage = '';
-            $arUpdateList = \CUpdateClient::GetUpdatesList($errorMessage);
+            $arUpdateList = CUpdateClient::GetUpdatesList($errorMessage);
             if (empty($errorMessage)) {
-                if (\is_array($arUpdateList) && \array_key_exists('CLIENT', $arUpdateList)) {
+                if (is_array($arUpdateList) && array_key_exists('CLIENT', $arUpdateList)) {
                     $this->redaction = (string)$arUpdateList['CLIENT'][0]['@']['LICENSE'];
                 }
             }
@@ -51,7 +71,7 @@ class Version
      *
      * @return bool
      */
-    public function isVersionMoreThan($version, $curVersion = null)
+    public function isVersionMoreThan($version, $curVersion = null): bool
     {
         if ($curVersion === null) {
             $curVersion = $this->getProductVersion();
@@ -65,7 +85,7 @@ class Version
      *
      * @return bool
      */
-    public function isVersionMoreEqualThan($version, $curVersion = null)
+    public function isVersionMoreEqualThan($version, $curVersion = null): bool
     {
         if ($curVersion === null) {
             $curVersion = $this->getProductVersion();
@@ -79,7 +99,7 @@ class Version
      *
      * @return bool
      */
-    public function isVersionLessThan($version, $curVersion = null)
+    public function isVersionLessThan($version, $curVersion = null): bool
     {
         if ($curVersion === null) {
             $curVersion = $this->getProductVersion();
@@ -93,7 +113,7 @@ class Version
      *
      * @return bool
      */
-    public function isVersionLessEqualThan($version, $curVersion = null)
+    public function isVersionLessEqualThan($version, $curVersion = null): bool
     {
         if ($curVersion === null) {
             $curVersion = $this->getProductVersion();
@@ -107,7 +127,7 @@ class Version
      *
      * @return bool
      */
-    public function isEqual($curVersion, $version)
+    public function isEqual($curVersion, $version): bool
     {
         return $curVersion === $version;
     }
@@ -119,11 +139,11 @@ class Version
      *
      * @return bool
      */
-    public function matchVersions($curVersion, $version, $operation = '>=')
+    public function matchVersions($curVersion, $version, $operation = '>='): bool
     {
-        $explodeList = \explode('.', $curVersion);
+        $explodeList = explode('.', $curVersion);
         $this->prepareVersion($explodeList);
-        $explodeCompareList = \explode('.', $version);
+        $explodeCompareList = explode('.', $version);
         $this->prepareVersion($explodeCompareList);
         $res1 = $this->compareVal($curVersion[0], $version[0], $operation);
         if ($res1 < 0) {
@@ -148,16 +168,21 @@ class Version
      * Возвращает версию главного модуля
      * @return string
      */
-    public function getProductVersion()
+    public function getProductVersion(): string
     {
         return $this->getModuleVersion('main');
     }
 
+    /**
+     * @param $module
+     *
+     * @return mixed
+     */
     public function getModuleVersion($module)
     {
         if (!isset($this->moduleVersion[$module])) {
             $res = ModuleManager::getVersion($module);
-            $this->moduleVersion[$module] = \is_string($res) ? $res : 'undefined';
+            $this->moduleVersion[$module] = is_string($res) ? $res : 'undefined';
         }
         return $this->moduleVersion[$module];
     }
@@ -165,13 +190,13 @@ class Version
     /**
      * @param array $explodeList
      */
-    protected function prepareVersion(&$explodeList)
+    protected function prepareVersion(&$explodeList): void
     {
         foreach ($explodeList as &$item) {
             $item = (int)$item;
         }
         unset($item);
-        $count = \count($explodeList);
+        $count = count($explodeList);
         if ($count < 3) {
             for ($i = $count; $i <= 3; $i++) {
                 $explodeList[$i] = 0;
@@ -186,7 +211,7 @@ class Version
      *
      * @return int
      */
-    protected function compareVal($val1, $val2, $operator)
+    protected function compareVal($val1, $val2, $operator): int
     {
         if ($val1 === $val2) {
             return 0;

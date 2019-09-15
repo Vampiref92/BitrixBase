@@ -2,12 +2,16 @@
 
 namespace Vf92\BitrixUtils\Orm\Model;
 
+use Bitrix\Main\ArgumentException;
 use Bitrix\Main\ArgumentNullException;
 use Bitrix\Main\ArgumentOutOfRangeException;
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\FileTable;
-use Vf92\BitrixUtils\Orm\Model\Exceptions\FileNotFoundException;
-use Vf92\BitrixUtils\Orm\Model\Interfaces\FileInterface;
+use Bitrix\Main\ObjectPropertyException;
+use Bitrix\Main\SystemException;
+use Vf92\BitrixUtils\Exceptions\File\FileNotFoundException;
+use Vf92\BitrixUtils\Interfaces\Orm\Model\File\ActiveReadModelInterface;
+use Vf92\BitrixUtils\Interfaces\Orm\Model\File\FileInterface;
 
 /**
  * Class File
@@ -35,10 +39,11 @@ class File implements FileInterface
     {
         if ($fields['src']) {
             $this->setSrc($fields['src']);
-        } else if ($fields['SRC']) {
-            $this->setSrc($fields['SRC']);
+        } else {
+            if ($fields['SRC']) {
+                $this->setSrc($fields['SRC']);
+            }
         }
-        
         $this->fields = $fields;
     }
 
@@ -47,40 +52,33 @@ class File implements FileInterface
      *
      * @return static
      * @throws FileNotFoundException
-     * @throws \Bitrix\Main\ArgumentException
-     * @throws \Bitrix\Main\ObjectPropertyException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
      */
-    public static function createFromPrimary($primary)
+    public static function createFromPrimary($primary):ActiveReadModelInterface
     {
         $fields = FileTable::getById($primary)->fetch();
-
         if (!$fields) {
             throw new FileNotFoundException(sprintf('File with id %s is not found', $primary));
         }
-
         return new static($fields);
     }
 
     /**
      * @return string
      */
-    public function getSrc()
+    public function getSrc():string
     {
         if ($this->src === null) {
             try {
-                $src = sprintf(
-                    '/%s/%s/%s',
-                    Option::get('main', 'upload_dir', 'upload'),
-                    $this->getSubDir(),
-                    $this->getFileName()
-                );
+                $src = sprintf('/%s/%s/%s', Option::get('main', 'upload_dir', 'upload'), $this->getSubDir(),
+                    $this->getFileName());
                 $this->setSrc($src);
             } catch (ArgumentNullException $e) {
             } catch (ArgumentOutOfRangeException $e) {
             }
         }
-
         return $this->src;
     }
 
@@ -89,17 +87,16 @@ class File implements FileInterface
      *
      * @return static
      */
-    protected function setSrc($src)
+    protected function setSrc(string $src): File
     {
         $this->src = $src;
-
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getSubDir()
+    public function getSubDir():string
     {
         return (string)$this->fields['SUBDIR'];
     }
@@ -107,7 +104,7 @@ class File implements FileInterface
     /**
      * @return string
      */
-    public function getFileName()
+    public function getFileName():string
     {
         return (string)$this->fields['FILE_NAME'];
     }
@@ -115,7 +112,7 @@ class File implements FileInterface
     /**
      * @return int
      */
-    public function getId()
+    public function getId():int
     {
         return (int)$this->fields['ID'];
     }
@@ -131,7 +128,7 @@ class File implements FileInterface
     /**
      * @return array
      */
-    public function getFields()
+    public function getFields():array
     {
         return $this->fields;
     }

@@ -1,5 +1,7 @@
 <?php namespace Vf92\BitrixUtils\Path;
 
+use function defined;
+
 /**
  * Class MainTemplate
  *
@@ -12,7 +14,7 @@ class MainTemplate extends TemplateAbstract
     /**
      * @return bool
      */
-    public function isIndex()
+    public function isIndex(): bool
     {
         return $this->isPage('/');
     }
@@ -22,9 +24,9 @@ class MainTemplate extends TemplateAbstract
      *
      * @return bool
      */
-    public function is404()
+    public function is404(): bool
     {
-        return \defined('ERROR_404') && ERROR_404 === 'Y';
+        return defined('ERROR_404') && ERROR_404 === 'Y';
     }
 
     /**
@@ -32,62 +34,92 @@ class MainTemplate extends TemplateAbstract
      *
      * @return bool
      */
-    public function isForbidden()
+    public function isForbidden(): bool
     {
         /**
          * It's bitrix way
          */
         global $USER;
 
-        return \defined('NEED_AUTH') && NEED_AUTH === true && !$USER->IsAuthorized();
+        return defined('NEED_AUTH') && NEED_AUTH === true && !$USER->IsAuthorized();
     }
 
-    public function isCatalog()
+    /**
+     * @return bool
+     */
+    public function isCatalog(): bool
     {
         return $this->isDir('/catalog');
     }
 
-    public function isCatalogPage()
+    /**
+     * @return bool
+     */
+    public function isCatalogPage(): bool
     {
         return $this->isPartitionDir('/catalog');
     }
 
-    public function hasCatalogPage()
+    /**
+     * @return bool
+     */
+    public function hasCatalogPage(): bool
     {
         return $this->isCatalog() || $this->isCatalogPage();
     }
 
-    public function isPersonal()
+    /**
+     * @return bool
+     */
+    public function isPersonal(): bool
     {
         return $this->isDir('/personal');
     }
 
-    public function isPersonalPage()
+    /**
+     * @return bool
+     */
+    public function isPersonalPage(): bool
     {
         return $this->isPartitionDir('/personal');
     }
 
-    public function hasPersonalPage()
+    /**
+     * @return bool
+     */
+    public function hasPersonalPage(): bool
     {
         return ($this->isPersonal() || ($this->isPersonalPage() && !$this->isBasket() && !$this->isOrder() && !$this->isFavorite() && !$this->isCompare()));
     }
 
-    public function isBasket()
+    /**
+     * @return bool
+     */
+    public function isBasket(): bool
     {
         return $this->isDir('/personal/cart');
     }
 
-    public function isOrder()
+    /**
+     * @return bool
+     */
+    public function isOrder(): bool
     {
         return $this->isDir('/personal/order/make');
     }
 
-    public function isCompare()
+    /**
+     * @return bool
+     */
+    public function isCompare(): bool
     {
         return $this->isDir('/personal/compare');
     }
 
-    public function isFavorite()
+    /**
+     * @return bool
+     */
+    public function isFavorite(): bool
     {
         return $this->isDir('/personal/favorite');
     }

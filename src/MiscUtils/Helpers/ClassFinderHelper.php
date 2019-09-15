@@ -1,6 +1,10 @@
 <?php
 namespace Vf92\MiscUtils\Helpers;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RecursiveRegexIterator;
+use RegexIterator;
 
 /**
  * Class ClassFinderHelper
@@ -15,13 +19,13 @@ class ClassFinderHelper
      *
      * @return array
      */
-    public static function getClasses($findNamespace = '', $findDir = '/')
+    public static function getClasses(string $findNamespace = '', string $findDir = '/'): array
     {
         if($findDir === '/'){
             $findDir = $_SERVER['DOCUMENT_ROOT'].'/';
         }
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($findDir));
-        $regex = new \RegexIterator($iterator, '/^.+\.php$/i', \RecursiveRegexIterator::GET_MATCH);
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($findDir));
+        $regex = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
         $classes = [];
         foreach ($regex as $file => $value) {
             $current = static::parseTokens(token_get_all(file_get_contents(str_replace('\\', '/', $file))));
@@ -43,18 +47,48 @@ class ClassFinderHelper
         return $classes;
     }
 
-    public static function getClassByFile($pathToFile)
+    /**
+     * @param string $pathToFile
+     *
+     * @return string|null
+     */
+    public static function getClassByFile(string $pathToFile): ?string
     {
         return shell_exec("php -r \"include('$pathToFile'); echo end(get_declared_classes());\"");
     }
 
-    public static function getClassByFileInclude($pathToFile)
+    /**
+     * @param string $pathToFile
+     *
+     * @return mixed
+     */
+    public static function getClassByFileInclude(string $pathToFile)
     {
         include_once($pathToFile);
         return end(get_declared_classes());
     }
 
 
+    /**
+     * @param array $tokens
+     *
+     * @return array|bool
+     */
+    /**
+     * @param array $tokens
+     *
+     * @return array|bool
+     */
+    /**
+     * @param array $tokens
+     *
+     * @return array|bool
+     */
+    /**
+     * @param array $tokens
+     *
+     * @return array|bool
+     */
     private static function parseTokens(array $tokens)
     {
         $nsStart = false;

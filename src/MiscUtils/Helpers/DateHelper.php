@@ -10,19 +10,19 @@ namespace Vf92\MiscUtils\Helpers;
 class DateHelper
 {
     /** именительный падеж */
-    const NOMINATIVE = 'Nominative';
+    public const NOMINATIVE = 'Nominative';
 
     /** родительный падеж */
-    const GENITIVE = 'Genitive';
+    public const GENITIVE = 'Genitive';
 
     /** именительный падеж короткий*/
-    const SHORT_NOMINATIVE = 'ShortNominative';
+    public const SHORT_NOMINATIVE = 'ShortNominative';
 
     /** родительный падеж короткий */
-    const SHORT_GENITIVE = 'ShortGenitive';
+    public const SHORT_GENITIVE = 'ShortGenitive';
 
     /** дательный падеж множ. число */
-    const DATIVE_PLURAL = 'DativePlural';
+    public const DATIVE_PLURAL = 'DativePlural';
 
     /**Месяца в родительном падеже*/
     protected static $monthGenitive = [
@@ -132,7 +132,7 @@ class DateHelper
      *
      * @return string
      */
-    public static function replaceRuMonth($date, $case = 'Nominative', $lower = false)
+    public static function replaceRuMonth(string $date, string $case = 'Nominative', bool $lower = false): string
     {
         $res = static::replaceStringByArray(
             [
@@ -158,7 +158,7 @@ class DateHelper
      *
      * @return string
      */
-    public static function replaceRuDayOfWeek($date, $case = 'Nominative')
+    public static function replaceRuDayOfWeek(string $date, string $case = 'Nominative'): string
     {
         return static::replaceStringByArray(
             [
@@ -170,7 +170,12 @@ class DateHelper
         );
     }
 
-    protected static function replaceStringByArray(array $params)
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
+    protected static function replaceStringByArray(array $params):string
     {
         preg_match($params['pattern'], $params['date'], $matches);
         if (!empty($matches[0]) && !empty($params['case'])) {

@@ -2,8 +2,8 @@
 
 namespace Vf92\BitrixUtils\Orm\Model;
 
-use Cfile;
-use Vf92\BitrixUtils\Orm\Model\Interfaces\ImageInterface;
+use CFile;
+use Vf92\BitrixUtils\Interfaces\Orm\Model\File\ImageInterface;
 use Vf92\Enum\MediaEnum;
 
 /**
@@ -33,26 +33,37 @@ class Image extends File implements ImageInterface
      */
     public function __construct(array $fields = [])
     {
-        if (!empty($fields['width'])){
-            $fields['WIDTH']=$fields['width'];
+        if (!empty($fields['width'])) {
+            $fields['WIDTH'] = $fields['width'];
         }
-        if (!empty($fields['height'])){
-            $fields['HEIGHT']=$fields['height'];
+        if (!empty($fields['height'])) {
+            $fields['HEIGHT'] = $fields['height'];
         }
-        if(!empty($fields['WIDTH'])) {
+        if (!empty($fields['WIDTH'])) {
             $this->setWidth($fields['WIDTH']);
         }
-        if(!empty($fields['HEIGHT'])) {
+        if (!empty($fields['HEIGHT'])) {
             $this->setHeight($fields['HEIGHT']);
         }
-
         parent::__construct($fields);
+    }
+
+    /**
+     * @return Image
+     */
+    public static function getNoImage(): Image
+    {
+        return new static([
+            'src'    => MediaEnum::NO_IMAGE_WEB_PATH,
+            'width'  => MediaEnum::NO_IMAGE_WIDTH,
+            'height' => MediaEnum::NO_IMAGE_HEIGHT,
+        ]);
     }
 
     /**
      * @return int
      */
-    public function getWidth()
+    public function getWidth(): int
     {
         return (int)$this->width;
     }
@@ -62,17 +73,16 @@ class Image extends File implements ImageInterface
      *
      * @return static
      */
-    protected function setWidth($width)
+    protected function setWidth(int $width): Image
     {
-        $this->width = (int)$width;
-
+        $this->width = $width;
         return $this;
     }
 
     /**
      * @return int
      */
-    public function getHeight()
+    public function getHeight(): int
     {
         return (int)$this->height;
     }
@@ -82,10 +92,9 @@ class Image extends File implements ImageInterface
      *
      * @return static
      */
-    protected function setHeight($height)
+    protected function setHeight(int $height): Image
     {
-        $this->height = (int)$height;
-
+        $this->height = $height;
         return $this;
     }
 
@@ -95,9 +104,9 @@ class Image extends File implements ImageInterface
      *
      * @return Image
      */
-    public function getResizeImage($size, $resizeType = BX_RESIZE_IMAGE_PROPORTIONAL)
+    public function getResizeImage($size, $resizeType = BX_RESIZE_IMAGE_PROPORTIONAL): Image
     {
-        $resizedFile = Cfile::ResizeImageGet($this->getId(), $size, $resizeType, true);
+        $resizedFile = CFile::ResizeImageGet($this->getId(), $size, $resizeType, true);
         $fields = [
             'SRC'    => $resizedFile['src'],
             'WIDTH'  => $resizedFile['width'],
@@ -112,7 +121,7 @@ class Image extends File implements ImageInterface
     /**
      * @return Image|null
      */
-    public function getOriginal()
+    public function getOriginal(): ?Image
     {
         return $this->original;
     }
@@ -123,14 +132,5 @@ class Image extends File implements ImageInterface
     public function setOriginal(Image $original)
     {
         $this->original = $original;
-    }
-
-    public static function getNoImage()
-    {
-        return new static([
-            'src'    => MediaEnum::NO_IMAGE_WEB_PATH,
-            'width'  => MediaEnum::NO_IMAGE_WIDTH,
-            'height' => MediaEnum::NO_IMAGE_HEIGHT,
-        ]);
     }
 }

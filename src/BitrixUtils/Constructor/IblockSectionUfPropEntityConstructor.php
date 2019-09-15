@@ -4,6 +4,7 @@ namespace Vf92\BitrixUtils\Constructor;
 
 use Bitrix\Main;
 use Vf92\BitrixUtils\Config\Version;
+use Vf92\BitrixUtils\Exceptions\Config\VersionException;
 
 /**
  * Class IblockSectionUfPropEntityConstructor
@@ -11,83 +12,65 @@ use Vf92\BitrixUtils\Config\Version;
  */
 class IblockSectionUfPropEntityConstructor extends EntityConstructor
 {
-    const SINGLE_TYPE = 's';
-    const MULTIPLE_TYPE = 'm';
+    public const SINGLE_TYPE = 's';
+    public const MULTIPLE_TYPE = 'm';
 
     /**
      * @param int $iblockId
      *
      * @return Main\Entity\DataManager|string
      * @throws Main\SystemException
+     * @throws VersionException
      */
-    public static function getDataClass($iblockId)
+    public static function getDataClass(int $iblockId)
     {
         return static::getBaseDataClass($iblockId, static::SINGLE_TYPE);
     }
 
     /**
-     * @param $iblockId
+     * @param int $iblockId
      *
      * @return Main\Entity\DataManager|string
      * @throws Main\SystemException
-     * @throws Main\ArgumentException
+     * @throws VersionException
      */
-    public static function getMultipleDataClass($iblockId)
+    public static function getMultipleDataClass(int $iblockId)
     {
         $additionalFields = [];
-        if (Version::getInstance()->isVersionMoreEqualThan('18')) {
-            $additionalFields[] = '(new Main\ORM\Fields\Relations\Reference(
+        if (Version::getInstance()->isVersionLessThan('18.0.4')) {
+            throw new VersionException();
+        }
+        $additionalFields[] = '(new Main\ORM\Fields\Relations\Reference(
                 \'USER_FIELD\',
                 \Bitrix\Main\UserFieldTable::getEntity(),
                 Main\Entity\Query\Join::on(\'this.FIELD_ID\', \'ref.ID\')
             ))->configureJoinType(\'inner\')';
-        } else {
-            $referenceFilter = '[\'=this.FIELD_ID\' => \'ref.ID\']';
-            if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                $referenceFilter = 'Main\Entity\Query\Join::on(\'this.FIELD_ID\', \'ref.ID\')';
-            }
-            $additionalFields[] = 'new Main\Entity\ReferenceField(
-                \'USER_FIELD\',
-                \Bitrix\Main\UserFieldTable::getEntity(),
-                ' . $referenceFilter . '
-            )';
-        }
-
         return static::getBaseDataClass($iblockId, static::MULTIPLE_TYPE, $additionalFields);
     }
 
     /**
-     * @param        $iblockId
+     * @param int    $iblockId
      * @param string $type
      *
      * @param array  $additionalFields
      *
      * @return Main\Entity\DataManager|string
      * @throws Main\SystemException
+     * @throws VersionException
      */
-    protected static function getBaseDataClass($iblockId, $type = 's', array $additionalFields = [])
+    protected static function getBaseDataClass(int $iblockId, string $type = 's', array $additionalFields = [])
     {
         $className = 'Ut' . ToLower($type) . 'Iblock' . $iblockId . 'Section';
         $tableName = 'b_ut' . ToLower($type) . '_iblock_' . $iblockId . '_section';
-
         $additionalFieldsBase = [];
-        if (Version::getInstance()->isVersionMoreEqualThan('18')) {
-            $additionalFieldsBase[] = '(new Main\ORM\Fields\Relations\Reference(
+        if (Version::getInstance()->isVersionLessThan('18.0.4')) {
+            throw new VersionException();
+        }
+        $additionalFieldsBase[] = '(new Main\ORM\Fields\Relations\Reference(
                 \'SECTION\',
                 \Bitrix\Iblock\SectionTable::getEntity(),
                 Main\Entity\Query\Join::on(\'this.VALUE_ID\', \'ref.ID\')
             ))->configureJoinType(\'inner\')';
-        } else {
-            $referenceFilter = '[\'=this.VALUE_ID\' => \'ref.ID\']';
-            if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                $referenceFilter = 'Main\Entity\Query\Join::on(\'this.VALUE_ID\', \'ref.ID\')';
-            }
-            $additionalFieldsBase[] = 'new Main\Entity\ReferenceField(
-                \'SECTION\',
-                \Bitrix\Iblock\SectionTable::getEntity(),
-                ' . $referenceFilter . '
-            )';
-        }
         $additionalFields = array_merge($additionalFieldsBase, $additionalFields);
         return parent::compileEntityDataClass($className, $tableName, $additionalFields);
     }

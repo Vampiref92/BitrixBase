@@ -16,13 +16,13 @@ class JsonResponse extends BaseJsonResponse
     /**
      * @param string $message
      * @param bool $success
-     * @param array $data
+     * @param array|null $data
      * @param array $options
      * @see \Vf92\MiscUtils\Response\Model\JsonContent
      *
      * @return JsonContent
      */
-    public static function buildContent($message = '', $success = true, $data = null, array $options = [])
+    public static function buildContent(string $message = '', bool $success = true, ?array $data = null, array $options = []): JsonContent
     {
         $content = new JsonContent($message, $success, $data);
 

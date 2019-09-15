@@ -1,6 +1,9 @@
 <?php namespace Vf92\BitrixUtils\Config;
 
 use Vf92\MiscUtils\MiscUtils;
+use function is_bool;
+use function is_numeric;
+use function is_string;
 
 /**
  * Class Dbconn
@@ -9,9 +12,9 @@ use Vf92\MiscUtils\MiscUtils;
 class Dbconn
 {
     /**
-     * @param $list
+     * @param array $list
      */
-    public static function save($list)
+    public static function save(array $list): void
     {
         $content = '';
         if (!empty($list['db'])) {
@@ -68,7 +71,7 @@ class Dbconn
     /**
      * @return array
      */
-    public static function get()
+    public static function get(): array
     {
         return static::parse();
     }
@@ -76,7 +79,7 @@ class Dbconn
     /**
      * @return string
      */
-    protected static function getFileContent()
+    protected static function getFileContent(): string
     {
         $file = (string)file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/bitrix/php_interface/dbconn.php');
         $file = (string)str_replace(['<?php', '<?', '?>'], '', $file);
@@ -86,7 +89,7 @@ class Dbconn
     /**
      * @return array
      */
-    protected static function parse()
+    protected static function parse(): array
     {
         $file = static::getFileContent();
         if (empty($file)) {
@@ -95,7 +98,6 @@ class Dbconn
 
         $defineList = [];
         $dbList = [];
-        $umask = '';
         $custom = [];
 
         $res = preg_match_all('/if\s?\(.*\)\s?{.*}(\r\n|\n)?/is', $file, $customMatches);
@@ -128,7 +130,7 @@ class Dbconn
             $defineList = static::formatValues($defineList);
         }
 
-        $res = preg_match_all('/\$DB([^\s=]*)\s?=?\s?[\'"]?(true|false|\d|([^\'"]*))[\'"]?\;/im', $file, $dbMatches);
+        $res = preg_match_all('/\$DB([^\s=]*)\s?=?\s?[\'"]?(true|false|\d|([^\'"]*))[\'"]?;/im', $file, $dbMatches);
         if ($res !== false && !empty($dbMatches[1]) && !empty($dbMatches[2])) {
             $dbList = static::clearValues(array_combine(array_values($dbMatches[1]), array_values($dbMatches[2])));
         }
@@ -141,17 +143,17 @@ class Dbconn
         return [
             'define' => $defineList,
             'db'     => $dbList,
-            'umask'  => $umaskList,
+            'umask'  => $umaskList ?: [],
             'custom' => $custom,
         ];
     }
 
     /**
-     * @param $list
+     * @param array $list
      *
      * @return array
      */
-    protected static function clearValues($list)
+    protected static function clearValues(array $list): array
     {
         $result = [];
         foreach ($list as $key => $val) {
@@ -171,18 +173,18 @@ class Dbconn
         if ($val === 'true' || $val === 'false') {
             return MiscUtils::getBoolByStringBool($val);
         }
-        if (\is_numeric($val)) {
+        if (is_numeric($val)) {
             return (float)$val;
         }
         return (string)$val;
     }
 
     /**
-     * @param $list
+     * @param array $list
      *
      * @return array
      */
-    protected static function formatValues($list)
+    protected static function formatValues(array $list): array
     {
         $result = [];
         $list = self::clearValues($list);
@@ -207,27 +209,16 @@ class Dbconn
     }
 
     /**
-     * @param $list
+     * @param array $list
      *
      * @return string
      */
-    protected static function getStringDbContent($list)
+    protected static function getStringDbContent(array $list): string
     {
         $content = '';
         foreach ($list as $code => $value) {
             $content .= '$DB' . $code . ' = ';
-            $needQuote = false;
-            if (!\is_bool($value) && !\is_numeric($value) && \is_string($value)) {
-                $needQuote = true;
-                $content .= '\'';
-            }
-            if (\is_bool($value)) {
-                $value = MiscUtils::getStringBoolByBool($value);
-            }
-            $content .= (string)$value;
-            if ($needQuote) {
-                $content .= '\'';
-            }
+            $content = self::addFormattedContent($value, $content);
             $content .= ';' . PHP_EOL;
         }
         $content .= PHP_EOL;
@@ -235,31 +226,43 @@ class Dbconn
     }
 
     /**
-     * @param $list
+     * @param array $list
      *
      * @return string
      */
-    protected static function getStringDefineContent($list)
+    protected static function getStringDefineContent(array $list): string
     {
         $content = '';
         foreach ($list as $code => $value) {
             $content .= 'define(\'' . $code . '\' , ';
-            $needQuote = false;
-            if (!\is_bool($value) && !\is_numeric($value) && \is_string($value)) {
-                $needQuote = true;
-                $content .= '\'';
-            }
-            if (\is_bool($value)) {
-                $value = MiscUtils::getStringBoolByBool($value);
-            }
-            $content .= (string)$value;
-            if ($needQuote) {
-                $content .= '\'';
-            }
+            $content = self::addFormattedContent($value, $content);
             $content .= ');' . PHP_EOL;
         }
         $content .= PHP_EOL;
 
         return $content;
     }
+
+    /**
+     * @param        $value
+     * @param string $content
+     *
+     * @return string
+     */
+    protected static function addFormattedContent($value, string $content): string
+    {
+        $needQuote = false;
+        if (!is_bool($value) && !is_numeric($value) && is_string($value)) {
+            $needQuote = true;
+            $content .= '\'';
+        }
+        if (is_bool($value)) {
+            $value = MiscUtils::getStringBoolByBool($value);
+        }
+        $content .= (string)$value;
+        if ($needQuote) {
+            $content .= '\'';
+        }
+        return $content;
+}
 }

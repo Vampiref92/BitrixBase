@@ -10,25 +10,42 @@ use Vf92\MiscUtils\Helpers\WordHelper;
  */
 class CheckResources
 {
-    protected static $instance = null;
+    /**
+     * @var static|null
+     */
+    protected static $instance;
+    /**
+     * @var int
+     */
     protected $step = 1;
-    protected $resources;
-    protected $formattedResources;
-    protected $use;
+    /**
+     * @var array
+     */
+    protected $resources = [];
+    /**
+     * @var array
+     */
+    protected $formattedResources = [];
+    /**
+     * @var bool
+     */
+    protected $use = false;
 
     /**
-     * @return \Vf92\MiscUtils\Debug\CheckResources
+     * @return CheckResources
      */
-    public static function getInstance()
+    public static function getInstance(): CheckResources
     {
         if (static::$instance === null) {
             static::$instance = new static();
         }
-
         return static::$instance;
     }
 
-    public function setStep()
+    /**
+     * @return $this
+     */
+    public function setStep(): self
     {
         if ($this->use) {
             if (!isset($this->resources['START'])) {
@@ -49,7 +66,7 @@ class CheckResources
                 $differenceTime = $time - $this->resources['START']['TIME']['CURRENT'];
                 $this->formattedResources['STEP-' . $this->step] = [
                     'TIME'   => [
-                        'USED' => ($differenceTime/1000). 'с ['.$differenceTime.' мс]',
+                        'USED' => ($differenceTime / 1000) . 'с [' . $differenceTime . ' мс]',
                     ],
                     'MEMORY' => [
                         'CURRENT' => WordHelper::formatSize($memoryValue),
@@ -58,19 +75,19 @@ class CheckResources
                 ];
                 if ($this->step > 1) {
                     $lastStep = $this->step - 1;
-                    $this->formattedResources['STEP-' . $this->step]['TIME']['USED_INTERVAL_STEP'] =
-                        (($time - $this->resources['STEP-' . $lastStep]['TIME']['CURRENT'])/1000) . 'с';
-                    $this->formattedResources['STEP-' . $this->step]['MEMORY']['USED_INTERVAL_STEP'] =
-                        WordHelper::formatSize(
-                            $memoryValue - $this->resources['STEP-' . $lastStep]['MEMORY']['CURRENT']
-                        );
+                    $this->formattedResources['STEP-' . $this->step]['TIME']['USED_INTERVAL_STEP'] = (($time - $this->resources['STEP-' . $lastStep]['TIME']['CURRENT']) / 1000) . 'с';
+                    $this->formattedResources['STEP-' . $this->step]['MEMORY']['USED_INTERVAL_STEP'] = WordHelper::formatSize($memoryValue - $this->resources['STEP-' . $lastStep]['MEMORY']['CURRENT']);
                 }
                 $this->step++;
             }
         }
+        return $this;
     }
 
-    public function init()
+    /**
+     * @return $this
+     */
+    public function init(): self
     {
         if ($this->use) {
             if (!isset($this->resources['START'])) {
@@ -86,7 +103,7 @@ class CheckResources
                 ];
                 $this->formattedResources['START'] = [
                     'TIME'   => [
-                        'USED' => (string)0 . 'c',
+                        'USED' => 0 . 'c',
                     ],
                     'MEMORY' => [
                         'CURRENT' => WordHelper::formatSize($memoryValue),
@@ -94,41 +111,41 @@ class CheckResources
                 ];
             }
         }
+        return $this;
     }
 
     /**
      * @param bool $expand
      */
-    public function show($expand = true)
+    public function show(bool $expand = true): void
     {
         if ($this->use) {
             if (function_exists('pp')) {
                 pp($this->formattedResources, $expand);
             } else {
                 echo '<pre>';
-                print_r($this->formattedResources);
+                print_r($this->get());
                 echo '</pre>';
             }
         }
     }
 
     /**
-     * @return bool
+     * @return array
      */
-    public function get()
+    public function get(): array
     {
         if ($this->use) {
             return $this->formattedResources;
         }
-
-        return false;
+        return [];
     }
 
     /**
-     * @param bool $bUse
+     * @param bool $use
      */
-    public function setUse($bUse = true)
+    public function setUse(bool $use = true): void
     {
-        $this->use = $bUse;
+        $this->use = $use;
     }
 }

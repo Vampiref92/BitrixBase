@@ -10,7 +10,7 @@ use Bitrix\Main\UserTable;
 use CSite;
 use CUser;
 use Vf92\BitrixUtils\Constructor\EntityConstructor;
-use Vf92\BitrixUtils\User\Exception\GroupNotFoundException;
+use Vf92\BitrixUtils\Exceptions\User\GroupNotFoundException;
 
 /**
  * Class UserHelper
@@ -18,7 +18,10 @@ use Vf92\BitrixUtils\User\Exception\GroupNotFoundException;
  */
 class UserHelper
 {
-    static $curUser = null;
+    /**
+     * @var null
+     */
+    public static $curUser = null;
 
     /**
      * Проверяет вхождение пользователя в группу
@@ -32,7 +35,7 @@ class UserHelper
      * @throws SystemException
      * @throws GroupNotFoundException
      */
-    public static function isInGroup($groupStringId, $userId)
+    public static function isInGroup($groupStringId, $userId): bool
     {
         $userId = (int)$userId;
         $groupStringId = trim($groupStringId);
@@ -58,7 +61,7 @@ class UserHelper
      * @throws ObjectPropertyException
      * @throws SystemException
      */
-    public static function getLoginByHash($hash)
+    public static function getLoginByHash($hash): string
     {
         $hash = trim($hash);
         if (empty($hash)) {
@@ -86,7 +89,7 @@ class UserHelper
      *
      * @return string
      */
-    public static function getFullName($data, $format = null)
+    public static function getFullName($data, $format = null): string
     {
         if($format === null){
             $format = CSite::GetNameFormat();
@@ -96,5 +99,43 @@ class UserHelper
             true,
             true
         );
+    }
+
+    /**
+     * @param string $salt
+     * @param string $originalPassword
+     *
+     * @return string
+     */
+    public static function getPasswordHash(string $salt, string $originalPassword): string
+    {
+        return md5($salt . $originalPassword);
+    }
+
+    /**
+     * @param string $originalPassword
+     * @param string $salt
+     *
+     * @return string
+     */
+    public static function getPasswordToSave(string $originalPassword, string $salt = ''):string
+    {
+        if(empty($salt)) {
+            $salt = static::getPasswordSalt();
+        }
+        return $salt.static::getPasswordHash($salt, $originalPassword);
+    }
+
+    /**
+     * @return string
+     */
+    public static function getPasswordSalt(): string
+    {
+        return randString(8, array(
+            'abcdefghijklnmopqrstuvwxyz',
+            'ABCDEFGHIJKLNMOPQRSTUVWXYZ',
+            '0123456789',
+            ",.<>/?;:[]{}\\|~!@#\$%^&*()-_+=",
+        ));
     }
 }

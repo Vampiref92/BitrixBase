@@ -2,10 +2,12 @@
 
 namespace Vf92\BitrixUtils\Component;
 
-
-use Vf92\Log\LazyLoggerAwareTrait;
+use CBitrixComponent;
+use Exception;
 use Psr\Log\LoggerAwareInterface;
-use RuntimeException;
+use Vf92\Log\LazyLoggerAwareTrait;
+use function get_class;
+use function sprintf;
 
 /**
  * Class BaseBitrixComponent
@@ -14,7 +16,7 @@ use RuntimeException;
  *
  * @package Vf92\BitrixUtils
  */
-abstract class BaseBitrixComponent extends \CBitrixComponent implements LoggerAwareInterface
+abstract class BaseBitrixComponent extends CBitrixComponent implements LoggerAwareInterface
 {
     use LazyLoggerAwareTrait;
 
@@ -24,29 +26,20 @@ abstract class BaseBitrixComponent extends \CBitrixComponent implements LoggerAw
     protected $templatePage = '';
 
     /**
-     * @param $params
-     *
-     * @return array
+     * @inheritDoc
      */
     public function onPrepareComponentParams($params)
     {
-        $this->withLogName(
-            \sprintf(
-                'component_%s',
-                static::class
-            )
-        );
-
+        $this->withLogName(sprintf('component_%s', static::class));
         $params['return_result'] = $params['return_result'] === true || $params['return_result'] === 'Y';
-
         return parent::onPrepareComponentParams($params);
     }
 
     /**
      * {@inheritdoc}
      *
-     * @throws RuntimeException
      * @return null|array
+     * @throws Exception
      */
     public function executeComponent()
     {
@@ -54,24 +47,19 @@ abstract class BaseBitrixComponent extends \CBitrixComponent implements LoggerAw
 
             try {
                 parent::executeComponent();
-
                 $this->prepareResult();
-
                 $this->includeComponentTemplate($this->templatePage);
-            } catch (\Exception $e) {
-                $this->log()->error(sprintf('%s: %s', \get_class($e), $e->getMessage()), [
-                    'trace' => $e->getTrace()
+            } catch (Exception $e) {
+                $this->log()->error(sprintf('%s: %s', get_class($e), $e->getMessage()), [
+                    'trace' => $e->getTrace(),
                 ]);
                 $this->abortResultCache();
             }
-
             $this->setResultCacheKeys($this->getResultCacheKeys());
         }
-
         if ($this->arParams['return_result']) {
             return $this->arResult;
         }
-
         return null;
     }
 
@@ -83,7 +71,7 @@ abstract class BaseBitrixComponent extends \CBitrixComponent implements LoggerAw
     /**
      * @return array
      */
-    public function getResultCacheKeys()
+    public function getResultCacheKeys(): array
     {
         return [];
     }
@@ -91,7 +79,8 @@ abstract class BaseBitrixComponent extends \CBitrixComponent implements LoggerAw
     /**
      * @param string $page
      */
-    protected function setTemplatePage($page) {
+    protected function setTemplatePage(string $page = '')
+    {
         $this->templatePage = $page;
     }
 }

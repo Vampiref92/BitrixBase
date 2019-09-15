@@ -2,6 +2,7 @@
 
 namespace Vf92\Log;
 
+use Exception;
 use Vf92\MiscUtils\EnvType;
 use InvalidArgumentException;
 use Monolog\Handler\StreamHandler;
@@ -9,6 +10,10 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
+/**
+ * Class LoggerFactory
+ * @package Vf92\Log
+ */
 abstract class LoggerFactory
 {
     /**
@@ -21,10 +26,10 @@ abstract class LoggerFactory
      *
      * @param string $logName
      * @param string $logType
-     * @param bool $tryStdOut Попытаться, если скрипт запущен из консоли, добавить вывод лога в STDOUT
+     * @param bool   $tryStdOut Попытаться, если скрипт запущен из консоли, добавить вывод лога в STDOUT
      *
      * @return LoggerInterface
-     * @throws RuntimeException
+     * @throws Exception
      */
     public static function create($logName, $logType = 'main', $tryStdOut = true)
     {

@@ -2,7 +2,10 @@
 
 namespace Vf92\BitrixUtils\Orm\Collection;
 
+use Bitrix\Main\ArgumentException;
 use Bitrix\Main\FileTable;
+use Bitrix\Main\ObjectPropertyException;
+use Bitrix\Main\SystemException;
 use InvalidArgumentException;
 use Vf92\BitrixUtils\Orm\Model\Image;
 use Vf92\Enum\MediaEnum;
@@ -18,11 +21,11 @@ class ImageCollection extends ObjectArrayCollection
      * @param array $ids
      *
      * @return ImageCollection
-     * @throws \Bitrix\Main\ArgumentException
-     * @throws \Bitrix\Main\ObjectPropertyException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
      */
-    public static function createFromIds(array $ids = [])
+    public static function createFromIds(array $ids = []): ImageCollection
     {
         if (!empty($ids)) {
             $collection = new static();
@@ -40,9 +43,9 @@ class ImageCollection extends ObjectArrayCollection
     /**
      * Dirty hack
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public static function createNoImageCollection()
+    public static function createNoImageCollection(): ImageCollection
     {
         $collection = new static();
 
@@ -51,7 +54,13 @@ class ImageCollection extends ObjectArrayCollection
         return $collection;
     }
 
-    public function getResizeCollection($size, $resizeType = BX_RESIZE_IMAGE_PROPORTIONAL)
+    /**
+     * @param     $size
+     * @param int $resizeType
+     *
+     * @return ImageCollection
+     */
+    public function getResizeCollection($size, $resizeType = BX_RESIZE_IMAGE_PROPORTIONAL): ImageCollection
     {
         $collection = new static();
         /** @var Image $item */
@@ -64,13 +73,14 @@ class ImageCollection extends ObjectArrayCollection
     /**
      * @param mixed $object
      *
-     * @return void
+     * @return bool
      * @throws InvalidArgumentException
      */
-    protected function checkType($object)
+    protected function checkType($object):bool
     {
         if (!($object instanceof Image)) {
             throw new InvalidArgumentException('Переданный объект не является картинкой');
         }
+        return true;
     }
 }

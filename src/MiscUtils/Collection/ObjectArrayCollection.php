@@ -37,7 +37,6 @@ abstract class ObjectArrayCollection extends ArrayCollection
     public function add($object)
     {
         $this->checkType($object);
-
         return parent::add($object);
     }
 
@@ -58,7 +57,6 @@ abstract class ObjectArrayCollection extends ArrayCollection
     public function removeElement($object)
     {
         $this->checkType($object);
-
         return parent::removeElement($object);
     }
 
@@ -69,7 +67,6 @@ abstract class ObjectArrayCollection extends ArrayCollection
     public function contains($object)
     {
         $this->checkType($object);
-
         return parent::contains($object);
     }
 
@@ -80,15 +77,14 @@ abstract class ObjectArrayCollection extends ArrayCollection
     public function indexOf($object)
     {
         $this->checkType($object);
-
         return parent::indexOf($object);
     }
 
     /**
      * @param mixed $object
      *
-     * @return void
+     * @return bool
      * @throws InvalidArgumentException
      */
-    abstract protected function checkType($object);
+    abstract protected function checkType($object):bool ;
 }

@@ -1,14 +1,16 @@
 <?php
 
-
 namespace Vf92\BitrixUtils\User;
 
-
-use Bitrix\Main\UserTable;
+use Bitrix\Main\ArgumentException;
 use Bitrix\Main\EO_User;
-use Vf92\BitrixUtils\Config\Exception\VersionException;
+use Bitrix\Main\ObjectPropertyException;
+use Bitrix\Main\SystemException;
+use Bitrix\Main\UserTable;
+use CUser;
 use Vf92\BitrixUtils\Config\Version;
-use Vf92\BitrixUtils\User\Exception\CurerntUserNotFoundException;
+use Vf92\BitrixUtils\Exceptions\Config\VersionException;
+use Vf92\BitrixUtils\Exceptions\User\CurrentUserNotFoundException;
 
 /**
  * Class CurrentUser
@@ -16,10 +18,13 @@ use Vf92\BitrixUtils\User\Exception\CurerntUserNotFoundException;
  */
 class CurrentUser
 {
+    /**
+     * @var CUser
+     */
     protected $curUser;
 
     /**
-     * @throws CurerntUserNotFoundException
+     * @throws CurrentUserNotFoundException
      */
     public function __construct()
     {
@@ -27,16 +32,16 @@ class CurrentUser
             global $USER;
             $this->curUser = $USER;
         }
-        if (!$this->curUser instanceof \CUser) {
-            throw new CurerntUserNotFoundException('Не найден пользователь', 0);
+        if (!$this->curUser instanceof CUser) {
+            throw new CurrentUserNotFoundException('Не найден пользователь', 0);
         }
     }
 
     /**
      * @return CurrentUser
-     * @throws CurerntUserNotFoundException
+     * @throws CurrentUserNotFoundException
      */
-    public static function get()
+    public static function get(): CurrentUser
     {
         return new static();
     }
@@ -44,7 +49,7 @@ class CurrentUser
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->getBitrixObject() !== null ? (int)$this->getBitrixObject()->GetID() : 0;
     }
@@ -52,7 +57,7 @@ class CurrentUser
     /**
      * @return bool
      */
-    public function isAuth()
+    public function isAuth(): bool
     {
         return $this->getBitrixObject() !== null ? (bool)$this->getBitrixObject()->IsAuthorized() : false;
     }
@@ -60,7 +65,7 @@ class CurrentUser
     /**
      * @return bool
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->getBitrixObject() !== null ? (bool)$this->getBitrixObject()->IsAdmin() : false;
     }
@@ -68,7 +73,7 @@ class CurrentUser
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->getBitrixObject() !== null ? (string)$this->getBitrixObject()->GetFirstName() : '';
     }
@@ -76,7 +81,7 @@ class CurrentUser
     /**
      * @return string
      */
-    public function getLastName()
+    public function getLastName(): string
     {
         return $this->getBitrixObject() !== null ? (string)$this->getBitrixObject()->GetLastName() : '';
     }
@@ -84,7 +89,7 @@ class CurrentUser
     /**
      * @return string
      */
-    public function getSecondName()
+    public function getSecondName(): string
     {
         return $this->getBitrixObject() !== null ? (string)$this->getBitrixObject()->GetSecondName() : '';
     }
@@ -92,7 +97,7 @@ class CurrentUser
     /**
      * @return string
      */
-    public function getFullName()
+    public function getFullName(): string
     {
         return $this->getBitrixObject() !== null ? (string)$this->getBitrixObject()->GetFullName() : '';
     }
@@ -102,7 +107,7 @@ class CurrentUser
      *
      * @return string
      */
-    public function getFullNameByFormat($format = null)
+    public function getFullNameByFormat($format = null): string
     {
         return UserHelper::getFullName([
             'NAME'        => $this->getName(),
@@ -117,7 +122,7 @@ class CurrentUser
     /**
      * @return string
      */
-    public function getLogin()
+    public function getLogin(): string
     {
         return $this->getBitrixObject() !== null ? (string)$this->getBitrixObject()->GetLogin() : '';
     }
@@ -125,31 +130,32 @@ class CurrentUser
     /**
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->getBitrixObject()->GetEmail() ?: '';
     }
 
     /**
-     * @return \CUser
+     * @return CUser
      */
-    public function getBitrixObject()
+    public function getBitrixObject(): CUser
     {
         return $this->curUser;
     }
 
     /**
      * @return null|EO_User
-     * @throws \Bitrix\Main\ArgumentException
-     * @throws \Bitrix\Main\ObjectPropertyException
-     * @throws \Bitrix\Main\SystemException
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     * @throws VersionException
      * @throws VersionException
      */
-    public function getD7BitrixObject()
+    public function getD7BitrixObject(): ?EO_User
     {
-        if (Version::getInstance()->isVersionMoreEqualThan('18.0.4')) {
-            return UserTable::getById($this->getId())->fetchObject();
+        if (Version::getInstance()->isVersionLessThan('18.0.4')) {
+            throw new VersionException();
         }
-        throw new VersionException('Для выполнения данной функции нужна версия не ниже 18.0.4');
+        return UserTable::getById($this->getId())->fetchObject();
     }
 }

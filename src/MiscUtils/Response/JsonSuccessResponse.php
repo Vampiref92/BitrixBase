@@ -33,11 +33,11 @@ class JsonSuccessResponse extends JsonResponse
      * @return JsonResponse
      */
     public static function createWithData(
-        $message = '',
+        string $message = '',
         array $data = [],
-        $status = 200,
+        int $status = 200,
         array $options = []
-    ) {
+    ): JsonResponse {
         $content = static::buildContent($message, true, $data, $options);
 
         return parent::create($content, $status);

@@ -4,6 +4,10 @@ namespace Vf92\MiscUtils\Response\Model;
 
 use JsonSerializable;
 
+/**
+ * Class JsonContent
+ * @package Vf92\MiscUtils\Response\Model
+ */
 class JsonContent implements JsonSerializable
 {
     /**
@@ -31,7 +35,14 @@ class JsonContent implements JsonSerializable
      */
     private $redirect = '';
 
-    public function __construct($message = '', $success = true, $data = null)
+    /**
+     * JsonContent constructor.
+     *
+     * @param string $message
+     * @param bool   $success
+     * @param array|null   $data
+     */
+    public function __construct(string $message = '', bool $success = true, $data = null)
     {
         $this->message = $message;
         $this->success = (int)$success;
@@ -41,7 +52,7 @@ class JsonContent implements JsonSerializable
     /**
      * @return bool
      */
-    public function getSuccess()
+    public function getSuccess(): bool
     {
         return (bool)$this->success;
     }
@@ -51,10 +62,9 @@ class JsonContent implements JsonSerializable
      *
      * @return JsonContent
      */
-    public function withSuccess($success)
+    public function withSuccess(bool $success): JsonContent
     {
         $this->success = (int)$success;
-
         return $this;
     }
 
@@ -71,17 +81,16 @@ class JsonContent implements JsonSerializable
      *
      * @return JsonContent
      */
-    public function withData($data)
+    public function withData($data): JsonContent
     {
         $this->data = $data;
-
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -91,36 +100,50 @@ class JsonContent implements JsonSerializable
      *
      * @return JsonContent
      */
-    public function withMessage($message)
+    public function withMessage(string $message): JsonContent
     {
         $this->message = $message;
-
         return $this;
     }
 
-    public function getReload()
+    /**
+     * @return bool
+     */
+    public function getReload(): bool
     {
         return (bool)$this->reload;
     }
 
-    public function withReload($reload)
+    /**
+     * @param bool $reload
+     *
+     * @return $this
+     */
+    public function withReload(bool $reload): JsonContent
     {
         $this->reload = $reload;
         return $this;
     }
 
-    public function getRedirect()
+    /**
+     * @return string
+     */
+    public function getRedirect(): string
     {
         return $this->redirect;
     }
 
-    public function withRedirect($redirect)
+    /**
+     * @param string $redirect
+     *
+     * @return $this
+     */
+    public function withRedirect(string $redirect): JsonContent
     {
         $this->redirect = $redirect;
-
         return $this;
     }
-    
+
     /**
      * @return array
      */

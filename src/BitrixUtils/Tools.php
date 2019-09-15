@@ -2,6 +2,10 @@
 
 namespace Vf92\BitrixUtils;
 
+use CFile;
+use function is_array;
+use function is_numeric;
+
 /**
  * Class Tools
  * @package Vf92\BitrixUtils
@@ -14,9 +18,9 @@ class Tools
      *
      * @return array
      */
-    public static function resizeImageList(array $list, array $params = [])
+    public static function resizeImageList(array $list, array $params = []): array
     {
-        if (empty($list) || !\is_array($list) || !isset($params['sizes'])) {
+        if (empty($list) || !is_array($list) || !isset($params['sizes'])) {
             return $list;
         }
         if (!isset($params['resizeType'])) {
@@ -39,14 +43,14 @@ class Tools
      *
      * @return array
      */
-    public static function getImageList(array $list, array $params = [])
+    public static function getImageList(array $list, array $params = []): array
     {
         foreach ($list as $key => $item) {
             $fileId = static::getFileId($item, $params);
             $file = null;
             if ($fileId > 0) {
-                $file = \CFile::GetFileArray($fileId);
-                if (\is_array($file)) {
+                $file = CFile::GetFileArray($fileId);
+                if (is_array($file)) {
                     $file = array_change_key_case($file, CASE_UPPER);
                 }
             }
@@ -61,13 +65,13 @@ class Tools
      *
      * @return null|array
      */
-    public static function resizeImage($file, array $params)
+    public static function resizeImage($file, array $params): ?array
     {
-        $fileId = \is_array($file) ? (int)$file['ID'] : (int)$file;
-        $resizeFile = \CFile::ResizeImageGet($file,
+        $fileId = is_array($file) ? (int)$file['ID'] : (int)$file;
+        $resizeFile = CFile::ResizeImageGet($file,
             [
-                'width' => \is_numeric($params['sizes']['width']) ? (int)$params['sizes']['width'] : 0,
-                'height' => \is_numeric($params['sizes']['height']) ? (int)$params['sizes']['height'] : 0,
+                'width' => is_numeric($params['sizes']['width']) ? (int)$params['sizes']['width'] : 0,
+                'height' => is_numeric($params['sizes']['height']) ? (int)$params['sizes']['height'] : 0,
             ],
             $params['resizeType'] ?: BX_RESIZE_IMAGE_PROPORTIONAL,
             $params['initSizes'] ?: false,
@@ -76,14 +80,14 @@ class Tools
             $params['jpgQuality'] ?: false
         );
         $resizeFile['orig_id'] = $fileId;
-        return \is_array($resizeFile) ? array_change_key_case($resizeFile, CASE_UPPER) : null;
+        return is_array($resizeFile) ? array_change_key_case($resizeFile, CASE_UPPER) : null;
     }
 
     /**
      * @param array $images
      * @param bool  $resizeWithBase
      */
-    public static function showPictureHtml(array $images, $resizeWithBase = false)
+    public static function showPictureHtml(array $images, $resizeWithBase = false): void
     {
         echo static::getPictureHtml($images, $resizeWithBase);
     }
@@ -94,9 +98,9 @@ class Tools
      *
      * @return string
      */
-    public static function getPictureHtml(array $images, $resizeWithBase = false)
+    public static function getPictureHtml(array $images, $resizeWithBase = false): string
     {
-        if (empty($images) || !\is_array($images)) {
+        if (empty($images) || !is_array($images)) {
             return '';
         }
 
@@ -150,18 +154,10 @@ class Tools
                     ]);
                     $image['src'] = $file['SRC'];
                 }
-                $html .= '<source
-                        ' . ($image['media'] ? ' media="' . $image['media'] . '"' : '') . '
-                        sizes="' . ($image['sizes'] ?: '100vw') . '"
-                        srcset="' . $image['src'] . '"
-                        type="' . ($image['mime'] ?: \CFile::GetContentType($image['src'])) . '">';
+                $html .= static::getSourceHtml($image);
             }
         }
-        $html .= '<source
-                        ' . ($real['media'] ? ' media="' . $real['media'] . '"' : '') . '
-                        sizes="' . ($real['sizes'] ?: '100vw') . '"
-                        srcset="' . $real['src'] . '"
-                        type="' . ($real['mime'] ?: \CFile::GetContentType($real['src'])) . '">';
+        $html .= static::getSourceHtml($real);
         $html .= '<img src="' .
             $real['src'] . '"' .
             ($real['alt'] ? ' alt="' . $real['alt'] . '"' : '') .
@@ -174,16 +170,45 @@ class Tools
     }
 
     /**
+     * @param $image
+     *
+     * @return string
+     */
+    /**
+     * @param $image
+     *
+     * @return string
+     */
+    /**
+     * @param $image
+     *
+     * @return string
+     */
+    /**
+     * @param $image
+     *
+     * @return string
+     */
+    protected static function getSourceHtml($image): string
+    {
+        return '<source
+                        ' . ($image['media'] ? ' media="' . $image['media'] . '"' : '') . '
+                        sizes="' . ($image['sizes'] ?: '100vw') . '"
+                        srcset="' . $image['src'] . '"
+                        type="' . ($image['mime'] ?: CFile::GetContentType($image['src'])) . '">';
+    }
+
+    /**
      * @param array|null $file
      * @param            $el
      * @param array $params
      *
      * @return array
      */
-    protected static function setImageToList($file, $el, array $params)
+    protected static function setImageToList($file, $el, array $params): array
     {
         if (isset($params['imgKeyNew'])) {
-            if (!\is_array($el)) {
+            if (!is_array($el)) {
                 $el = [];
             }
             if ($params['imgKey'] !== false && $params['subPath'] === true) {
@@ -193,7 +218,7 @@ class Tools
             }
         } else {
             if ($params['imgKey'] !== false) {
-                if (!\is_array($el)) {
+                if (!is_array($el)) {
                     $el = [];
                 }
                 $el[$params['imgKey']] = $file;
@@ -213,7 +238,7 @@ class Tools
      *
      * @return int
      */
-    protected static function getFileId($item, array $params)
+    protected static function getFileId($item, array $params): int
     {
         if ($params['imgKey'] !== false) {
             $fileId = $item[$params['imgKey']]['ID'] ?: $item[$params['imgKey']];

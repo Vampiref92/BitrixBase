@@ -9,7 +9,7 @@ namespace Vf92\Enum;
  */
 final class MediaEnum
 {
-    const NO_IMAGE_WEB_PATH = '/local/images/no_image.png';
-    const NO_IMAGE_WIDTH = 500;
-    const NO_IMAGE_HEIGHT = 362;
+    public const NO_IMAGE_WEB_PATH = '/local/images/no_image.png';
+    public const NO_IMAGE_WIDTH = 500;
+    public const NO_IMAGE_HEIGHT = 362;
 }

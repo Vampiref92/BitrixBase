@@ -3,9 +3,13 @@
 namespace Vf92\BitrixUtils\Decorators;
 
 use Bitrix\Main\Application;
+use Bitrix\Main\EO_Site;
 use Bitrix\Main\SiteTable;
 use Bitrix\Main\SystemException;
+use Exception;
+use RuntimeException;
 use Vf92\BitrixUtils\Config\Version;
+use Vf92\BitrixUtils\Exceptions\Config\VersionException;
 use Vf92\Log\LoggerFactory;
 
 /**
@@ -16,9 +20,12 @@ use Vf92\Log\LoggerFactory;
 class FullHrefDecorator
 {
     /** @var string Домен */
-    private static $host = null;
+    private static $host;
     /** @var string Протокол: http|https */
-    private static $proto = null;
+    private static $proto;
+    /**
+     * @var
+     */
     private $path;
 
     /**
@@ -34,13 +41,14 @@ class FullHrefDecorator
     /**
      * @param $path
      */
-    public function setPath($path)
+    public function setPath($path): void
     {
         $this->path = $path;
     }
 
     /**
      * @return string
+     * @throws Exception
      */
     public function __toString()
     {
@@ -50,29 +58,28 @@ class FullHrefDecorator
             try {
                 $logger = LoggerFactory::create('fullHrefDecorator');
                 $logger->critical('Системная ошибка при получении пукбличного пути ' . $e->getTraceAsString());
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
             }
-
             return '';
         }
     }
 
     /**
-     * @throws SystemException
      * @return string
+     * @throws SystemException
+     * @throws VersionException
      */
-    public function getFullPublicPath()
+    public function getFullPublicPath(): string
     {
         $prefix = $this->getProto();
         $host = $this->getHost();
-
         return $prefix . '://' . $host . $this->path;
     }
 
     /**
      * @return string
      */
-    public function getStartPath()
+    public function getStartPath(): string
     {
         return $this->path;
     }
@@ -81,7 +88,7 @@ class FullHrefDecorator
      * @return string
      * @throws SystemException
      */
-    public function getProto()
+    public function getProto(): string
     {
         if (static::$proto === null) {
             static::$proto = 'http';
@@ -90,14 +97,13 @@ class FullHrefDecorator
                 static::$proto .= 's';
             }
         }
-
         return static::$proto;
     }
 
     /**
      * Сброс значения протокола
      */
-    public function flushProto()
+    public function flushProto(): void
     {
         static::$proto = null;
     }
@@ -107,24 +113,23 @@ class FullHrefDecorator
      *
      * @return FullHrefDecorator
      */
-    public function setHost($host)
+    public function setHost($host): FullHrefDecorator
     {
         $this::$host = $host;
-
         return $this;
     }
 
     /**
      * @return string
      * @throws SystemException
+     * @throws VersionException
      */
-    public function getHost()
+    public function getHost(): string
     {
         if (static::$host === null) {
             $context = Application::getInstance()->getContext();
             static::$host = $context->getServer()->getHttpHost();
             static::$host = static::$host ? trim(static::$host) : '';
-
             // в cli нет HTTP_HOST, пробуем через константу
             if (static::$host === '' && defined('SITE_SERVER_NAME')) {
                 static::$host = trim(SITE_SERVER_NAME);
@@ -132,25 +137,24 @@ class FullHrefDecorator
             // ... или через сайт
             if (static::$host === '') {
                 $query = SiteTable::query()->setOrder(['SORT' => 'ASC']);
-                if (Version::getInstance()->isVersionMoreEqualThan('17.5.2')) {
-                    $query->where('ACTIVE', 'Y');
-                } else {
-                    $query->setFilter(['=ACTIVE' => 'Y']);
+                if (Version::getInstance()->isVersionLessThan('18.0.4')) {
+                    throw new VersionException();
                 }
-                $site = $query->exec()->fetch();
+                $query->where('ACTIVE', 'Y');
+                /** @var EO_Site $site */
+                $site = $query->exec()->fetchObject();
                 if ($site) {
-                    static::$host = $site['SERVER_NAME'];
+                    static::$host = $site->getServerName();
                 }
             }
         }
-
         return static::$host;
     }
 
     /**
      * Сброс значения хоста
      */
-    public function flushHost()
+    public function flushHost(): void
     {
         static::$host = null;
     }
